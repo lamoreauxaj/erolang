@@ -115,5 +115,5 @@ midpoint = (a b) -> (p) {
 
 #### References
 
-[Euclid's Elements](https://www.gutenberg.org/files/21076/21076-pdf.pdf). This inspired a lot of the language ideas.
-[Experimental-Geometer](https://github.com/JamsRamen/Experimental-Geometer). This is the GitHub for the previous project. This is mostly here so you can be aware of what work has already been done to ensure that this project is new work. In here you can find an interpreter (which is over 600 lines and has 27 classes in a single file - please don't ask why there are 27 classes in one file) which implemented a set of features not too far from what we plan to implement.
+- [Euclid's Elements](https://www.gutenberg.org/files/21076/21076-pdf.pdf). This inspired a lot of the language ideas.
+- [Experimental-Geometer](https://github.com/JamsRamen/Experimental-Geometer). This is the GitHub for the previous project. This is mostly here so you can be aware of what work has already been done to ensure that this project is new work. In here you can find an interpreter (which is over 600 lines and has 27 classes in a single file - please don't ask why there are 27 classes in one file) which implemented a set of features not too far from what we plan to implement.
