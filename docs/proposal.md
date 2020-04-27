@@ -22,7 +22,7 @@ The idea for this language originated from a previous project that Aaron and a f
 
 [Here](./experimental-geometer-demo.mp4) is a video of our demo if you want an idea of the project. The quality is bad since this is a screen recording of a Youtube video recorded with a phone which recorded a projector which was playing a screen recording of someone demoing the application. I don't have the original video, sorry!
 
-This was actually part of the code that ran that demo. Do not that this code does not match the syntax which we are implementing (for example, the choice to have lack of commas in parameter lists).
+This was actually part of the code that ran that demo. Do note that this code does not match the syntax which we are implementing (for example, the choice to have lack of commas in parameter lists).
 ```
 a = point(0.0 1.0 0.0)
 b = point(0.0 1.1 0.0)
