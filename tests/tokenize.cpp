@@ -11,7 +11,7 @@ void checkTokens(vector<Token> &tokens, vector<Token> &exp) {
     }
 }
 
-TEST(lexer, assignment1) {
+TEST(tokenize1, assignment1) {
     string program = "a = 1.0\n";
     vector<Token> tokens = tokenize(program);
     vector<Token> exp = {
@@ -23,13 +23,13 @@ TEST(lexer, assignment1) {
     checkTokens(tokens, exp);
 }
 
-TEST(lexer, assignment2) {
+TEST(tokenize2, assignment2) {
     string program = "a = 2\nb = .001\n";
     vector<Token> tokens = tokenize(program);
     vector<Token> exp = {
         Token(TokenType::IDENTIFIER, "a"),
         Token(TokenType::EQUALS, "="),
-        Token(TokenType::REAL, "1.0"),
+        Token(TokenType::REAL, "2"),
         Token(TokenType::NEWLINE, "\n"),
         Token(TokenType::IDENTIFIER, "b"),
         Token(TokenType::EQUALS, "="),
