@@ -35,7 +35,7 @@ enum TokenType {
     DIVIDE, // /
     DIVIDE_EQUALS, // /=
     IDIVIDE, // //
-    IDIVIDE_EQUALS // //=
+    IDIVIDE_EQUALS, // //=
     POWER, // ^
     POWER_EQUALS, // ^=
     MOD, // % 
@@ -55,6 +55,7 @@ enum TokenType {
     GREATER_OR_EQUAL, // >=
     SLICE, // :
     IN, // in
+    STRING, // "text", 'test', '''multiple lines''', """multiple lines""" - can contain '\n', '\t', '\x##', \' \"
     IMPORT, // import 
 };
 

@@ -19,13 +19,14 @@ TokenType char_type(char c) {
         case ']': return RIGHT_BRACKET;
         case '{': return LEFT_BRACE;
         case '}': return RIGHT_BRACE;
-        case '=': return EQUALS;
+        case '=': return ASSIGN;
         case '#': return SINGLE_COMMENT;
         case ',': return COMMA;
         case '-': return MINUS;
         case '+': return PLUS;
         case '*': return TIMES;
         case '/': return DIVIDE;
+        case ':': return SLICE;
         default: return IDENTIFIER;
     }
 }
@@ -33,14 +34,18 @@ TokenType char_type(char c) {
 bool one_char(TokenType t) {
     return (t == NEWLINE) || (t == BACKSLASH) || (t == SEMICOLON) || (t == LEFT_PAREN) || (t == RIGHT_PAREN) || (t == PLUS) ||
         (t == LEFT_BRACKET) || (t == RIGHT_BRACKET) || (t == LEFT_BRACE) || (t == RIGHT_BRACE) || (t == EQUALS) || (t == COMMA)
-        || (t == TIMES) || (t == DIVIDE);
+        || (t == TIMES) || (t == DIVIDE) || (t == SLICE);
 }
 
 TokenType is_keyword(string s) {
-    if (s == "IS") return IS;
-    if (s == "IF") return IF;
-    if (s == "WHILE") return WHILE;
-    if (s == "IMPORT") return IMPORT;
+    if (s == "is") return IS;
+    if (s == "if") return IF;
+    if (s == "in") return IN;
+    if (s == "while") return WHILE;
+    if (s == "import") return IMPORT;
+    if (s == "or") return OR;
+    if (s == "and") return AND;
+    if (s == "not") return NOT;
     return IDENTIFIER;
 }
 
