@@ -62,3 +62,36 @@ TEST(tokenize3, assignment3) {
     };
     checkTokens(tokens, exp);
 }
+
+TEST(tokenize4, comma1) {
+    string program = "a, b , c";
+    vector<Token> tokens = tokenize(program);
+    vector<Token> exp = {
+        Token(TokenType::IDENTIFIER, "a"),
+        Token(TokenType::COMMA, ","),
+        Token(TokenType::IDENTIFIER, "b"),
+        Token(TokenType::COMMA, ","),
+        Token(TokenType::IDENTIFIER, "c")
+    };
+    checkTokens(tokens, exp);
+}
+
+TEST(tokenize5 ,comma2) {
+    string program = "a,b,c\n , d e,f\n";
+    vector<Token> tokens = tokenize(program);
+    vector<Token> exp = {
+        Token(TokenType::IDENTIFIER, "a"),
+        Token(TokenType::COMMA, ","),
+        Token(TokenType::IDENTIFIER, "b"),
+        Token(TokenType::COMMA, ","),
+        Token(TokenType::IDENTIFIER, "c"),
+        Token(TokenType::NEWLINE, "\n"),
+        Token(TokenType::COMMA, ","),
+        Token(TokenType::IDENTIFIER, "d"),
+        Token(TokenType::IDENTIFIER, "e"),
+        Token(TokenType::COMMA, ","),
+        Token(TokenType::IDENTIFIER, "f"),
+        Token(TokenType::NEWLINE, "\n")
+    };
+    checkTokens(tokens, exp);
+}
