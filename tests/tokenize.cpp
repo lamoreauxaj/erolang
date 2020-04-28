@@ -16,7 +16,7 @@ TEST(tokenize1, assignment1) {
     vector<Token> tokens = tokenize(program);
     vector<Token> exp = {
         Token(TokenType::IDENTIFIER, "a"),
-        Token(TokenType::EQUALS, "="),
+        Token(TokenType::ASSIGN, "="),
         Token(TokenType::REAL, "1.0"),
         Token(TokenType::NEWLINE, "\n")
     };
@@ -28,11 +28,11 @@ TEST(tokenize2, assignment2) {
     vector<Token> tokens = tokenize(program);
     vector<Token> exp = {
         Token(TokenType::IDENTIFIER, "a"),
-        Token(TokenType::EQUALS, "="),
+        Token(TokenType::ASSIGN, "="),
         Token(TokenType::REAL, "2"),
         Token(TokenType::NEWLINE, "\n"),
         Token(TokenType::IDENTIFIER, "b"),
-        Token(TokenType::EQUALS, "="),
+        Token(TokenType::ASSIGN, "="),
         Token(TokenType::REAL, ".001"),
         Token(TokenType::NEWLINE, "\n")
     };
