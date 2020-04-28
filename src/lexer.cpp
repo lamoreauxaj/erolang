@@ -46,7 +46,7 @@ TokenType is_keyword(string s) {
 }
 
 bool alpha_num(char c) {
-    return isalnum(c) || (c == '_');
+    return isalnum(c) || (c == '_') || (c == '.');
 }
 
 Token next_token() {
@@ -112,18 +112,42 @@ Token next_token() {
         }
     }
 
-    while (curIndex < program.length() && alpha_num(program[curIndex])) {
-        next_text.push_back(program[curIndex]);
-        curIndex++;
-    }
+    if (!alpha_num(program[curIndex]))
+        log_error("unrecognized character", curIndex, curIndex);
+    
+    // IDENTIFIER
+    if (isalpha(program[curIndex])) {
+        bool validIdentifier = true;
+        while (curIndex < program.length() && alpha_num(program[curIndex])) {
+            validIdentifier &= !(program[curIndex] == '.');
+            next_text.push_back(program[curIndex]);
+            curIndex++;
+        }
 
-    next_end = curIndex - 1;
-    
-    t = is_keyword(next_text);
-    if (t != IDENTIFIER)
+        next_end = curIndex - 1;
+
+        if (!validIdentifier)
+            log_error("invalid identifier", next_start, next_end);
+
+        t = is_keyword(next_text);
         return Token(t, next_text, next_start, next_end);
-    
-    
+    } 
+    // REAL
+    else {
+        bool validReal = true;
+        while (curIndex < program.length() && alpha_num(program[curIndex])) {
+            validReal &= program[curIndex] == 'E' || program[curIndex] == 'e' || program[curIndex] == '.' || isdigit(program[curIndex]);
+            next_text.push_back(program[curIndex]);
+            curIndex++;
+        }
+
+        next_end = curIndex - 1;
+
+        if (!validReal)
+            log_error("invalid real", next_start, next_end);
+
+        return Token(REAL, next_text, next_start, next_end);
+    }
 }
 
 vector<Token> tokenize(string& programText) {
