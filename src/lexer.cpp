@@ -33,7 +33,7 @@ TokenType char_type(char c) {
 
 bool one_char(TokenType t) {
     return (t == NEWLINE) || (t == BACKSLASH) || (t == SEMICOLON) || (t == LEFT_PAREN) || (t == RIGHT_PAREN) || (t == PLUS) ||
-        (t == LEFT_BRACKET) || (t == RIGHT_BRACKET) || (t == LEFT_BRACE) || (t == RIGHT_BRACE) || (t == EQUALS) || (t == COMMA)
+        (t == LEFT_BRACKET) || (t == RIGHT_BRACKET) || (t == LEFT_BRACE) || (t == RIGHT_BRACE) || (t == ASSIGN) || (t == COMMA)
         || (t == TIMES) || (t == DIVIDE) || (t == SLICE);
 }
 
