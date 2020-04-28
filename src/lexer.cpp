@@ -152,6 +152,8 @@ Token next_token() {
 
 vector<Token> tokenize(string& programText) {
     program = programText;
+    curIndex = 0;
+    tokens.clear();
 
     while (curIndex < programText.length()) {
         Token t = next_token();
