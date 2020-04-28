@@ -1,5 +1,6 @@
 #include <lexer.h>
 #include <string>
+#include <log.h>
 #include <vector>
 
 using namespace std;
@@ -28,8 +29,8 @@ TokenType char_type(char c) {
 }
 
 bool one_char(TokenType t) {
-    return (t == NEWLINE) | (t == BACKSLASH) | (t == SEMICOLON) | (t == LEFT_PAREN) | (t == RIGHT_PAREN) | 
-        (t == LEFT_BRACKET) | (t == RIGHT_BRACKET) | (t == LEFT_BRACE) | (t == RIGHT_BRACE) | (t == EQUALS) | (t == COMMA);
+    return (t == NEWLINE) || (t == BACKSLASH) || (t == SEMICOLON) || (t == LEFT_PAREN) || (t == RIGHT_PAREN) || 
+        (t == LEFT_BRACKET) || (t == RIGHT_BRACKET) || (t == LEFT_BRACE) || (t == RIGHT_BRACE) || (t == EQUALS) || (t == COMMA);
 }
 
 bool is_keyword() {
@@ -39,20 +40,57 @@ bool is_keyword() {
 
 Token next_token() {
     TokenType next_type;
-    string next_text;
-    int next_start;
-    int next_end;
+    string next_text = "";
+    int next_start = -1;
+    int next_end = -1;
 
-    while (curIndex < program.length() & isspace(program[curIndex]) & program[curIndex] != '\n')
+    while (curIndex < program.length() && isspace(program[curIndex]) && program[curIndex] != '\n')
         curIndex++;
 
-    next_start = curIndex;
-
     TokenType t = char_type(program[curIndex]);
+    if (one_char(t))
+        return Token(t, program.substr(curIndex, 1), curIndex, curIndex);
+
+    next_start = curIndex;
     
-    if (one_char(t)) {
-        struct Token ret = Token(t, "abcd", next_start, next_end);
-        return ret;
+    // handle comments
+    if (t == SINGLE_COMMENT) {
+        // multi comment
+        if (curIndex + 1 < program.length() && program[curIndex + 1] == '#') {
+            curIndex++;
+            while (curIndex + 1 < program.length()) {
+                if (program[curIndex + 1] == '#') {
+                    if (curIndex + 2 < program.length() && program[curIndex + 2] == '#') {
+                        next_end = curIndex + 2;
+                        break;
+                    } else {
+                        next_text.push_back(program[curIndex + 1]);
+                    }
+                } else {
+                    next_text.push_back(program[curIndex + 1]);
+                }
+
+                curIndex++;
+            }
+
+            if (next_end == -1)
+                log_error("multicomment does not end properly", next_start, -1);
+            
+            return Token(MULTI_COMMENT, next_text, next_start, next_end);
+        } 
+        // single comment
+        else {
+            while (++curIndex < program.length()) {
+                if (program[curIndex] == '\n') {
+                    break;
+                } else {
+                    next_text.push_back(program[curIndex]);
+                }
+            }
+
+            next_end = curIndex;
+            return Token(SINGLE_COMMENT, next_text, next_start, next_end);
+        }
     }
     
 
