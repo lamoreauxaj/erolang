@@ -42,6 +42,6 @@ struct Token {
     Token(TokenType type, string text, int start, int end) : type(type), text(text), start(start), end(end) {}
 };
 
-vector<Token> tokenize(string program);
+vector<Token> tokenize(string& program);
 
 #endif
