@@ -95,3 +95,25 @@ TEST(tokenize5 ,comma2) {
     };
     checkTokens(tokens, exp);
 }
+
+TEST(tokenize6, singleComment1) {
+    string program = "a,b,c #i like cows\n d,e,f#moo moo  moo!\n";
+    vector<Token> tokens = tokenize(program);
+    vector<Token> exp = {
+        Token(TokenType::IDENTIFIER, "a"),
+        Token(TokenType::COMMA, ","),
+        Token(TokenType::IDENTIFIER, "b"),
+        Token(TokenType::COMMA, ","),
+        Token(TokenType::IDENTIFIER, "c"),
+        Token(TokenType::SINGLE_COMMENT, "i like cows"),
+        Token(TokenType::NEWLINE, "\n"),
+        Token(TokenType::IDENTIFIER, "d"),
+        Token(TokenType::COMMA, ","),
+        Token(TokenType::IDENTIFIER, "e"),
+        Token(TokenType::COMMA, ","),
+        Token(TokenType::IDENTIFIER, "f"),
+        Token(TokenType::SINGLE_COMMENT, "moo moo  moo!"),
+        Token(TokenType::NEWLINE, "\n")
+    };
+    checkTokens(tokens, exp);
+}

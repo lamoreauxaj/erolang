@@ -103,7 +103,7 @@ Token next_token() {
                 }
             }
 
-            next_end = curIndex;
+            next_end = curIndex - 1;
             return Token(SINGLE_COMMENT, next_text, next_start, next_end);
         }
     }
