@@ -117,3 +117,21 @@ TEST(tokenize6, singleComment1) {
     };
     checkTokens(tokens, exp);
 }
+
+TEST(tokenize7, multicomment1) {
+    string program = "a,b,c ##hi aaron, stop \njudging my unit\n tests\n## d,ef #i like cookies";
+    vector<Token> tokens = tokenize(program);
+    vector<Token> exp = {
+        Token(TokenType::IDENTIFIER, "a"),
+        Token(TokenType::COMMA, ","),
+        Token(TokenType::IDENTIFIER, "b"),
+        Token(TokenType::COMMA, ","),
+        Token(TokenType::IDENTIFIER, "c"),
+        Token(TokenType::MULTI_COMMENT, "hi aaron, stop \njudging my unit\n tests\n"),
+        Token(TokenType::IDENTIFIER, "d"),
+        Token(TokenType::COMMA, ","),
+        Token(TokenType::IDENTIFIER, "ef"),
+        Token(TokenType::SINGLE_COMMENT, "i like cookies")
+    };
+    checkTokens(tokens, exp);
+}
