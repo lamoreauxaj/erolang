@@ -5,7 +5,7 @@
 
 using namespace std;
 
-string& program;
+string program;
 int curIndex;
 vector<Token> tokens;
 
