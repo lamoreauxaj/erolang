@@ -135,3 +135,92 @@ TEST(tokenize7, multicomment1) {
     };
     checkTokens(tokens, exp);
 }
+
+TEST(tokenize8, is_keyword1) {
+    string program = "tis is yis";
+    vector<Token> tokens = tokenize(program);
+    vector<Token> exp = {
+        Token(TokenType::IDENTIFIER, "tis"),
+        Token(TokenType::IS, "is"),
+        Token(TokenType::IDENTIFIER, "yis")
+    };
+    checkTokens(tokens, exp);
+}
+
+TEST(tokenize9, if_keyword1) {
+    string program = "tif if yif";
+    vector<Token> tokens = tokenize(program);
+    vector<Token> exp = {
+        Token(TokenType::IDENTIFIER, "tif"),
+        Token(TokenType::IF, "if"),
+        Token(TokenType::IDENTIFIER, "yif")
+    };
+    checkTokens(tokens, exp);
+}
+
+TEST(tokenize10, in_keyword1) {
+    string program = "tin in yin";
+    vector<Token> tokens = tokenize(program);
+    vector<Token> exp = {
+        Token(TokenType::IDENTIFIER, "tin"),
+        Token(TokenType::IN, "in"),
+        Token(TokenType::IDENTIFIER, "yin")
+    };
+    checkTokens(tokens, exp);
+}
+
+TEST(tokenize11, while_keyword1) {
+    string program = "while xyzwhile";
+    vector<Token> tokens = tokenize(program);
+    vector<Token> exp = {
+        Token(TokenType::WHILE, "while"),
+        Token(TokenType::IDENTIFIER, "xyzwhile")
+    };
+    checkTokens(tokens, exp);
+}
+
+TEST(tokenize12, import_keyword1) {
+    string program = "aimportb import";
+    vector<Token> tokens = tokenize(program);
+    vector<Token> exp = {
+        Token(TokenType::IDENTIFIER, "aimportb"),
+        Token(TokenType::IMPORT, "import")
+    };
+    checkTokens(tokens, exp);
+}
+
+TEST(tokenize13, or_keyword1) {
+    string program = "nor is the only or";
+    vector<Token> tokens = tokenize(program);
+    vector<Token> exp = {
+        Token(TokenType::IDENTIFIER, "nor"),
+        Token(TokenType::IS, "is"),
+        Token(TokenType::IDENTIFIER, "the"),
+        Token(TokenType::IDENTIFIER, "only"),
+        Token(TokenType::OR, "or")
+    };
+    checkTokens(tokens, exp);
+}
+
+TEST(tokenize14, and_keyword1) {
+    string program = "nand is the only and";
+    vector<Token> tokens = tokenize(program);
+    vector<Token> exp = {
+        Token(TokenType::IDENTIFIER, "nand"),
+        Token(TokenType::IS, "is"),
+        Token(TokenType::IDENTIFIER, "the"),
+        Token(TokenType::IDENTIFIER, "only"),
+        Token(TokenType::AND, "and")
+    };
+    checkTokens(tokens, exp);
+}
+
+TEST(tokenize15, not_keyword1) {
+    string program = "nnot not";
+    vector<Token> tokens = tokenize(program);
+    vector<Token> exp = {
+        Token(TokenType::IDENTIFIER, "nnot"),
+        Token(TokenType::NOT, "not")
+    };
+    checkTokens(tokens, exp);
+}
