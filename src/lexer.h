@@ -36,7 +36,10 @@ enum TokenType {
 struct Token {
     TokenType type;
     string text;
-    int line, start, end;
+    int start, end;
+
+    Token(TokenType type, string text) : type(type), text(text) {}
+    Token(TokenType type, string text, int start, int end) : type(type), text(text), start(start), end(end) {}
 };
 
 vector<Token> tokenize(string program);
