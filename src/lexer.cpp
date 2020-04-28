@@ -34,7 +34,6 @@ bool one_char(TokenType t) {
 }
 
 bool is_keyword() {
-
     return false;
 }
 
@@ -92,7 +91,6 @@ Token next_token() {
             return Token(SINGLE_COMMENT, next_text, next_start, next_end);
         }
     }
-    
 
 }
 
