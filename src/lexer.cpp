@@ -35,7 +35,11 @@ bool is_keyword() {
 }
 
 Token next_token() {
+    Token ret;
 
+    while (curIndex < programText.length() & isspace(programText[curIndex]) & programText[curIndex] != '\n') {
+        curIndex++;
+    }
 }
 
 vector<Token> tokenize(string& program) {
