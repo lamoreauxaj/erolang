@@ -15,7 +15,7 @@ enum TokenType {
     RIGHT_BRACKET,  // ]
     LEFT_BRACE,     // {
     RIGHT_BRACE,    // }
-    EQUALS,         // =
+    ASSIGN,         // =
     SINGLE_COMMENT, // # text
     MULTI_COMMENT,  // ## text\ntext ##
     COMMA,          // ,
@@ -25,12 +25,39 @@ enum TokenType {
     APPLY,          // -> operator
     // everything after this point is optional to implement if we have time / want
     // these features
-    WHILE,
-    PLUS,
-    MINUS,
-    TIMES,
-    DIVIDE,
-    IMPORT,
+    WHILE, // while
+    PLUS, // +
+    PLUS_EQUALS, // +=
+    MINUS, // -
+    MINUS_EQUALS, // -=
+    TIMES, // *
+    TIMES_EQUALS, // *=
+    DIVIDE, // /
+    DIVIDE_EQUALS, // /=
+    IDIVIDE, // //
+    IDIVIDE_EQUALS // //=
+    POWER, // ^
+    POWER_EQUALS, // ^=
+    MOD, // % 
+    MOD_EQUALS, // %=
+    NOT, // ! or not
+    XOR, // ^^
+    XOR_EQUALS, // ^^=
+    AND, // and or &&
+    AND_EQUALS, // &&=
+    OR, // or or ||
+    OR_EQUALS, // ||=
+    EQUALS, // ==
+    NOT_EQUALS, // !=
+    LESS, // <
+    GREATER, // >
+    LESS_OR_EQUAL, // <=
+    GREATER_OR_EQUAL, // >=
+    CONCAT, // ++
+    REPEAT, // **
+    SLICE, // :
+    IN, // in
+    IMPORT, // import 
 };
 
 struct Token {
