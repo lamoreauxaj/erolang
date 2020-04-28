@@ -2,7 +2,9 @@
 #include <string>
 #include <vector>
 
-string& programText;
+using namespace std;
+
+string& program;
 int curIndex;
 vector<Token> tokens;
 
@@ -32,18 +34,32 @@ bool one_char(TokenType t) {
 
 bool is_keyword() {
 
+    return false;
 }
 
 Token next_token() {
-    Token ret;
+    TokenType next_type;
+    string next_text;
+    int next_start;
+    int next_end;
 
-    while (curIndex < programText.length() & isspace(programText[curIndex]) & programText[curIndex] != '\n') {
+    while (curIndex < program.length() & isspace(program[curIndex]) & program[curIndex] != '\n')
         curIndex++;
+
+    next_start = curIndex;
+
+    TokenType t = char_type(program[curIndex]);
+    
+    if (one_char(t)) {
+        struct Token ret = Token(t, "abcd", next_start, next_end);
+        return ret;
     }
+    
+
 }
 
-vector<Token> tokenize(string& program) {
-    programText = program;
+vector<Token> tokenize(string& programText) {
+    program = programText;
 
     while (curIndex < programText.length()) {
         Token t = next_token();
