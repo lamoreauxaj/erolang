@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-string& programText;
+string programText;
 int curIndex;
 vector<Token> tokens;
 
@@ -31,11 +31,11 @@ bool one_char(TokenType t) {
 }
 
 bool is_keyword() {
-
+    return false;
 }
 
 Token next_token() {
-
+    return Token(TokenType::IDENTIFIER, "a");
 }
 
 vector<Token> tokenize(string& program) {
