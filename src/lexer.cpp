@@ -7,7 +7,6 @@ using namespace std;
 
 string program;
 int curIndex;
-vector<Token> tokens;
 
 TokenType char_type(char c) {
     switch (c) {
@@ -153,7 +152,7 @@ Token next_token() {
 vector<Token> tokenize(string& programText) {
     program = programText;
     curIndex = 0;
-    tokens.clear();
+    vector<Token> tokens;
 
     while (curIndex < programText.length()) {
         Token t = next_token();
