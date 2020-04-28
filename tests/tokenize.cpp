@@ -17,7 +17,8 @@ TEST(lexer, assignment1) {
     vector<Token> exp = {
         Token(TokenType::IDENTIFIER, "a"),
         Token(TokenType::EQUALS, "="),
-        Token(TokenType::REAL, "1.0")
+        Token(TokenType::REAL, "1.0"),
+        Token(TokenType::NEWLINE, "\n")
     };
     checkTokens(tokens, exp);
 }
@@ -33,7 +34,7 @@ TEST(lexer, assignment2) {
         Token(TokenType::IDENTIFIER, "b"),
         Token(TokenType::EQUALS, "="),
         Token(TokenType::REAL, ".001"),
-        Token(TokenType::NEWLINE, "\n"),
+        Token(TokenType::NEWLINE, "\n")
     };
     checkTokens(tokens, exp);
 }
