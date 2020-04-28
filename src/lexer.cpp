@@ -23,18 +23,30 @@ TokenType char_type(char c) {
         case '=': return EQUALS;
         case '#': return SINGLE_COMMENT;
         case ',': return COMMA;
-        case '-': return APPLY;  
+        case '-': return MINUS;
+        case '+': return PLUS;
+        case '*': return TIMES;
+        case '/': return DIVIDE;
         default: return IDENTIFIER;
     }
 }
 
 bool one_char(TokenType t) {
-    return (t == NEWLINE) || (t == BACKSLASH) || (t == SEMICOLON) || (t == LEFT_PAREN) || (t == RIGHT_PAREN) || 
-        (t == LEFT_BRACKET) || (t == RIGHT_BRACKET) || (t == LEFT_BRACE) || (t == RIGHT_BRACE) || (t == EQUALS) || (t == COMMA);
+    return (t == NEWLINE) || (t == BACKSLASH) || (t == SEMICOLON) || (t == LEFT_PAREN) || (t == RIGHT_PAREN) || (t == PLUS) ||
+        (t == LEFT_BRACKET) || (t == RIGHT_BRACKET) || (t == LEFT_BRACE) || (t == RIGHT_BRACE) || (t == EQUALS) || (t == COMMA)
+        || (t == TIMES) || (t == DIVIDE);
 }
 
-bool is_keyword() {
-    return false;
+TokenType is_keyword(string s) {
+    if (s == "IS") return IS;
+    if (s == "IF") return IF;
+    if (s == "WHILE") return WHILE;
+    if (s == "IMPORT") return IMPORT;
+    return IDENTIFIER;
+}
+
+bool alpha_num(char c) {
+    return isalnum(c) || (c == '_');
 }
 
 Token next_token() {
@@ -92,6 +104,26 @@ Token next_token() {
         }
     }
 
+    if (t == MINUS) {
+        if (curIndex + 1 < program.length() && program[curIndex + 1] == '>') {
+            return Token(APPLY, "->", curIndex, curIndex + 1);
+        } else {
+            return Token(MINUS, "-", curIndex, curIndex);
+        }
+    }
+
+    while (curIndex < program.length() && alpha_num(program[curIndex])) {
+        next_text.push_back(program[curIndex]);
+        curIndex++;
+    }
+
+    next_end = curIndex - 1;
+    
+    t = is_keyword(next_text);
+    if (t != IDENTIFIER)
+        return Token(t, next_text, next_start, next_end);
+    
+    
 }
 
 vector<Token> tokenize(string& programText) {
