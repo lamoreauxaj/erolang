@@ -53,8 +53,6 @@ enum TokenType {
     GREATER, // >
     LESS_OR_EQUAL, // <=
     GREATER_OR_EQUAL, // >=
-    CONCAT, // ++
-    REPEAT, // **
     SLICE, // :
     IN, // in
     IMPORT, // import 
