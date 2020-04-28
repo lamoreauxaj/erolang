@@ -39,6 +39,6 @@ struct Token {
     int line, start, end;
 };
 
-vector<Token> tokenize(string program);
+vector<Token> tokenize(string& program);
 
 #endif

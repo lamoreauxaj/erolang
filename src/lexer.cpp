@@ -2,6 +2,10 @@
 #include <string>
 #include <vector>
 
+string& programText;
+int curIndex;
+vector<Token> tokens;
+
 TokenType char_type(char c) {
     switch (c) {
         case '\n': return NEWLINE;
@@ -34,8 +38,14 @@ Token next_token() {
 
 }
 
-vector<Token> tokenize(string program) {
-    vector<Token> tokens;
+vector<Token> tokenize(string& program) {
+    programText = program;
 
+    while (curIndex < programText.length()) {
+        Token t = next_token();
+        tokens.push_back(t);
+        curIndex = t.end + 1;
+    }
 
+    return tokens;
 }
