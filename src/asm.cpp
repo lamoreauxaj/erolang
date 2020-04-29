@@ -35,5 +35,36 @@ string get_data_line(int line) {
 }
 
 void write_assembly(string file) {
+    ofstream fileWriter;
+    fileWriter.open(file);
 
+    fileWriter << "     .data\n";
+    for (string s : dataSeg) {
+        fileWriter << s << '\n';
+    }
+    
+    fileWriter << "     .text\n";
+    fileWriter << " .extern printf\n";
+    fileWriter << "  .global main\n";
+
+    // asdf need to probably update print code (this is just p4 version)
+    fileWriter << "print:\n";
+    fileWriter << "    lea printformat(%rip), %rdi\n";
+    fileWriter << "    mov %r15, %rsi\n";
+    fileWriter << "    xor %rax, %rax\n";
+    fileWriter << "    call printf\n";
+    fileWriter << "    ret\n";
+
+    if (!functions.count("main"))
+        log_error("No main function in assembly code", -1, -1);
+    
+    for (auto p : functions) {
+        fileWriter << p.first << ":\n";
+        for (string s : p.second) {
+            fileWriter << "     " << s << '\n';
+        }
+        fileWriter << "ret\n";
+    }
+
+    fileWriter.close();
 }

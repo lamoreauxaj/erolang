@@ -234,3 +234,21 @@ TEST(tokenize16, else_keyword1) {
     };
     checkTokens(tokens, exp);
 }
+
+TEST(tokenize17, apply1) {
+    string program = "we shall-do this test-> xD -> -";
+    vector<Token> tokens = tokenize(program);
+    vector<Token> exp = {
+        Token(TokenType::IDENTIFIER, "we"),
+        Token(TokenType::IDENTIFIER, "shall"),
+        Token(TokenType::MINUS, "-"),
+        Token(TokenType::IDENTIFIER, "do"),
+        Token(TokenType::IDENTIFIER, "this"),
+        Token(TokenType::IDENTIFIER, "test"),
+        Token(TokenType::APPLY, "->"),
+        Token(TokenType::IDENTIFIER, "xD"),
+        Token(TokenType::APPLY, "->"),
+        Token(TokenType::MINUS, "-")
+    };
+    checkTokens(tokens, exp);
+}
