@@ -1,11 +1,11 @@
 #ifndef ASM_H
 #define ASM_H
+
 #include <map>
-#include <string>
 #include <string>
 #include <vector>
 #include <log.h>
-#include <map>
+
 using namespace std;
 
 /**

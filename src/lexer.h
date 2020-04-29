@@ -1,8 +1,10 @@
 #ifndef LEXER_H
 #define LEXER_H
+
 #include <string>
 #include <vector>
 #include <log.h>
+
 using namespace std;
 
 enum TokenType {
