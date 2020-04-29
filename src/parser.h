@@ -2,6 +2,7 @@
 #define PARSER_H
 #include <vector>
 #include "lexer.h"
+#include "log.h"
 using namespace std;
 
 struct Node {
