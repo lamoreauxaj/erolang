@@ -1,5 +1,8 @@
 #ifndef PARSER_H
 #define PARSER_H
+#include <vector>
+#include "lexer.h"
+using namespace std;
 
 struct Node {
 };
@@ -10,50 +13,59 @@ struct Stmt : Node {
 struct Expr : Node {
 };
 
-struct Statements : Node {
-    vector<Statement> children;
+struct Stmts : Node {
+    vector<Stmt> children;
 };
 
-struct GroupExpr : Node {
+struct IfStmt : Stmt {
+    Expr cond;
+    Stmts block;
 };
 
-struct TupleExpr : Node {
+struct WhileStmt : Stmt {
+    Expr cond;
+    Stmts block;
 };
 
-struct RealExpr : Node {
-    Token val;
-    RealExpr(Token val) : val(val) {}
+struct ExprStmt : Stmt {
+    AssignmentExpr expr;
 };
 
-struct StringExpr : Node {
-    Token val;
+struct AssignmentExpr : Expr {
+    AssignmentExpr &left;
+    Token op;
+    DisjunctionExpr &right;
+    AssignmentExpr(AssignmentExpr left, Token op, DisjunctionExpr right) : left(left), op(op), right(right) {}
 };
 
-struct IdentifierExpr : Node {
-    Token val;
+struct DisjunctionExpr : Expr {
+    XdisjunctionExpr &left;
+    Token op;
+    DisjunctionExpr &right;
+    DisjunctionExpr(XdisjunctionExpr left, Token op, DisjunctionExpr right) : left(left), op(op), right(right) {}
 };
 
-struct PimaryExpr : Node {
+struct XdisjunctionExpr : Expr {
+    ConjunctionExpr &left;
+    Token op;
+    XdisjunctionExpr &right;
+    XdisjunctionExpr(ConjunctionExpr left, Token op, XdisjunctionExpr right) : left(left), op(op), right(right) {}
 };
 
-struct UnaryExpr : Node {
+struct ConjunctionExpr {
+    ComparisonExpr &left;
+    Token op;
+    ConjunctionExpr &right;
+    ConjunctionExpr(ComparisonExpr left, Token op, ConjunctionExpr right) : left(left), op(op), right(right) {}
 };
 
-struct ExponentiationExpr : Node {
+struct ComparisonExpr {
+    AdditionExpr &left;
+    Token op;
+    ComparisonExpr &right;
+    ComparisonExpr(AdditionExpr left, Token op, ComparisonExpr right) : left(left), op(op), right(right) {}
 };
 
-struct MultiplicationExpr : Node {
-};
-
-struct AdditionExpr : Node {
-};
-
-struct ComparisonExpr : Node {
-};
-
-struct AssignmentExpr : Node {
-};
-
-ASTNode parse(vector<Token> &tokens);
+Stmts parse(vector<Token> &tokens);
 
 #endif
