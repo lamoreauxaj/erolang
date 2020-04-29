@@ -38,15 +38,16 @@ bool one_char(TokenType t) {
 }
 
 TokenType is_keyword(string s) {
-    if (s == "is") return IS;
-    if (s == "if") return IF;
-    if (s == "in") return IN;
-    if (s == "while") return WHILE;
-    if (s == "import") return IMPORT;
-    if (s == "or") return OR;
-    if (s == "and") return AND;
-    if (s == "not") return NOT;
-    return IDENTIFIER;
+    if (s == "is") return TokenType::IS;
+    if (s == "else") return TokenType::ELSE;
+    if (s == "if") return TokenType::IF;
+    if (s == "in") return TokenType::IN;
+    if (s == "while") return TokenType::WHILE;
+    if (s == "import") return TokenType::IMPORT;
+    if (s == "or") return TokenType::OR;
+    if (s == "and") return TokenType::AND;
+    if (s == "not") return TokenType::NOT;
+    return TokenType::IDENTIFIER;
 }
 
 bool alpha_num(char c) {

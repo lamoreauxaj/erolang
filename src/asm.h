@@ -41,4 +41,9 @@ int add_to_data(string text);
  */
 string get_data_line(int line);
 
+/**
+ * Write the assembly that has been logged into file
+ */
+void write_assembly(string file);
+
 #endif
