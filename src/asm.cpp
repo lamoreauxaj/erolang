@@ -1,19 +1,9 @@
 #include <asm.h>
-#include <string>
-#include <vector>
-#include <log.h>
-#include <map>
-
-using namespace std;
 
 vector<string> dataSeg;
 map<string, vector<string>> functions;
 
-void add_function(string name) {
-    // do we need this xd
-}
-
-int add_to_function(string name, string text, int line=-1) {
+int add_to_function(string name, string text, int line) {
     if (line == -1 || line == functions[name].size()) {
         functions[name].push_back(text);
         return functions.size() - 1;

@@ -1,6 +1,10 @@
 #ifndef ASM_H
 #define ASM_H
 #include <string>
+#include <string>
+#include <vector>
+#include <log.h>
+#include <map>
 using namespace std;
 
 /**
@@ -12,7 +16,7 @@ using namespace std;
  * Create a function in our assembly.
  * @param name the name of the function
  */
-void add_function(string name);
+// void add_function(string name);
 
 /**
  * Add a line to a given function.

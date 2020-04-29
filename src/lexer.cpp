@@ -1,9 +1,4 @@
 #include <lexer.h>
-#include <string>
-#include <log.h>
-#include <vector>
-
-using namespace std;
 
 string program;
 int curIndex;
