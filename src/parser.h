@@ -96,14 +96,17 @@ struct MultiplicationExpr : Expr {
 };
 
 struct ExponentiationExpr : Expr {
-    ExponentiationExpr &left;
+    UnaryExpr &left;
     Token op;
-    UnaryExpr &right;
+    ExponentiationExpr &right;
+    ExponentiationExpr() {}
+    ExponentiationExpr(UnaryExpr left, Token op, ExponentiationExpr right) : left(left), op(op), right(right) {}
 }
 
 struct UnaryExpr : Expr {
     Token op;
     PrimaryExpr val;
+    UnaryExpr() {}
     UnaryExpr(Token op, PrimaryExpr val) : op(op), val(val) {}
 };
 
@@ -112,33 +115,39 @@ struct PrimaryExpr : Expr {
 
 struct RealExpr : PrimaryExpr {
     Token val;
+    RealExpr() {}
     RealExpr(Token val) : val(val) {}
 };
 
 struct IdentifierExpr : PrimaryExpr {
     Token val;
+    IdentifierExpr() {}
     IdentifierExpr(Token val) val(val) {}
 };
 
 struct GroupExpr : PrimaryExpr {
     Expr val;
+    GroupExpr() {}
     GroupExpr(Expr val) : val(val) {}
 };
 
 struct TupleExpr : PrimaryExpr {
     vector<Expr> vals;
+    TupleExpr() {}
     TupleExpr(vector<Expr> vals) vals(vals) {}
 };
 
 struct CallExpr : PrimaryExpr {
     Expr val;
     TupleExpr args;
+    CallExpr() {}
     CallExpr(Expr val, TupleExpr args) val(val), args(args) {}
 };
 
 struct IndexExpr : PrimaryExpr {
     Expr val;
     Expr index;
+    IndexExpr() {}
     IndexExpr(Expr val, Expr index) : val(val), index(index) {}
 };
 
