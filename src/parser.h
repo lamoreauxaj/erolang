@@ -1,20 +1,57 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-struct ASTNode {
+struct Node {
 };
 
-struct StatementNode : ASTNode {
+struct Stmt : Node {
 };
 
-struct ExpressionNode : ASTNode {
+struct Expr : Node {
 };
 
-struct StatementsNode : ASTNode {
+struct Statements : Node {
     vector<Statement> children;
 };
 
-struct RealNode : ASTNode {
+struct GroupExpr : Node {
+};
+
+struct TupleExpr : Node {
+};
+
+struct RealExpr : Node {
+    Token val;
+    RealExpr(Token val) : val(val) {}
+};
+
+struct StringExpr : Node {
+    Token val;
+};
+
+struct IdentifierExpr : Node {
+    Token val;
+};
+
+struct PimaryExpr : Node {
+};
+
+struct UnaryExpr : Node {
+};
+
+struct ExponentiationExpr : Node {
+};
+
+struct MultiplicationExpr : Node {
+};
+
+struct AdditionExpr : Node {
+};
+
+struct ComparisonExpr : Node {
+};
+
+struct AssignmentExpr : Node {
 };
 
 ASTNode parse(vector<Token> &tokens);
