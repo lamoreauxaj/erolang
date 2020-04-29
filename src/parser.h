@@ -52,37 +52,80 @@ struct XdisjunctionExpr : Expr {
     XdisjunctionExpr(XdisjunctionExpr left, Token op, ConjunctionExpr right) : left(left), op(op), right(right) {}
 };
 
-struct ConjunctionExpr {
+struct ConjunctionExpr : Expr {
     ConjunctionExpr &left;
     Token op;
     ComparisonExpr &right;
     ConjunctionExpr(ConjunctionExpr left, Token op, ComparisonExpr right) : left(left), op(op), right(right) {}
 };
 
-struct ComparisonExpr {
+struct ComparisonExpr : Expr {
     ComparisonExpr &left;
     Token op;
     AdditionExpr &right;
     ComparisonExpr(ComparisonExpr left, Token op, AdditionExpr right) : left(left), op(op), right(right) {}
 };
 
-struct AdditionExpr {
+struct AdditionExpr : Expr {
     AdditionExpr &left;
     Token op;
     MultiplicationExpr &right;
     AdditionExpr(AdditionExpr left, Token op, MultiplicationExpr right) : left(left), op(op), right(right) {}
 };
 
-struct MultiplicationExpr {
+struct MultiplicationExpr : Expr {
     MultiplicationExpr &left;
     Token op;
     ExponentiationExpr &right;
     MultiplicationExpr(MultiplicationExpr left, Token op, ExponentiationExpr right) : left(left), op(op), right(right) {}
 };
 
-struct ExponentiationExpr {
-    
+struct ExponentiationExpr : Expr {
+    ExponentiationExpr &left;
+    Token op;
+    UnaryExpr &right;
 }
+
+struct UnaryExpr : Expr {
+    Token op;
+    PrimaryExpr val;
+    UnaryExpr(Token op, PrimaryExpr val) : op(op), val(val) {}
+};
+
+struct PrimaryExpr : Expr {
+};
+
+struct RealExpr : PrimaryExpr {
+    Token val;
+    RealExpr(Token val) : val(val) {}
+};
+
+struct IdentifierExpr : PrimaryExpr {
+    Token val;
+    IdentifierExpr(Token val) val(val) {}
+};
+
+struct GroupExpr : PrimaryExpr {
+    Expr val;
+    GroupExpr(Expr val) : val(val) {}
+};
+
+struct TupleExpr : PrimaryExpr {
+    vector<Expr> vals;
+    TupleExpr(vector<Expr> vals) vals(vals) {}
+};
+
+struct CallExpr : PrimaryExpr {
+    Expr val;
+    TupleExpr args;
+    CallExpr(Expr val, TupleExpr args) val(val), args(args) {}
+};
+
+struct IndexExpr : PrimaryExpr {
+    Expr val;
+    Expr index;
+    IndexExpr(Expr val, Expr index) : val(val), index(index) {}
+};
 
 Stmts parse(vector<Token> &tokens);
 

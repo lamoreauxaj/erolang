@@ -20,6 +20,7 @@ enum TokenType {
     MULTI_COMMENT,  // ## text\ntext ##
     COMMA,          // ,
     IF,             // if
+    ELSE,           // else
     IS,             // is
     REAL,           // any floating point value
     APPLY,          // -> operator
