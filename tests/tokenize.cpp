@@ -224,3 +224,13 @@ TEST(tokenize15, not_keyword1) {
     };
     checkTokens(tokens, exp);
 }
+
+TEST(tokenize16, else_keyword1) {
+    string program = "elsee else";
+    vector<Token> tokens = tokenize(program);
+    vector<Token> exp =  {
+        Token(TokenType::IDENTIFIER, "elsee"),
+        Token(TokenType::ELSE, "else")
+    };
+    checkTokens(tokens, exp);
+}
