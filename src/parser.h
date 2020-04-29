@@ -32,39 +32,57 @@ struct ExprStmt : Stmt {
 };
 
 struct AssignmentExpr : Expr {
-    AssignmentExpr &left;
+    DisjunctionExpr &left;
     Token op;
-    DisjunctionExpr &right;
-    AssignmentExpr(AssignmentExpr left, Token op, DisjunctionExpr right) : left(left), op(op), right(right) {}
+    AssignmentExpr &right;
+    AssignmentExpr(DisjunctionExpr left, Token op, AssignmentExpr right) : left(left), op(op), right(right) {}
 };
 
 struct DisjunctionExpr : Expr {
-    XdisjunctionExpr &left;
+    DisjunctionExpr &left;
     Token op;
-    DisjunctionExpr &right;
-    DisjunctionExpr(XdisjunctionExpr left, Token op, DisjunctionExpr right) : left(left), op(op), right(right) {}
+    XdisjunctionExpr &rightj;
+    DisjunctionExpr(DisjunctionExpr left, Token op, XdisjunctionExpr right) : left(left), op(op), right(right) {}
 };
 
 struct XdisjunctionExpr : Expr {
-    ConjunctionExpr &left;
+    XdisjunctionExpr &left;
     Token op;
-    XdisjunctionExpr &right;
-    XdisjunctionExpr(ConjunctionExpr left, Token op, XdisjunctionExpr right) : left(left), op(op), right(right) {}
+    ConjunctionExpr &right;
+    XdisjunctionExpr(XdisjunctionExpr left, Token op, ConjunctionExpr right) : left(left), op(op), right(right) {}
 };
 
 struct ConjunctionExpr {
-    ComparisonExpr &left;
+    ConjunctionExpr &left;
     Token op;
-    ConjunctionExpr &right;
-    ConjunctionExpr(ComparisonExpr left, Token op, ConjunctionExpr right) : left(left), op(op), right(right) {}
+    ComparisonExpr &right;
+    ConjunctionExpr(ConjunctionExpr left, Token op, ComparisonExpr right) : left(left), op(op), right(right) {}
 };
 
 struct ComparisonExpr {
+    ComparisonExpr &left;
+    Token op;
+    AdditionExpr &right;
+    ComparisonExpr(ComparisonExpr left, Token op, AdditionExpr right) : left(left), op(op), right(right) {}
+};
+
+struct AdditionExpr {
     AdditionExpr &left;
     Token op;
-    ComparisonExpr &right;
-    ComparisonExpr(AdditionExpr left, Token op, ComparisonExpr right) : left(left), op(op), right(right) {}
+    MultiplicationExpr &right;
+    AdditionExpr(AdditionExpr left, Token op, MultiplicationExpr right) : left(left), op(op), right(right) {}
 };
+
+struct MultiplicationExpr {
+    MultiplicationExpr &left;
+    Token op;
+    ExponentiationExpr &right;
+    MultiplicationExpr(MultiplicationExpr left, Token op, ExponentiationExpr right) : left(left), op(op), right(right) {}
+};
+
+struct ExponentiationExpr {
+    
+}
 
 Stmts parse(vector<Token> &tokens);
 
