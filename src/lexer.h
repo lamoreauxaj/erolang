@@ -68,6 +68,7 @@ struct Token {
     string text;
     int start, end;
 
+    Token() {}
     Token(TokenType type, string text) : type(type), text(text) {}
     Token(TokenType type, string text, int start, int end) : type(type), text(text), start(start), end(end) {}
 };

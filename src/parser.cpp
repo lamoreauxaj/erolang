@@ -13,9 +13,13 @@ void advance() {
         pos++;
 }
 
-bool match(TokenType type) {
-    if (!eof() && tokens[pos].type == type) {
-        pos++
+bool does_match(TokenType type) {
+    return !eof() && tokens[pos].type == type;
+}
+
+bool match(TokenType type, Token &res) {
+    if (does_match(type)) {
+        res = tokens[pos++];
         return true;
     }
     return false;
@@ -81,8 +85,43 @@ bool parse_assignment_expr(AssignmentExpr &res) {
     return false;
 }
 
+bool parse_expr(Expr &res) {
+    return parse_assignment_expr(res);
+}
+
 bool parse_if_stmt(IfStmt &res) {
-    return false;
+    if (!does_match(IF)) {
+        log_error("missing if token");
+        return false;
+    }
+    advance();
+    if (!does_match(LEFT_PAREN)) {
+        log_error("missing left paren in if");
+        return false;
+    }
+    advance();
+    Expr expr;
+    if (!parse_expr(expr)) {
+        return false;
+    }
+    if (!does_match(RIGHT_PAREN)) {
+        log_error("missing right paren in if");
+        return false;
+    }
+    if (!does_match(LEFT_BRACE)) {
+        log_error("missing left brace in if");
+        return false;
+    }
+    Stmts stmts;
+    if (!parse_statements(stmts)) {
+        return false;
+    }
+    if (!does_match(RIGHT_BRACE)) {
+        log_error("missing right brace in if");
+        return false;
+    }
+    res = IfStmt(expr, stmts);
+    return true;
 }
 
 bool parse_while_stmt(WhileStmt &res) {
@@ -94,12 +133,12 @@ bool parse_expr_stmt(ExprStmt &res) {
 }
 
 bool parse_statement(Stmt &res) {
-    if (match(IF)) {
+    if (does_match(IF)) {
         IfStmt stmt;
         if (!parse_if_stmt(stmt)) return false;
         res = stmt;
     }
-    else if (match(WHILE)) {
+    else if (does_match(WHILE)) {
         WhileStmt stmt;
         if (!parse_while_stmt(stmt)) return false;
         res = stmt;
@@ -113,13 +152,14 @@ bool parse_statement(Stmt &res) {
 }
 
 bool parse_statements(Stmts &res) {
-    vector<Stmt> stmts;
+    vector<Stmt> stmts
     while (true) {
         Stmt stmt;
         if (!parse_statement(stmt)) break;
         stmts.push_back(stmt);
     }
     if (!stmts.size()) return false;
+    if (!eof()) return false;
     res = stmts;
 }
 
