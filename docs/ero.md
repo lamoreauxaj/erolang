@@ -24,6 +24,10 @@ This is the exact definition of our language's syntactic grammar which we use to
 our parsing efforts.
 
 ```
+statements     -> statement*
+statement      -> expression | if | while
+if             -> IF LEFT_PAREN expression RIGHT_PAREN LEFT_BRACKET statements RIGHT_BRACKET
+while          -> WHILE LEFT_PAREN expression RIGHT_PAREN LEFT_BRACE statements RIGHT_BRACE
 expression     -> assignment
 assignment     -> disjunction (ASSIGN disjunction)* 
 disjunction    -> xdisjunction (OR xdisjunction)*
