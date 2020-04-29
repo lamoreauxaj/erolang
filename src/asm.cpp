@@ -3,7 +3,6 @@
 #include <vector>
 #include <log.h>
 #include <map>
-
 using namespace std;
 
 vector<string> dataSeg;

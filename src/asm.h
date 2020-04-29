@@ -1,6 +1,9 @@
 #ifndef ASM_H
 #define ASM_H
+#include <map>
 #include <string>
+#include <vector>
+#include <log.h>
 using namespace std;
 
 /**
