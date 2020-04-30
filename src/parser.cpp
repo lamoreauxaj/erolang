@@ -78,11 +78,35 @@ Expr *parse_unary_expr() {
 }
 
 Expr *parse_exponentiation_expr() {
-    return parse_unary_expr();
+    Expr *expr = parse_unary_expr();
+    if (!expr) return nullptr;
+    while (true) {
+        Token op;
+        if (!consume(POWER, op)) break;
+        Expr *right = parse_exponentiation_expr();
+        if (!right) {
+            log_error("incomplete binary operator");
+            return nullptr;
+        }
+        expr = new BinaryExpr(expr, op, right);
+    }
+    return expr;
 }
 
 Expr *parse_multiplication_expr() {
-    return parse_exponentiation_expr();
+    Expr *expr = parse_exponentiation_expr();
+    if (!expr) return nullptr;
+    while (true) {
+        Token op;
+        if (!consume(DIVIDE, op) && !consume(TIMES, op) && !consume(IDIVIDE, op) && !consume(MOD, op)) break;
+        Expr *right = parse_exponentiation_expr();
+        if (!right) {
+            log_error("incomplete binary operator");
+            return nullptr;
+        }
+        expr = new BinaryExpr(expr, op, right);
+    }
+    return expr;
 }
 
 Expr *parse_addition_expr() {
@@ -92,26 +116,89 @@ Expr *parse_addition_expr() {
         Token op;
         if (!consume(PLUS, op) && !consume(MINUS, op)) break;
         Expr *right = parse_multiplication_expr(); // left associative operation
-        if (!right) break;
+        if (!right) {
+            log_error("incomplete binary operator");
+            return nullptr;
+        }
         expr = new BinaryExpr(expr, op, right);
     }
     return expr;
 }
 
 Expr *parse_comparision_expr() {
-    return parse_addition_expr();
+    Expr *expr = parse_addition_expr();
+    if (!expr) return nullptr;
+    while (true) {
+        Token op;
+        if (!consume(IS, op) && !consume(EQUALS, op) && !consume(NOT_EQUALS, op) && !consume(IN, op) && !consume(NOT, op)) break;
+        if (op.type == NOT) {
+            Token xop = NONE;
+            if (!consume(IS, xop) && !consume(IN, xop)) break;
+            Expr *right = parse_addition_expr();
+            if (!right) {
+                log_error("incomplete binary operator");
+                return nullptr;
+            }
+            expr = new BinaryExpr(expr, op, xop, right);
+        }
+        else {
+            Expr *right = parse_addition_expr();
+            if (!right) {
+                log_error("incomplete binary operator");
+                return nullptr;
+            }
+            expr = new BinaryExpr(expr, op, right);
+        }
+    }
+    return expr;
 }
 
 Expr *parse_conjunction_expr() {
-    return parse_comparision_expr();
+    Expr *expr = parse_comparision_expr();
+    if (!expr) return nullptr;
+    while (true) {
+        Token op;
+        if (!consume(AND, op)) break;
+        Expr *right = parse_comparision_expr();
+        if (!right) {
+            log_error("incomplete binary operator");
+            return nullptr;
+        }
+        expr = new BinaryExpr(expr, op, right);
+    }
+    return expr;
 }
 
 Expr *parse_xdisjunction_expr() {
-    return parse_conjunction_expr();
+    Expr *expr = parse_conjunction_expr();
+    if (!expr) return nullptr;
+    while (true) {
+        Token op;
+        if (!consume(XOR, op)) break;
+        Expr *right = parse_conjunction_expr();
+        if (!right) {
+            log_error("incomplete binary operator");
+            return nullptr;
+        }
+        expr = new BinaryExpr(expr, op, right);
+    }
+    return expr;
 }
 
 Expr *parse_disjunction_expr() {
-    return parse_xdisjunction_expr();
+    Expr *expr = parse_xdisjunction_expr();
+    if (!expr) return nullptr;
+    while (true) {
+        Token op;
+        if (!consume(OR, op)) break;
+        Expr *right = parse_xdisjunction_expr();
+        if (!right) {
+            log_error("incomplete binary operator");
+            return nullptr;
+        }
+        expr = new BinaryExpr(expr, op, right);
+    }
+    return expr;
 }
 
 Expr *parse_assignment_expr() {
@@ -121,7 +208,10 @@ Expr *parse_assignment_expr() {
         Token op;
         if (!consume(ASSIGN, op)) break;
         Expr *right = parse_assignment_expr(); // right associative is recursive
-        if (!right) break;
+        if (!right) {
+            log_error("incomplete binary operator");
+            return nullptr;
+        }
         expr = new BinaryExpr(expr, op, right);
     }
     return expr;
@@ -132,25 +222,23 @@ Expr *parse_expr() {
 }
 
 IfStmt *parse_if_stmt() {
-    if (!peek(IF)) {
+    if (!consume(IF)) {
         log_error("missing if token");
         return nullptr;
     }
-    advance();
-    if (!peek(LEFT_PAREN)) {
+    if (!consume(LEFT_PAREN)) {
         log_error("missing left paren in if");
         return nullptr;
     }
-    advance();
     Expr *expr = parse_expr();
     if (!expr) {
         return nullptr;
     }
-    if (!peek(RIGHT_PAREN)) {
+    if (!consume(RIGHT_PAREN)) {
         log_error("missing right paren in if");
         return nullptr;
     }
-    if (!peek(LEFT_BRACE)) {
+    if (!consume(LEFT_BRACE)) {
         log_error("missing left brace in if");
         return nullptr;
     }
@@ -158,7 +246,7 @@ IfStmt *parse_if_stmt() {
     if (!stmts) {
         return nullptr;
     }
-    if (!peek(RIGHT_BRACE)) {
+    if (!consume(RIGHT_BRACE)) {
         log_error("missing right brace in if");
         return nullptr;
     }
@@ -166,7 +254,35 @@ IfStmt *parse_if_stmt() {
 }
 
 WhileStmt *parse_while_stmt() {
-    return nullptr;
+    if (!consume(WHILE)) {
+        log_error("missing while token");
+        return nullptr;
+    }
+    if (!consume(LEFT_PAREN)) {
+        log_error("missing left paren in while");
+        return nullptr;
+    }
+    Expr *expr = parse_expr();
+    if (!expr) {
+        return nullptr;
+    }
+    if (!consume(RIGHT_PAREN)) {
+        log_error("missing right paren in while");
+        return nullptr;
+    }
+    if (!consume(LEFT_BRACE)) {
+        log_error("missing left brace in while");
+        return nullptr;
+    }
+    Stmts *stmts = parse_statements();
+    if (!stmts) {
+        return nullptr;
+    }
+    if (!consume(RIGHT_BRACE)) {
+        log_error("missing right brace in while");
+        return nullptr;
+    }
+    return new WhileStmt(expr, stmts);
 }
 
 ExprStmt *parse_expr_stmt() {

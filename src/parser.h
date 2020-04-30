@@ -114,9 +114,11 @@ struct UnaryExpr : virtual Expr {
 struct BinaryExpr : virtual Expr {
     Expr *left;
     Token op;
+    Token xop;
     Expr *right;
     BinaryExpr() {}
     BinaryExpr(Expr *left, Token op, Expr *right) : left(left), op(op), right(right) {}
+    BinaryExpr(Expr *left, Token op, Token xop, Expr *right) : left(left), op(op), xop(xop), right(right) {}
     string pprint() { return "(BinaryExpr " + left->pprint() + " " + op.text + " " + right->pprint() + ")"; }
 };
 
