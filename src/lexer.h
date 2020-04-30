@@ -8,6 +8,7 @@
 using namespace std;
 
 enum TokenType {
+    NONE,           // not a real token type
     IDENTIFIER,
     NEWLINE,        // I have this so we can go back and detect statement boundaries
     BACKSLASH,      // intended to be before newline 

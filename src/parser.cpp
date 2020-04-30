@@ -13,161 +13,186 @@ void advance() {
         pos++;
 }
 
-bool does_match(TokenType type) {
+bool peek(TokenType type) {
     return !eof() && tokens[pos].type == type;
 }
 
-bool match(TokenType type, Token &res) {
-    if (does_match(type)) {
+bool peek(TokenType type, Token &res) {
+    if (peek(type)) {
+        res = tokens[pos];
+        return true;
+    }
+    return false;
+}
+
+bool consume(TokenType type) {
+    if (peek(type)) {
+        pos++;
+        return true;
+    }
+    return false;
+}
+
+bool consume(TokenType type, Token &res) {
+    if (peek(type)) {
         res = tokens[pos++];
         return true;
     }
     return false;
 }
 
-bool parse_index_expr(IndexExpr &res) {
-    return false;
+Stmts *parse_statements();
+
+IndexExpr *parse_index_expr() {
+    return nullptr;
 }
 
-bool parse_call_expr(CallExpr &res) {
-    return false;
+CallExpr *parse_call_expr() {
+    return nullptr;
 }
 
-bool parse_tuple_expr(TupleExpr &res) {
-    return false;
+TupleExpr *parse_tuple_expr() {
+    return nullptr;
 }
 
-bool parse_identifier_expr(IdentifierExpr &res) {
-    return false;
+IdentifierExpr *parse_identifier_expr() {
+    Token val;
+    if (!consume(IDENTIFIER, val)) return nullptr;
+    return new IdentifierExpr(val);
 }
 
-bool parse_real_expr(RealExpr &res) {
-    return false;
+RealExpr *parse_real_expr() {
+    Token val;
+    if (!consume(REAL, val)) return nullptr;
+    return new RealExpr(val);
 }
 
-bool parse_primary_expr(PrimaryExpr &res) {
-    return false;
+Expr *parse_primary_expr() {
+    if (peek(REAL)) return parse_real_expr();
+    else if (peek(IDENTIFIER)) return parse_identifier_expr();
+    else return nullptr;
 }
 
-bool parse_unary_expr(UnaryExpr &res) {
-    return false;
+Expr *parse_unary_expr() {
+    return parse_primary_expr();
 }
 
-bool parse_exponentiation_expr(ExponentiationExpr &res) {
-    return false;
+Expr *parse_exponentiation_expr() {
+    return parse_unary_expr();
 }
 
-bool parse_multiplication_expr(MultiplicationExpr &res) {
-    return false;
+Expr *parse_multiplication_expr() {
+    return parse_exponentiation_expr();
 }
 
-bool parse_addition_expr(AdditionExpr &res) {
-    return false;
+Expr *parse_addition_expr() {
+    return parse_multiplication_expr();
 }
 
-bool parse_comparision_expr(ComparisionExpr &res) {
-    return false;
+Expr *parse_comparision_expr() {
+    return parse_addition_expr();
 }
 
-bool parse_conjunction_expr(ConjunctionExpr &res) {
-    return false;
+Expr *parse_conjunction_expr() {
+    return parse_comparision_expr();
 }
 
-bool parse_xdisjunction_expr(XdisjunctionExpr &res) {
-    return false;
+Expr *parse_xdisjunction_expr() {
+    return parse_conjunction_expr();
 }
 
-bool parse_disjunction_expr(DisjunctionExpr &res) {
-    return false;
+Expr *parse_disjunction_expr() {
+    return parse_xdisjunction_expr();
 }
 
-bool parse_assignment_expr(AssignmentExpr &res) {
-    return false;
+Expr *parse_assignment_expr() {
+    Expr *expr = parse_disjunction_expr();
+    if (!expr) return nullptr;
+    while (true) {
+        Token op;
+        if (!consume(ASSIGN, op)) break;
+        Expr *right = parse_assignment_expr();
+        if (!right) break;
+        expr = new BinaryExpr(expr, op, right);
+    }
+    return expr;
 }
 
-bool parse_expr(Expr &res) {
-    return parse_assignment_expr(res);
+Expr *parse_expr() {
+    return parse_assignment_expr();
 }
 
-bool parse_if_stmt(IfStmt &res) {
-    if (!does_match(IF)) {
+IfStmt *parse_if_stmt() {
+    if (!peek(IF)) {
         log_error("missing if token");
-        return false;
+        return nullptr;
     }
     advance();
-    if (!does_match(LEFT_PAREN)) {
+    if (!peek(LEFT_PAREN)) {
         log_error("missing left paren in if");
-        return false;
+        return nullptr;
     }
     advance();
-    Expr expr;
-    if (!parse_expr(expr)) {
-        return false;
+    Expr *expr = parse_expr();
+    if (!expr) {
+        return nullptr;
     }
-    if (!does_match(RIGHT_PAREN)) {
+    if (!peek(RIGHT_PAREN)) {
         log_error("missing right paren in if");
-        return false;
+        return nullptr;
     }
-    if (!does_match(LEFT_BRACE)) {
+    if (!peek(LEFT_BRACE)) {
         log_error("missing left brace in if");
-        return false;
+        return nullptr;
     }
-    Stmts stmts;
-    if (!parse_statements(stmts)) {
-        return false;
+    Stmts *stmts = parse_statements();
+    if (!stmts) {
+        return nullptr;
     }
-    if (!does_match(RIGHT_BRACE)) {
+    if (!peek(RIGHT_BRACE)) {
         log_error("missing right brace in if");
-        return false;
+        return nullptr;
     }
-    res = IfStmt(expr, stmts);
-    return true;
+    return new IfStmt(expr, stmts);
 }
 
-bool parse_while_stmt(WhileStmt &res) {
-    return false;
+WhileStmt *parse_while_stmt() {
+    return nullptr;
 }
 
-bool parse_expr_stmt(ExprStmt &res) {
-    return false;
+ExprStmt *parse_expr_stmt() {
+    Expr *expr = parse_expr();
+    if (!expr) return nullptr;
+    return new ExprStmt(expr);
 }
 
-bool parse_statement(Stmt &res) {
-    if (does_match(IF)) {
-        IfStmt stmt;
-        if (!parse_if_stmt(stmt)) return false;
-        res = stmt;
+Stmt *parse_statement() {
+    if (peek(IF)) {
+        return parse_if_stmt();
     }
-    else if (does_match(WHILE)) {
-        WhileStmt stmt;
-        if (!parse_while_stmt(stmt)) return false;
-        res = stmt;
+    else if (peek(WHILE)) {
+        return parse_while_stmt();
     }
     else {
-        ExprStmt stmt;
-        if (!parse_expr_stmt(stmt)) return false;
-        res = stmt;
+        return parse_expr_stmt();
     }
-    return true;
 }
 
-bool parse_statements(Stmts &res) {
-    vector<Stmt> stmts
-    while (true) {
-        Stmt stmt;
-        if (!parse_statement(stmt)) break;
+Stmts *parse_statements() {
+    vector<Stmt*> stmts;
+    while (!eof()) {
+        Stmt *stmt = parse_statement();
+        if (!stmt) break;
         stmts.push_back(stmt);
+        consume(NEWLINE);
     }
-    if (!stmts.size()) return false;
-    if (!eof()) return false;
-    res = stmts;
+    if (!stmts.size()) return nullptr;
+    if (!eof()) return nullptr;
+    return new Stmts(stmts);
 }
 
-Stmts parse(vector<Token> &tok) {
+Stmts *parse(vector<Token> &tok) {
     tokens = tok;
-    Stmts res;
-    if (!parse_statements(res)) {
-        log_error("unable to parse program");
-    }
-    return res;
+    pos = 0;
+    return parse_statements();
 }
