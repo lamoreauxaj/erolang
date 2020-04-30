@@ -104,7 +104,7 @@ Expr *parse_primary_expr() {
                 log_error("expected right paren");
                 return nullptr;
             }
-            return new CallExpr(expr, args);
+            return new CallExpr(expr, new TupleExpr(args));
         }
     }
 }
