@@ -91,7 +91,7 @@ Expr *parse_addition_expr() {
     while (true) {
         Token op;
         if (!consume(PLUS, op) && !consume(MINUS, op)) break;
-        Expr *right = parse_multiplication_expr();
+        Expr *right = parse_multiplication_expr(); // left associative operation
         if (!right) break;
         expr = new BinaryExpr(expr, op, right);
     }
@@ -120,7 +120,7 @@ Expr *parse_assignment_expr() {
     while (true) {
         Token op;
         if (!consume(ASSIGN, op)) break;
-        Expr *right = parse_assignment_expr();
+        Expr *right = parse_assignment_expr(); // right associative is recursive
         if (!right) break;
         expr = new BinaryExpr(expr, op, right);
     }

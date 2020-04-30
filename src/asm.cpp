@@ -9,7 +9,7 @@ int add_to_function(string name, string text, int line) {
         return functions.size() - 1;
     } else {
         if (line < -1 || functions.size() < line)
-            log_error("out of bounds assembly line", -1, -1);
+            log_error("out of bounds assembly line");
         functions[name][line] = text;
         return line;
     }
@@ -17,9 +17,9 @@ int add_to_function(string name, string text, int line) {
 
 string get_function_line(string name, int line) {
     if (!functions.count(name))
-        log_error("function has not been defined in assembly", -1, -1);
+        log_error("function has not been defined in assembly");
     if (line < 0 || functions[name].size() <= line)
-        log_error("out of bounds assembly line", -1, -1);
+        log_error("out of bounds assembly line");
     return functions[name][line];
 }
 
@@ -30,7 +30,7 @@ int add_to_data(string text) {
 
 string get_data_line(int line) {
     if (line < 0 || dataSeg.size() <= line)
-        log_error("out of bounds data segment", -1, -1);
+        log_error("out of bounds data segment");
     return dataSeg[line];
 }
 
@@ -56,7 +56,7 @@ void write_assembly(string file) {
     fileWriter << "    ret\n";
 
     if (!functions.count("main"))
-        log_error("No main function in assembly code", -1, -1);
+        log_error("No main function in assembly code");
     
     for (auto p : functions) {
         fileWriter << p.first << ":\n";
