@@ -1,5 +1,6 @@
 #include <iostream>
 #include "asm.h"
+#include "compile.h"
 #include "lexer.h"
 #include "log.h"
 #include "parser.h"
@@ -28,9 +29,9 @@ int main(int argc, char **argv) {
     cout << "compiling" << endl;
     vector<Token> tokens = tokenize(program);
     Node *tree = parse(tokens);
-    // compile(tree);
-    add_to_function("main", "xor %rax, %rax");
-    add_to_function("main", "ret");
+    compile(tree);
+    // add_to_function("main", "xor %rax, %rax");
+    // add_to_function("main", "ret");
     write_assembly(output_file + ".s");
 
     string command = "gcc -static -o " + output_file + " " + output_file + ".s";
