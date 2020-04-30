@@ -42,35 +42,71 @@ bool consume(TokenType type, Token &res) {
 }
 
 Stmts *parse_statements();
-
-IndexExpr *parse_index_expr() {
-    return nullptr;
-}
-
-CallExpr *parse_call_expr() {
-    return nullptr;
-}
-
-TupleExpr *parse_tuple_expr() {
-    return nullptr;
-}
-
-IdentifierExpr *parse_identifier_expr() {
-    Token val;
-    if (!consume(IDENTIFIER, val)) return nullptr;
-    return new IdentifierExpr(val);
-}
-
-RealExpr *parse_real_expr() {
-    Token val;
-    if (!consume(REAL, val)) return nullptr;
-    return new RealExpr(val);
-}
+Expr *parse_expr();
 
 Expr *parse_primary_expr() {
-    if (peek(REAL)) return parse_real_expr();
-    else if (peek(IDENTIFIER)) return parse_identifier_expr();
-    else return nullptr;
+    Token val;
+    if (consume(REAL, val)) return new RealExpr(val);
+    else if (consume(IDENTIFIER, val)) return new IdentifierExpr(val);
+    else if (peek(LEFT_PAREN)) {
+        Expr *expr = parse_expr();
+        if (peek(COMMA)) {
+            vector<Expr*> tuple = {expr};
+            while (!peek(RIGHT_PAREN)) {
+                if (!consume(COMMA)) {
+                    log_error("expected comma");
+                    return nullptr;
+                }
+                Expr *expr = parse_expr();
+                if (expr)
+                    tuple.push_back(expr);
+            }
+            return new TupleExpr(tuple);
+        }
+        else {
+            if (!consume(RIGHT_PAREN)) {
+                log_error("expected right paren");
+                return nullptr;
+            }
+            return new GroupExpr(expr);
+        }
+    }
+    else {
+        Expr *expr = parse_expr();
+        if (!expr) return nullptr;
+        if (consume(LEFT_BRACKET)) {
+            Expr *index = parse_expr();
+            if (!index) {
+                log_error("expected index");
+                return nullptr;
+            }
+            if (!consume(RIGHT_BRACKET)) {
+                log_error("expected right bracket");
+                return nullptr;
+            }
+            return new IndexExpr(expr, index);
+        }
+        else {
+            if (!consume(LEFT_PAREN)) {
+                log_error("expected left paren");
+                return nullptr;
+            }
+            vector<Expr*> args;
+            while (!peek(RIGHT_PAREN)) {
+                Expr *arg = parse_expr();
+                if (!arg) {
+                    log_error("expected arg");
+                    return nullptr;
+                }
+                args.push_back(arg);
+            }
+            if (!consume(RIGHT_PAREN)) {
+                log_error("expected right paren");
+                return nullptr;
+            }
+            return new CallExpr(expr, args);
+        }
+    }
 }
 
 Expr *parse_unary_expr() {
@@ -132,7 +168,7 @@ Expr *parse_comparision_expr() {
         Token op;
         if (!consume(IS, op) && !consume(EQUALS, op) && !consume(NOT_EQUALS, op) && !consume(IN, op) && !consume(NOT, op)) break;
         if (op.type == NOT) {
-            Token xop = NONE;
+            Token xop;
             if (!consume(IS, xop) && !consume(IN, xop)) break;
             Expr *right = parse_addition_expr();
             if (!right) {

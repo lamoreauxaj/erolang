@@ -44,6 +44,6 @@ real           -> REAL
 identifier     -> IDENTIFIER
 group          -> LEFT_PAREN expression RIGHT_PAREN
 tuple          -> LEFT_PAREN (expression COMMA)+ expression? RIGHT_PAREN
-call           -> expression tuple
+call           -> expression LEFT_PAREN (expression COMMA)* expression RIGHT_PAREN
 index          -> expression LEFT_BRACKET expression RIGHT_BRACKET
 ```
