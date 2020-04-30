@@ -10,7 +10,11 @@ TEST(parser1, assigment1) {
     vector<Token> tok = {
         Token(IDENTIFIER, "a"),
         Token(ASSIGN, "="),
+        Token(REAL, "2.0"),
+        Token(PLUS, "+"),
         Token(REAL, "1.0"),
+        Token(MINUS, "-"),
+        Token(REAL, "0.5"),
         Token(NEWLINE, "\n")
     };
     Stmts *exp = new Stmts({

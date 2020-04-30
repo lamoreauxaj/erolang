@@ -86,7 +86,16 @@ Expr *parse_multiplication_expr() {
 }
 
 Expr *parse_addition_expr() {
-    return parse_multiplication_expr();
+    Expr *expr = parse_multiplication_expr();
+    if (!expr) return nullptr;
+    while (true) {
+        Token op;
+        if (!consume(PLUS, op) && !consume(MINUS, op)) break;
+        Expr *right = parse_multiplication_expr();
+        if (!right) break;
+        expr = new BinaryExpr(expr, op, right);
+    }
+    return expr;
 }
 
 Expr *parse_comparision_expr() {
