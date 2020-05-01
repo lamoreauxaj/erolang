@@ -15,26 +15,23 @@ enum VarType {
     SPACE,
     CONSTRUCTION,
     TUPLE,
-    NULL
+    UNDEFINED
 };
 
 struct Vector3D {
     double x, y, z;
-    bool defined;
 
     Vector3D() {
-        x = 0, y = 0, z = 0, defined = 0;
+        x = 0, y = 0, z = 0;
     }
 
-    Vector3D(double x, double y, double z) {
-        x(x), y(y), z(z), defined = 1;
-    }
+    Vector3D(double x, double y, double z) : x(x), y(y), z(z) {}
 
-    Vector3D operator + (Vector3D& v) {
+    Vector3D operator + (const Vector3D& v) const {
         return Vector3D(x + v.x, y + v.y, z + v.z);
     }
 
-    Vector3D operator - (Vector3D& v) {
+    Vector3D operator - (const Vector3D& v) const {
         return Vector3D(x - v.x, y - v.y, z - v.z);
     }
 
