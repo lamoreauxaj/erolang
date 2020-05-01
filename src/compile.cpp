@@ -16,15 +16,17 @@ queue<Node*> function_queue;
 void compile_expr(Expr *expr);
 
 void compile_real_expr(RealExpr *expr) {
-
+    // cout << sizeof(Var) << "\n";
+    cout << to_string(REALV) << "\n";
+    add_to_function("main", "push $" + to_string(REALV));
 }
 
 void compile_unary_expr(UnaryExpr *expr) {
-
+    compile_expr(expr->val);
 }
 
 void compile_binary_expr(BinaryExpr *expr) {
-
+    compile_expr(expr->right);
 }
 
 void compile_expr(Expr *expr) {
@@ -59,12 +61,13 @@ void compile_stmt(Stmt *stmt) {
     }
 }
 
-void compile_stmts(Stmts *node) {
-    for (Stmt *child : node->stmts) {
-
+void compile_stmts(Stmts *stmts) {
+    for (Stmt *stmt : stmts->stmts) {
+        compile_stmt(stmt);
     }
 }
 
-void compile(Node *tree) {
-
+void compile(Stmts *tree) {
+    compile_stmts(tree);
+    add_to_function("main", "ret");
 }

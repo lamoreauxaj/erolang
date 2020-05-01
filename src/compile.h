@@ -4,11 +4,12 @@
 #include <string>
 #include <queue>
 #include <vector>
+#include "asm.h"
 #include "lexer.h"
 #include "lib/variable.h"
 #include "parser.h"
 using namespace std;
 
-void compile(Node *tree);
+void compile(Stmts *tree);
 
 #endif

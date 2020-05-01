@@ -26,9 +26,12 @@ int main(int argc, char **argv) {
 
     string program = read_program(input_file);
 
+    system(string("rm " + output_file + ".s").c_str());
+    system(string("rm " + output_file).c_str());
+
     cout << "compiling" << endl;
     vector<Token> tokens = tokenize(program);
-    Node *tree = parse(tokens);
+    Stmts *tree = parse(tokens);
     compile(tree);
     // add_to_function("main", "xor %rax, %rax");
     // add_to_function("main", "ret");
@@ -39,6 +42,10 @@ int main(int argc, char **argv) {
     if (rc) {
         cout << "unable to compile" << endl;
         return 1;
+    }
+
+    for (string error : get_messages()) {
+        cout << error << "\n";
     }
 
     return 0;

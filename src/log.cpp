@@ -9,6 +9,7 @@ void log_error(string message, int start, int end) {
         error += " at " + start;
     if (end != -1)
         error += ":" + end;
+    log_messages.push_back(error);
 }
 
 vector<string> get_messages() {
