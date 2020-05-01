@@ -15,14 +15,18 @@ queue<Node*> function_queue;
 
 void compile_expr(Expr *expr);
 
+int16_t pack(int16_t v) {
+    return ((v & 0xff) << 8) | ((v & 0xff00) >> 8);
+}
+
 void compile_real_expr(RealExpr *expr) {
     double tmp = stod(expr->val.text);
     uint64_t val = *((uint64_t*) &tmp);
     // not really sure if endianness is correct here
-    add_to_function("main", "pushw $" + to_string((int16_t) (val >> 48)));
-    add_to_function("main", "pushw $" + to_string((int16_t) ((val >> 32) & 0xffff)));
-    add_to_function("main", "pushw $" + to_string((int16_t) ((val >> 16) & 0xffff)));
-    add_to_function("main", "pushw $" + to_string((int32_t) (val & 0xffff)));
+    add_to_function("main", "pushw $" + to_string(((int16_t) (val >> 48))));
+    add_to_function("main", "pushw $" + to_string(((int16_t) ((val >> 32) & 0xffff))));
+    add_to_function("main", "pushw $" + to_string(((int16_t) ((val >> 16) & 0xffff))));
+    add_to_function("main", "pushw $" + to_string(((int16_t) (val & 0xffff))));
     add_to_function("main", "pushw $0");
     add_to_function("main", "pushw $" + to_string(sizeof(RealVar)));
     add_to_function("main", "pushw $0");
@@ -38,20 +42,19 @@ void compile_unary_expr(UnaryExpr *expr) {
 }
 
 void compile_addition_op(BinaryExpr *expr) {
-    compile_expr(expr->left);
+    // compile_expr(expr->left);
     compile_expr(expr->right);
-    add_to_data("format: .byte '%', '.', '2', 'f', 10, 0");
+    // add_to_data("format: .byte 'h', 'e', 'l', 'o', 10, 0");
     // add_to_function("main", "movsd 0x18(%rsp), %xmm0");
     // add_to_function("main", "addsd 0x8(%rsp), %xmm0");
     // add_to_function("main", "movsd %xmm0, 0x18(%rsp)");
-    // add_to_function("main", "add 0x20, %rsp");
-    // add_to_function("main", "mov $1, %rax");
-    // add_to_function("main", "movsd 0x8(%rsp), %xmm0");
-    // add_to_function("main", "mov format(%rip), %rdi");
-    // add_to_function("main", "call printf");
-    // add_to_function("main", "add 0x20, %rsp");
-    add_to_function("main", "pop %rax");
-    add_to_function("main", "pop %rax");
+    // add_to_function("main", "pop %rax");
+    // add_to_function("main", "pop %rax");
+    add_to_function("main", "mov 0x8(%rsp), %rax");
+    add_to_function("main", "movq %rax, %xmm0");
+    add_to_function("main", "lea format(%rip), %rdi");
+    add_to_function("main", "mov $1, %eax");
+    add_to_function("main", "call printf");
     add_to_function("main", "pop %rax");
     add_to_function("main", "pop %rax");
 }
@@ -113,4 +116,5 @@ void compile_stmts(Stmts *stmts) {
 void compile(Stmts *tree) {
     compile_stmts(tree);
     add_to_function("main", "ret");
+    add_to_data("format: .byte '%', '.', '2', 'f', 10, 0");
 }
