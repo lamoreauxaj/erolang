@@ -38,7 +38,7 @@ struct Vector3D {
     Vector3D operator * (double scalar) {
         return Vector3D(x * scalar, y * scalar, z * scalar);
     }
-}
+};
 
 struct Var {
     VarType type;
@@ -59,14 +59,14 @@ struct Point : Var {
         type = POINT;
         size = sizeof(Point);
     }
-}
+};
 
 struct Line : Var {
     Vector3D p, m;
     Line(Vector3D p, Vector3D m) : p(p), m(m) {
         type = LINE;
         size = sizeof(Line);
-    }   
-}
+    }
+};
 
 #endif
