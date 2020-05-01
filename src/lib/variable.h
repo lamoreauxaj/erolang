@@ -88,36 +88,36 @@ struct Point : Var {
 };
 
 struct Line : Var {
-    Point p;
+    Vector3D p;
     Vector3D m;
-    Line(Point p, Vector3D m) : p(p), m(m) {
+    Line(Vector3D p, Vector3D m) : p(p), m(m) {
         type = LINE;
         size = sizeof(Line);
     }   
 };
 
 struct Plane : Var {
-    Point p;
+    Vector3D p;
     Vector3D norm;
-    Plane(Point p, Vector3D norm) : p(p), norm(norm) {
+    Plane(Vector3D p, Vector3D norm) : p(p), norm(norm) {
         type = PLANE;
         size = sizeof(Plane);
     }
 };
 
 struct Circle : Var {
-    Point p;
+    Vector3D p;
     double r;
-    Circle(Point p, double r) : p(p), r(r) {
+    Circle(Vector3D p, double r) : p(p), r(r) {
         type = CIRCLE;
         size = sizeof(Circle);
     }
 };
 
 struct Sphere : Var {
-    Point p;
+    Vector3D p;
     double r;
-    Sphere(Point p, double r) : p(p), r(r) {
+    Sphere(Vector3D p, double r) : p(p), r(r) {
         type = SPHERE;
         size = sizeof(Sphere);
     }
@@ -134,6 +134,28 @@ struct Space : Var {
     Space() {
         type = SPACE;
         size = sizeof(Space);
+    }
+};
+
+struct Construction: Var {
+    Construction() {
+        type = CONSTRUCTION;
+        size = sizeof(Construction);
+    }
+};
+
+struct Tuple : Var {
+    Vector3D tup;
+    Tuple(Vector3D tup) : tup(tup) {
+        type = TUPLE;
+        size = sizeof(Tuple);
+    }
+};
+
+struct Undefined : Var {
+    Undefined() {
+        type = UNDEFINED;
+        size = sizeof(Undefined);
     }
 };
 
