@@ -92,11 +92,7 @@ struct Line : Var {
     Line(Vector3D p, Vector3D m) : p(p), m(m) {
         type = LINE;
         size = sizeof(Line);
-<<<<<<< HEAD
     }   
-=======
-    }
->>>>>>> 285f875a27974a5c270a9eee810b4869dab7cc33
 };
 
 #endif
