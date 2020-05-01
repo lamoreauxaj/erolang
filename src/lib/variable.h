@@ -5,11 +5,11 @@ enum VarType {
     REALV,
     POINT,
     LINE,
-    SEGMENT,
-    RAY,
+    SEGMENT, // later
+    RAY,     // later
     PLANE,
     CIRCLE,
-    ARC,
+    ARC,     // later
     SPHERE,
     EMPTY,
     SPACE,

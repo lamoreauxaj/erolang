@@ -24,10 +24,12 @@ inline string pprinter(Node *node) {
 
 struct Stmt : virtual Node {
     Stmt() { type = STMT; }
+    string pprint() { return "TODO"; }
 };
 
 struct Expr : virtual Node {
     Expr() { type = EXPR; }
+    string pprint() { return "TODO"; }
 };
 
 struct Stmts : virtual Node {
@@ -44,7 +46,7 @@ struct Stmts : virtual Node {
     }
 };
 
-struct IfStmt : virtual Stmt {
+struct IfStmt : Stmt {
     Expr *cond;
     Stmts *block;
     IfStmt() { type = IFSTMT; }
@@ -53,7 +55,7 @@ struct IfStmt : virtual Stmt {
     string pprint() { return "TODO"; }
 };
 
-struct WhileStmt : virtual Stmt {
+struct WhileStmt : Stmt {
     Expr *cond;
     Stmts *block;
     WhileStmt() { type = WHILESTMT; }
@@ -62,21 +64,21 @@ struct WhileStmt : virtual Stmt {
     string pprint() { return "TODO"; }
 };
 
-struct RealExpr : virtual Expr {
+struct RealExpr : Expr {
     Token val;
     RealExpr() { type = REALEXPR; }
     RealExpr(Token val) : val(val) { type = REALEXPR; }
     string pprint() { return "(RealExpr " + val.text + ")"; }
 };
 
-struct IdentifierExpr : virtual Expr {
+struct IdentifierExpr : Expr {
     Token val;
     IdentifierExpr() { type = IDENTIFIEREXPR; }
     IdentifierExpr(Token val) : val(val) { type = IDENTIFIEREXPR; }
     string pprint() { return "(IdentifierExpr " + val.text + ")"; }
 };
 
-struct GroupExpr : virtual Expr {
+struct GroupExpr : Expr {
     Expr *val;
     GroupExpr() { type = GROUPEXPR; }
     GroupExpr(Expr *val) : val(val) { type = GROUPEXPR; }
@@ -84,7 +86,7 @@ struct GroupExpr : virtual Expr {
     string pprint() { return "(GroupExpr " + pprinter(val) + ")"; }
 };
 
-struct TupleExpr : virtual Expr {
+struct TupleExpr : Expr {
     vector<Expr*> vals;
     TupleExpr() { type = TUPLEEXPR; }
     TupleExpr(vector<Expr*> vals) : vals(vals) { type = TUPLEEXPR; }
@@ -92,7 +94,7 @@ struct TupleExpr : virtual Expr {
     string pprint() { return "TODO"; }
 };
 
-struct CallExpr : virtual Expr {
+struct CallExpr : Expr {
     Expr *val;
     TupleExpr *args;
     CallExpr() { type = CALLEXPR; }
@@ -101,7 +103,7 @@ struct CallExpr : virtual Expr {
     string pprint() { return "TODO"; }
 };
 
-struct IndexExpr : virtual Expr {
+struct IndexExpr : Expr {
     Expr *val;
     Expr *index;
     IndexExpr() { type = INDEXEXPR; }
@@ -110,7 +112,7 @@ struct IndexExpr : virtual Expr {
     string pprint() { return "TODO"; }
 };
 
-struct UnaryExpr : virtual Expr {
+struct UnaryExpr : Expr {
     Token op;
     Expr *val;
     UnaryExpr() { type = UNARYEXPR; }
@@ -119,7 +121,7 @@ struct UnaryExpr : virtual Expr {
     string pprint() { return "TODO"; }
 };
 
-struct BinaryExpr : virtual Expr {
+struct BinaryExpr : Expr {
     Expr *left;
     Token op;
     Token xop;
@@ -130,7 +132,7 @@ struct BinaryExpr : virtual Expr {
     string pprint() { return "(BinaryExpr " + left->pprint() + " " + op.text + " " + right->pprint() + ")"; }
 };
 
-struct ExprStmt : virtual Stmt {
+struct ExprStmt : Stmt {
     Expr *expr;
     ExprStmt() { type = EXPRSTMT; }
     ExprStmt(Expr *expr) : expr(expr) { type = EXPRSTMT; }
