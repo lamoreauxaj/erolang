@@ -13,6 +13,16 @@ struct Data {
 map<int, map<string, Data>> scope_levels;
 queue<Node*> function_queue;
 
+void compile_stmt(Stmt *stmt) {
+
+}
+
+void compile_stmts(Stmts *node) {
+    for (Stmt *child : node->stmts) {
+
+    }
+}
+
 void compile(Node *tree) {
 
 }

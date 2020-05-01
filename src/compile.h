@@ -5,8 +5,8 @@
 #include <queue>
 #include <vector>
 #include "lexer.h"
+#include "lib/variable.h"
 #include "parser.h"
-#include "variable.h"
 using namespace std;
 
 void compile(Node *tree);
