@@ -19,10 +19,14 @@ void compile_real_expr(RealExpr *expr) {
     double tmp = stod(expr->val.text);
     uint64_t val = *((uint64_t*) &tmp);
     // not really sure if endianness is correct here
-    add_to_function("main", "push $" + to_string((int32_t) (val >> 32)));
-    add_to_function("main", "push $" + to_string((int32_t) (val & 0xffffffff)));
-    add_to_function("main", "push $" + to_string(sizeof(RealVar)));
-    add_to_function("main", "push $" + to_string(REALV));
+    add_to_function("main", "pushw $" + to_string((int16_t) (val >> 48)));
+    add_to_function("main", "pushw $" + to_string((int16_t) ((val >> 32) & 0xffff)));
+    add_to_function("main", "pushw $" + to_string((int16_t) ((val >> 16) & 0xffff)));
+    add_to_function("main", "pushw $" + to_string((int32_t) (val & 0xffff)));
+    add_to_function("main", "pushw $0");
+    add_to_function("main", "pushw $" + to_string(sizeof(RealVar)));
+    add_to_function("main", "pushw $0");
+    add_to_function("main", "pushw $" + to_string((int32_t) (val & 0xffff)));
 }
 
 void compile_identifier_expr(IdentifierExpr *expr) {
@@ -40,12 +44,16 @@ void compile_addition_op(BinaryExpr *expr) {
     // add_to_function("main", "movsd 0x18(%rsp), %xmm0");
     // add_to_function("main", "addsd 0x8(%rsp), %xmm0");
     // add_to_function("main", "movsd %xmm0, 0x18(%rsp)");
-    add_to_function("main", "add 0x10, %rsp");
+    // add_to_function("main", "add 0x20, %rsp");
     // add_to_function("main", "mov $1, %rax");
     // add_to_function("main", "movsd 0x8(%rsp), %xmm0");
     // add_to_function("main", "mov format(%rip), %rdi");
     // add_to_function("main", "call printf");
-    add_to_function("main", "add 0x10, %rsp");
+    // add_to_function("main", "add 0x20, %rsp");
+    add_to_function("main", "pop %rax");
+    add_to_function("main", "pop %rax");
+    add_to_function("main", "pop %rax");
+    add_to_function("main", "pop %rax");
 }
 
 void compile_assign_op(BinaryExpr *expr) {
