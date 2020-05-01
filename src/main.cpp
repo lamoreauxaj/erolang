@@ -32,6 +32,7 @@ int main(int argc, char **argv) {
     cout << "compiling" << endl;
     vector<Token> tokens = tokenize(program);
     Stmts *tree = parse(tokens);
+    cout << pprinter(tree) << "\n";
     compile(tree);
     // add_to_function("main", "xor %rax, %rax");
     // add_to_function("main", "ret");

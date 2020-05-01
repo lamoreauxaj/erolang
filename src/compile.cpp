@@ -16,23 +16,58 @@ queue<Node*> function_queue;
 void compile_expr(Expr *expr);
 
 void compile_real_expr(RealExpr *expr) {
-    // cout << sizeof(Var) << "\n";
-    cout << to_string(REALV) << "\n";
+    double tmp = stod(expr->val.text);
+    uint64_t val = *((uint64_t*) &tmp);
+    // not really sure if endianness is correct here
+    add_to_function("main", "push $" + to_string((int32_t) (val >> 32)));
+    add_to_function("main", "push $" + to_string((int32_t) (val & 0xffffffff)));
+    add_to_function("main", "push $" + to_string(sizeof(RealVar)));
     add_to_function("main", "push $" + to_string(REALV));
+}
+
+void compile_identifier_expr(IdentifierExpr *expr) {
+    // identify shit here
 }
 
 void compile_unary_expr(UnaryExpr *expr) {
     compile_expr(expr->val);
 }
 
-void compile_binary_expr(BinaryExpr *expr) {
+void compile_addition_op(BinaryExpr *expr) {
+    compile_expr(expr->left);
     compile_expr(expr->right);
+    add_to_data("format: .byte '%', '.', '2', 'f', 10, 0");
+    // add_to_function("main", "movsd 0x18(%rsp), %xmm0");
+    // add_to_function("main", "addsd 0x8(%rsp), %xmm0");
+    // add_to_function("main", "movsd %xmm0, 0x18(%rsp)");
+    add_to_function("main", "add 0x10, %rsp");
+    // add_to_function("main", "mov $1, %rax");
+    // add_to_function("main", "movsd 0x8(%rsp), %xmm0");
+    // add_to_function("main", "mov format(%rip), %rdi");
+    // add_to_function("main", "call printf");
+    add_to_function("main", "add 0x10, %rsp");
+}
+
+void compile_assign_op(BinaryExpr *expr) {
+    compile_expr(expr->left);
+    // assign shit here
+    compile_expr(expr->right);
+}
+
+void compile_binary_expr(BinaryExpr *expr) {
+    if (expr->op.type == PLUS) compile_addition_op(expr);
+    else if (expr->op.type == ASSIGN) compile_assign_op(expr);
+    else {
+        log_error("unknown binary operator");
+        return;
+    }
 }
 
 void compile_expr(Expr *expr) {
     if (expr->type == BINARYEXPR) compile_binary_expr((BinaryExpr*) expr);
     else if (expr->type == UNARYEXPR) compile_unary_expr((UnaryExpr*) expr);
     else if (expr->type == REALEXPR) compile_real_expr((RealExpr*) expr);
+    else if (expr->type == IDENTIFIER) compile_identifier_expr((IdentifierExpr*) expr);
     else {
         log_error("unknown expr type");
         return;

@@ -44,8 +44,8 @@ void write_assembly(string file) {
     }
     
     fileWriter << "     .text\n";
-    // fileWriter << " .extern printf\n";
-    fileWriter << "  .global main\n";
+    fileWriter << "    .extern printf\n";
+    fileWriter << "    .global main\n";
 
     // asdf need to probably update print code (this is just p4 version)
     // fileWriter << "print:\n";
