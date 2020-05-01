@@ -130,6 +130,11 @@ struct Empty : Var {
     }
 };
 
-
+struct Space : Var {
+    Space() {
+        type = SPACE;
+        size = sizeof(Space);
+    }
+};
 
 #endif
