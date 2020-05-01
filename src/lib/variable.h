@@ -35,8 +35,34 @@ struct Vector3D {
         return Vector3D(x - v.x, y - v.y, z - v.z);
     }
 
-    Vector3D operator * (double scalar) {
+    Vector3D operator * (const double scalar) const {
         return Vector3D(x * scalar, y * scalar, z * scalar);
+    }
+
+    Vector3D operator / (const double scalar) const {
+        return Vector3D(x / scalar, y / scalar, z / scalar);
+    }
+
+    bool operator == (const Vector3D& v) const {
+        return (x == v.x) && (y == v.y) && (z == v.z);
+    }
+
+    bool operator != (const Vector3D& v) const {
+        return (x != v.x) || (y != v.y) || (z == v.z);
+    }
+
+    void operator = (const Vector3D& v) {
+        x = v.x;
+        y = v.y;
+        z = v.z;
+    }
+
+    double mag2() {
+        return x * x + y * y + z * z;
+    }
+
+    Vector3D dot(Vector3D& v) {
+        return Vector3D(x * v.x, y * v.y, z * v.z);
     }
 };
 
@@ -66,7 +92,11 @@ struct Line : Var {
     Line(Vector3D p, Vector3D m) : p(p), m(m) {
         type = LINE;
         size = sizeof(Line);
+<<<<<<< HEAD
     }   
+=======
+    }
+>>>>>>> 285f875a27974a5c270a9eee810b4869dab7cc33
 };
 
 #endif
