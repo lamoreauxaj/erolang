@@ -1,9 +1,12 @@
 #ifndef GEOMETRY_H
 #define GEOMETRY_H
 
+#include <utility>
 #include <vector>
 #include "Vector3D.h"
 #include "variable.h"
+
+using namespace std;
 
 struct Figure {};
 
@@ -15,17 +18,14 @@ struct Point : Figure {
 struct Line : Figure {
     Vector3D p;
     Vector3D m;
+
     Line(Vector3D p, Vector3D m) : p(p), m(m) {}
 
-    vector<Figure> intersect(Point p) {
-        vector<Figure> ret;
-
-        return ret;
-    }
-
-    vector<Figure> intersect(Line l) {
-        
-    }
+    vector<pair<VarType, Figure>> intersect(Point p);
+    vector<pair<VarType, Figure>> intersect(Line l);
+    vector<pair<VarType, Figure>> intersect(Circle c);
+    vector<pair<VarType, Figure>> intersect(Plane p);
+    vector<pair<VarType, Figure>> interserct(Sphere s);
 };
 
 struct Plane : Figure {
