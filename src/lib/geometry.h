@@ -25,7 +25,7 @@ struct Line : Figure {
     vector<pair<VarType, Figure>> intersect(Line l);
     vector<pair<VarType, Figure>> intersect(Circle c);
     vector<pair<VarType, Figure>> intersect(Plane p);
-    vector<pair<VarType, Figure>> interserct(Sphere s);
+    vector<pair<VarType, Figure>> intersect(Sphere s);
 };
 
 struct Plane : Figure {

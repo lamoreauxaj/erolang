@@ -33,21 +33,23 @@ int main(int argc, char **argv) {
     vector<Token> tokens = tokenize(program);
     Stmts *tree = parse(tokens);
     cout << pprinter(tree) << "\n";
-    compile(tree);
+    if (tree)
+        compile(tree);
     // add_to_function("main", "xor %rax, %rax");
     // add_to_function("main", "ret");
     write_assembly(output_file + ".s");
 
-    string command = "gcc -static -o " + output_file + " " + output_file + ".s";
+    string command = "g++ -static -o " + output_file + " " + output_file + ".s ../src/lib/variable.cpp ../src/lib/geometry.cpp";
+    int res = 0;
     int rc = system(command.c_str());
     if (rc) {
         cout << "unable to compile" << endl;
-        return 1;
+        res = 1;
     }
 
     for (string error : get_messages()) {
         cout << error << "\n";
     }
 
-    return 0;
+    return res;
 }

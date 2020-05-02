@@ -91,7 +91,13 @@ struct TupleExpr : Expr {
     TupleExpr() { type = TUPLEEXPR; }
     TupleExpr(vector<Expr*> vals) : vals(vals) { type = TUPLEEXPR; }
     ~TupleExpr() { for (auto i : vals) delete i; }
-    string pprint() { return "TODO"; }
+    string pprint() {
+        string res = "(TupleExpr";
+        for (Expr *val : vals)
+            res += " " + pprinter(val);
+        res += ")";
+        return res;
+    }
 };
 
 struct CallExpr : Expr {
@@ -100,7 +106,7 @@ struct CallExpr : Expr {
     CallExpr() { type = CALLEXPR; }
     CallExpr(Expr *val, TupleExpr *args) : val(val), args(args) { type = CALLEXPR; }
     ~CallExpr() { delete val; delete args; }
-    string pprint() { return "TODO"; }
+    string pprint() { return "(CallExpr " + pprinter(val) + " " + pprinter(args) + ")"; }
 };
 
 struct IndexExpr : Expr {

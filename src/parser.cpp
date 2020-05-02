@@ -45,9 +45,10 @@ Stmts *parse_statements();
 Expr *parse_expr();
 
 Expr *parse_primary_expr() {
+    Expr *expr;
     Token val;
-    if (consume(REAL, val)) return new RealExpr(val);
-    else if (consume(IDENTIFIER, val)) return new IdentifierExpr(val);
+    if (consume(REAL, val)) expr = new RealExpr(val);
+    else if (consume(IDENTIFIER, val)) expr = new IdentifierExpr(val);
     else if (peek(LEFT_PAREN)) {
         Expr *expr = parse_expr();
         if (peek(COMMA)) {
@@ -72,41 +73,38 @@ Expr *parse_primary_expr() {
         }
     }
     else {
-        Expr *expr = parse_expr();
-        if (!expr) return nullptr;
-        if (consume(LEFT_BRACKET)) {
-            Expr *index = parse_expr();
-            if (!index) {
-                log_error("expected index");
-                return nullptr;
-            }
-            if (!consume(RIGHT_BRACKET)) {
-                log_error("expected right bracket");
-                return nullptr;
-            }
-            return new IndexExpr(expr, index);
-        }
-        else {
-            if (!consume(LEFT_PAREN)) {
-                log_error("expected left paren");
-                return nullptr;
-            }
-            vector<Expr*> args;
-            while (!peek(RIGHT_PAREN)) {
-                Expr *arg = parse_expr();
-                if (!arg) {
-                    log_error("expected arg");
-                    return nullptr;
-                }
-                args.push_back(arg);
-            }
-            if (!consume(RIGHT_PAREN)) {
-                log_error("expected right paren");
-                return nullptr;
-            }
-            return new CallExpr(expr, new TupleExpr(args));
-        }
+        log_error("unexpected primary expression");
+        return nullptr;
     }
+    if (consume(LEFT_BRACKET)) {
+        Expr *index = parse_expr();
+        if (!index) {
+            log_error("expected index");
+            return nullptr;
+        }
+        if (!consume(RIGHT_BRACKET)) {
+            log_error("expected right bracket");
+            return nullptr;
+        }
+        return new IndexExpr(expr, index);
+    }
+    else if (consume(LEFT_PAREN)) {
+        vector<Expr*> args;
+        while (!peek(RIGHT_PAREN)) {
+            Expr *arg = parse_expr();
+            if (!arg) {
+                log_error("expected arg");
+                return nullptr;
+            }
+            args.push_back(arg);
+        }
+        if (!consume(RIGHT_PAREN)) {
+            log_error("expected right paren");
+            return nullptr;
+        }
+        return new CallExpr(expr, new TupleExpr(args));
+    }
+    else return expr;
 }
 
 Expr *parse_unary_expr() {
