@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ero</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <style>
+        .logo {
+            margin-left: 20px;
+        }
+        .content {
+            margin-top: 20px;
+        }
+        .editor {
+            font-family: monospace;
+            min-height: 400px;
+        }
+        .editor-title, .output-title {
+            margin-left: 20px;
+        }
+        .editor-card, .output-card {
+            min-height: 500px;
+        }
+    </style>
+</head>
+<body>
+    <div id="root">
+        <nav class="teal lighten-3">
+            <div id="nav-wrapper">
+                <a href="#" class="brand-logo logo">Ero</a>
+            </div>
+        </nav>
+        <div class="container content">
+            <div class="row">
+                <div class="col s6">
+                    <div class="card editor-card">
+                        <span class="card-title editor-title">Editor</span>
+                        <div class="card-content">
+                            <textarea class="editor" name="editor" id="" cols="30" rows="100">
+a = b = 1.0 + 2.0 + 1.2
+b = b + 0.5
+write(a)
+write(b)</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s6">
+                    <div class="card output-card">
+                        <span class="card-title output-title">Output</span>
+                        <div class="card-content">
+                            4.2 </br>
+                            4.7
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        new Vue({
+            el: '#root',
+            data: {
+                message: 'Hi Anand!', heart: ''
+            },
+            methods: {
+                onPress() {
+                    this.message += '!'
+                    this.heart += '<3 '
+                }
+            }
+        })
+    </script>
+</body>
+</html>
