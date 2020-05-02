@@ -1,7 +1,9 @@
 #ifndef SCOPE_H
 #define SCOPE_H
+#include <iostream>
 #include <map>
 #include <string>
+#include <utility>
 #include "parser.h"
 using namespace std;
 
@@ -12,7 +14,10 @@ enum DataLocation {
 
 struct Data {
     DataLocation loc;
-    int pos;
+    string pos;
+
+    Data() {}
+    Data(DataLocation loc, string pos) : loc(loc), pos(pos) {}
 };
 
 map<int, map<string, Data>> scope_variables(Stmts *stmts);
