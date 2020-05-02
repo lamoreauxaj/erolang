@@ -10,7 +10,7 @@ temp.track()
 
 const PORT = 3000
 
-app.use(bodyParser())
+app.use(bodyParser.json())
 
 app.post('/api/run', (req, res) => {
     const code = req.body.code
