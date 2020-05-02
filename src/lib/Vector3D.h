@@ -47,6 +47,10 @@ struct Vector3D {
     Vector3D dot(Vector3D& v) {
         return Vector3D(x * v.x, y * v.y, z * v.z);
     }
+
+    Vector3D cross(Vector3D& v) {
+        return Vector3D((y * v.z - z * v.y), (z * v.x - x * v.z), (x * v.y - y * v.x));
+    }
 };
 
 #endif
