@@ -18,9 +18,13 @@ void compile_real_expr(RealExpr *expr) {
     add_to_function("main", "pushw $" + to_string(((int16_t) ((val >> 16) & 0xffff))));
     add_to_function("main", "pushw $" + to_string(((int16_t) (val & 0xffff))));
     add_to_function("main", "pushw $0");
-    add_to_function("main", "pushw $" + to_string(sizeof(RealVar)));
     add_to_function("main", "pushw $0");
-    add_to_function("main", "pushw $" + to_string((int32_t) (val & 0xffff)));
+    add_to_function("main", "pushw $0");
+    add_to_function("main", "pushw $0");
+}
+
+void compile_call_expr(CallExpr *expr) {
+    
 }
 
 void compile_identifier_expr(IdentifierExpr *expr) {
