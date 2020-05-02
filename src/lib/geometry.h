@@ -31,18 +31,21 @@ struct Line : Figure {
 struct Plane : Figure {
     Vector3D p;
     Vector3D norm;
+
     Plane(Vector3D p, Vector3D norm) : p(p), norm(norm) {}
 };
 
 struct Circle : Figure {
     Vector3D p;
     double r;
+
     Circle(Vector3D p, double r) : p(p), r(r) {}
 };
 
 struct Sphere : Figure {
     Vector3D p;
     double r;
+    
     Sphere(Vector3D p, double r) : p(p), r(r) {}
 };
 
