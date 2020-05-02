@@ -52,9 +52,18 @@ void compile_addition_op(BinaryExpr *expr) {
 }
 
 void compile_assign_op(BinaryExpr *expr) {
-    compile_expr(expr->left);
-    // assign shit here
+    if (expr->left->type != IDENTIFIEREXPR) {
+        log_error("expected identifier as lvalue");
+        return;
+    }
     compile_expr(expr->right);
+    // compile_expr(expr->left);
+    IdentifierExpr *lvalue = (IdentifierExpr*) expr->left;
+    string name = "v_" + lvalue->val.text;
+    add_to_function("main", "pop %rax");
+    add_to_function("main", "mov %rax, p0" + name + "(%rip)");
+    add_to_function("main", "pop %rax");
+    add_to_function("main", "mov %rax, p1" + name + "(%rip)");
 }
 
 void compile_binary_expr(BinaryExpr *expr) {
@@ -105,8 +114,17 @@ void compile_stmts(Stmts *stmts) {
     }
 }
 
+void compile_data_segment() {
+    for (auto p : scope_levels[0]) {
+        add_to_data("p0" + p.second.pos + ": .quad 0");
+        add_to_data("p1" + p.second.pos + ": .quad 0");
+        // cout << p.first << " " << p.second.pos << "\n";
+    }
+}
+
 void compile(Stmts *tree) {
     scope_levels = scope_variables(tree);
+    compile_data_segment();
     compile_stmts(tree);
     add_to_function("main", "ret");
     add_to_data("format: .byte '%', '.', '2', 'f', 10, 0");
