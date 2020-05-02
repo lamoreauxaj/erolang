@@ -17,10 +17,20 @@ static void scope_real_expr(RealExpr *expr) {
 
 }
 
+static void scope_tuple_expr(TupleExpr *expr) {
+    for (Expr *val : expr->vals)
+        scope_expr(val);
+}
+
+static void scope_call_expr(CallExpr *expr) {
+    scope_expr(expr->val);
+    scope_tuple_expr(expr->args);
+}
+
 static void scope_identifier_expr(IdentifierExpr *expr) {
     string id = expr->val.text;
     if (!scope_levels[0].count(id)) {
-        scope_levels[0][id] = Data(DATA_SEGMENT, "v_" + id);
+        scope_levels[0][id] = Data(DATA_SEGMENT, id);
     }
 }
 
@@ -29,8 +39,9 @@ static void scope_expr(Expr *expr) {
     else if (expr->type == UNARYEXPR) scope_unary_expr((UnaryExpr*) expr);
     else if (expr->type == REALEXPR) scope_real_expr((RealExpr*) expr);
     else if (expr->type == IDENTIFIEREXPR) scope_identifier_expr((IdentifierExpr*) expr);
+    else if (expr->type == CALLEXPR) scope_call_expr((CallExpr*) expr);
     else {
-        log_error("unexpected expresssion type");
+        log_error("unexpected expr type");
         return;
     }
 }
@@ -63,6 +74,7 @@ static void scope_stmts(Stmts *stmts) {
 }
 
 map<int, map<string, Data>> scope_variables(Stmts *tree) {
+    scope_levels[0]["write"] = Data(DATA_SEGMENT, "write", new Var(CONSTRUCTION, (uint64_t) &ero_write));
     scope_stmts(tree);
     return scope_levels;
 }

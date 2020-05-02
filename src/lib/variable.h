@@ -1,7 +1,9 @@
 #ifndef VARIABLE_H
 #define VARIABLE_H
-
+#include <cstdint>
+#include <iostream>
 #include "Vector3D.h"
+using namespace std;
 
 enum VarType {
     REALV,
@@ -19,5 +21,14 @@ enum VarType {
     TUPLE,
     UNDEFINED
 };
+
+struct Var {
+    VarType type;
+    uint64_t val;
+
+    Var(VarType type, uint64_t val) : type(type), val(val) {}
+};
+
+extern "C" Var ero_write(Var *var);
 
 #endif

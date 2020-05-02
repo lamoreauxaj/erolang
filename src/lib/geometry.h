@@ -24,7 +24,9 @@ struct Line : Figure {
     }
 
     vector<Figure> intersect(Line l) {
-        
+        vector<Figure> ret;
+
+        return ret;
     }
 };
 
