@@ -8,6 +8,7 @@
 #include "lexer.h"
 #include "lib/variable.h"
 #include "parser.h"
+#include "scope.h"
 using namespace std;
 
 void compile(Stmts *tree);

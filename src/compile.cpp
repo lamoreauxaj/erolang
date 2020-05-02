@@ -1,15 +1,5 @@
 #include "compile.h"
 
-enum DataLocation {
-    DATA_SEGMENT, // store global and captured variables
-    STACK // all other local variables
-};
-
-struct Data {
-    DataLocation loc;
-    int pos;
-};
-
 map<int, map<string, Data>> scope_levels;
 queue<Node*> function_queue;
 
@@ -51,13 +41,13 @@ void compile_addition_op(BinaryExpr *expr) {
     add_to_function("main", "add $16, %rsp");
     // add_to_function("main", "movq $4611686018427387904, %rax");
     // add_to_function("main", "movq %rax, %xmm0");
-    add_to_function("main", "movsd 0x8(%rsp), %xmm0");
-    add_to_function("main", "lea format(%rip), %rdi");
-    add_to_function("main", "mov $1, %eax");
-    add_to_function("main", "sub $8, %rsp");
-    add_to_function("main", "call printf");
-    add_to_function("main", "add $8, %rsp");
-    add_to_function("main", "add $16, %rsp");
+    // add_to_function("main", "movsd 0x8(%rsp), %xmm0");
+    // add_to_function("main", "lea format(%rip), %rdi");
+    // add_to_function("main", "mov $1, %eax");
+    // add_to_function("main", "sub $8, %rsp");
+    // add_to_function("main", "call printf");
+    // add_to_function("main", "add $8, %rsp");
+    // add_to_function("main", "add $16, %rsp");
     // add_to_function("main", "pop %rax");
 }
 
@@ -80,7 +70,7 @@ void compile_expr(Expr *expr) {
     if (expr->type == BINARYEXPR) compile_binary_expr((BinaryExpr*) expr);
     else if (expr->type == UNARYEXPR) compile_unary_expr((UnaryExpr*) expr);
     else if (expr->type == REALEXPR) compile_real_expr((RealExpr*) expr);
-    else if (expr->type == IDENTIFIER) compile_identifier_expr((IdentifierExpr*) expr);
+    else if (expr->type == IDENTIFIEREXPR) compile_identifier_expr((IdentifierExpr*) expr);
     else {
         log_error("unknown expr type");
         return;
@@ -116,6 +106,7 @@ void compile_stmts(Stmts *stmts) {
 }
 
 void compile(Stmts *tree) {
+    scope_levels = scope_variables(tree);
     compile_stmts(tree);
     add_to_function("main", "ret");
     add_to_data("format: .byte '%', '.', '2', 'f', 10, 0");
