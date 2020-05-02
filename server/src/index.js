@@ -14,7 +14,6 @@ app.use(bodyParser.json())
 
 app.post('/api/run', (req, res) => {
     const code = req.body.code
-    out = '4.2\n4.7\n'
     const { path, fd } = temp.openSync();
     fs.writeSync(fd, code)
     fs.closeSync(fd)
