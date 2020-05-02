@@ -10,6 +10,10 @@ using namespace std;
 
 struct Figure {};
 
+struct Sphere;
+struct Circle;
+struct Plane;
+
 struct Point : Figure {
     Vector3D v;
     Point(Vector3D v) : v(v) {}

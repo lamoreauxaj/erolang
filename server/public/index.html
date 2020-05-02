@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
     <style>
         .logo {
             margin-left: 20px;
@@ -14,7 +15,7 @@
         }
         .editor {
             font-family: monospace;
-            min-height: 400px;
+            min-height: 370px;
         }
         .editor-title, .output-title {
             margin-left: 20px;
@@ -37,11 +38,8 @@
                     <div class="card editor-card">
                         <span class="card-title editor-title">Editor</span>
                         <div class="card-content">
-                            <textarea class="editor" name="editor" id="" cols="30" rows="100">
-a = b = 1.0 + 2.0 + 1.2
-b = b + 0.5
-write(a)
-write(b)</textarea>
+                            <textarea v-model="code" class="editor" name="editor" id="" cols="30" rows="100"></textarea>
+                            <button class="btn" @click="onRun">Run</button>
                         </div>
                     </div>
                 </div>
@@ -49,8 +47,7 @@ write(b)</textarea>
                     <div class="card output-card">
                         <span class="card-title output-title">Output</span>
                         <div class="card-content">
-                            4.2 </br>
-                            4.7
+                            <pre>{{ output }}</pre>
                         </div>
                     </div>
                 </div>
@@ -61,12 +58,17 @@ write(b)</textarea>
         new Vue({
             el: '#root',
             data: {
-                message: 'Hi Anand!', heart: ''
+                code: 'a = b = 1.0 + 2.0 + 1.2\nb = b + 0.5\nwrite(a)\nwrite(b)\n',
+                output: ''
             },
             methods: {
-                onPress() {
-                    this.message += '!'
-                    this.heart += '<3 '
+                onRun() {
+                    axios.post('/api/run', {
+                        code: this.code
+                    })
+                    .then((res) => {
+                        this.output = res.data
+                    })
                 }
             }
         })
