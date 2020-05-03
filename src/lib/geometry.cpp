@@ -23,6 +23,10 @@ vector<pair<VarType, Figure>> Line::intersect(Circle circle) {
 vector<pair<VarType, Figure>> Line::intersect(Plane plane) {
     vector<pair<VarType, Figure>> ret;
 
+    long double dot = (p - plane.p).dot(plane.norm);
+    if (withinEps(dot, 0))
+        ret.push_back(make_pair(LINE, *this));
+
     return ret;
 }
 

@@ -50,8 +50,8 @@ struct Vector3D {
         return x * x + y * y + z * z;
     }
 
-    Vector3D dot(Vector3D& v) {
-        return Vector3D(x * v.x, y * v.y, z * v.z);
+    long double dot(Vector3D& v) {
+        return x * v.x + y * v.y + z * v.z;
     }
 
     Vector3D cross(Vector3D& v) {
