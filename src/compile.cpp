@@ -146,14 +146,14 @@ void compile_data_segment() {
 
 void compile(Stmts *tree) {
     scope_variables(tree);
-    for (auto p : scope_levels) {
-        cout << p.first << ":\n";
-        auto scope = p.second;
-        for (auto p1 : scope) {
-            cout << p1.first << " " << p1.second.tostring() << "\n";
-        }
-    }
-    // compile_data_segment();
-    // compile_stmts(tree);
-    // add_to_function("main", "ret");
+    // for (auto p : scope_levels) {
+    //     cout << p.first << ":\n";
+    //     auto scope = p.second;
+    //     for (auto p1 : scope) {
+    //         cout << p1.first << " " << p1.second.tostring() << "\n";
+    //     }
+    // }
+    compile_data_segment();
+    compile_stmts(tree);
+    add_to_function("main", "ret");
 }

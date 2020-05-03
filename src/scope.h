@@ -9,6 +9,8 @@
 #include "lib/variable.h"
 using namespace std;
 
+const int VAR_SIZE = 16;
+
 enum DataLocation {
     DATA_SEGMENT, // store global and captured variables
     STACK // all other local variables
@@ -36,9 +38,13 @@ struct Data {
     }
 };
 
+// store variable locations
 extern map<int, map<string, Data>> scope_levels;
+// additional information
 extern map<int, int> parent_scope;
-extern map<Node*, int> node_scopes;
+extern map<int, int> root_scope;
+// size of stack of root scopes
+extern map<int, int> stack_size;
 
 void scope_variables(Stmts *stmts);
 

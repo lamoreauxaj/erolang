@@ -2,7 +2,8 @@
 
 map<int, map<string, Data>> scope_levels;
 map<int, int> parent_scope;
-map<Node*, int> node_scopes;
+map<int, int> root_scope;
+map<int, int> stack_size;
 
 static int scope_counter;
 static queue<pair<Stmts*, int>> scope_queue;
@@ -12,7 +13,19 @@ static void scope_expr(Expr *expr, int scope);
 
 static void scope_binary_expr(BinaryExpr *expr, int scope) {
     if (expr->op.type == ASSIGN) {
+        if (expr->left->type != IDENTIFIEREXPR) {
+            log_error("expected identifier as lvalue");
+            return;
+        }
         // create new variable
+        string id = ((IdentifierExpr*) expr->left)->val.text;
+        if (scope == 0) {
+            scope_levels[scope][id] = Data(DATA_SEGMENT, id);
+        }
+        else {
+            scope_levels[scope][id] = Data(STACK, stack_size[root_scope[scope]]);
+            stack_size[root_scope[scope]] += VAR_SIZE;
+        }
     }
     else {
         scope_expr(expr->left, scope);
@@ -40,16 +53,17 @@ static void scope_call_expr(CallExpr *expr, int scope) {
 
 static void scope_identifier_expr(IdentifierExpr *expr, int scope) {
     string id = expr->val.text;
+    int curr = scope;
     while (true) {
-        if (scope_levels[scope].count(id)) {
-
+        if (scope_levels[curr].count(id)) {
+            scope_levels[scope][id] = scope_levels[curr][id];
             break;
         }
-        scope = parent_scope[scope];
-        if (scope == 0) {
+        if (!parent_scope.count(curr)) {
             log_error("unable to resolve variable");
-            break;
-        }
+            return;
+        } 
+        curr = parent_scope[curr];
     }
     /*
     string id = expr->val.text;
@@ -74,13 +88,15 @@ static void scope_expr(Expr *expr, int scope) {
 static void scope_while_stmt(WhileStmt *stmt, int scope) {
     scope_expr(stmt->cond, scope);
     parent_scope[scope_counter + 1] = scope;
-    scope_queue.push({stmt->block, ++scope_counter});
+    root_scope[scope_counter + 1] = root_scope[scope];
+    scope_stmts(stmt->block, ++scope_counter);
 }
 
 static void scope_if_stmt(IfStmt *stmt, int scope) {
     scope_expr(stmt->cond, scope);
     parent_scope[scope_counter + 1] = scope;
-    scope_queue.push({stmt->block, ++scope_counter});
+    root_scope[scope_counter + 1] = root_scope[scope];
+    scope_stmts(stmt->block, ++scope_counter);
 }
 
 static void scope_expr_stmt(ExprStmt *stmt, int scope) {
@@ -98,13 +114,14 @@ static void scope_stmt(Stmt *stmt, int scope) {
 }
 
 static void scope_stmts(Stmts *stmts, int scope) {
-    node_scopes[stmts] = scope;
+    stack_size[scope] = 0;
     for (Stmt *stmt : stmts->stmts)
         scope_stmt(stmt, scope);
 }
 
 void scope_variables(Stmts *tree) {
     scope_counter = 0;
+    root_scope[0] = 0;
     scope_levels[0]["write"] = Data(DATA_SEGMENT, "write", new Var(CONSTRUCTIONV, (uint64_t) &ero_write));
 
     scope_queue.push({tree, scope_counter});
