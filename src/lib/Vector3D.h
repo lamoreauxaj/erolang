@@ -29,11 +29,11 @@ struct Vector3D {
     }
 
     bool operator == (const Vector3D& v) const {
-        return (x == v.x) && (y == v.y) && (z == v.z);
+        return (abs(x - v.x) <= 1e-6) && (abs(y - v.y) <= 1e-6) && (abs(z - v.z) <= 1e-6);
     }
 
     bool operator != (const Vector3D& v) const {
-        return (x != v.x) || (y != v.y) || (z == v.z);
+        return !(*this == v);
     }
 
     void operator = (const Vector3D& v) {
@@ -42,19 +42,19 @@ struct Vector3D {
         z = v.z;
     }
 
-    long double mag() {
+    long double mag() const {
         return sqrt(x * x + y * y + z * z);
     }
 
-    long double mag2() {
+    long double mag2() const {
         return x * x + y * y + z * z;
     }
 
-    long double dot(Vector3D& v) {
+    long double dot(const Vector3D& v) const {
         return x * v.x + y * v.y + z * v.z;
     }
 
-    Vector3D cross(Vector3D& v) {
+    Vector3D cross(const Vector3D& v) const {
         return Vector3D((y * v.z - z * v.y), (z * v.x - x * v.z), (x * v.y - y * v.x));
     }
 };
