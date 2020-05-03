@@ -38,6 +38,7 @@ struct Data {
     }
 };
 
+extern map<Node*, int> node_scopes;
 // store variable locations
 extern map<int, map<string, Data>> scope_levels;
 // additional information
