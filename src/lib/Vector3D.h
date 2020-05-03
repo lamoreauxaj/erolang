@@ -29,11 +29,11 @@ struct Vector3D {
     }
 
     bool operator == (const Vector3D& v) const {
-        return (x == v.x) && (y == v.y) && (z == v.z);
+        return (abs(x - v.x) <= 1e-6) && (abs(y - v.y) <= 1e-6) && (abs(z - v.z) <= 1e-6);
     }
 
     bool operator != (const Vector3D& v) const {
-        return (x != v.x) || (y != v.y) || (z == v.z);
+        return !(*this == v);
     }
 
     void operator = (const Vector3D& v) {
