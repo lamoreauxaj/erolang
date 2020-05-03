@@ -74,7 +74,7 @@ static void scope_stmts(Stmts *stmts) {
 }
 
 map<int, map<string, Data>> scope_variables(Stmts *tree) {
-    scope_levels[0]["write"] = Data(DATA_SEGMENT, "write", new Var(CONSTRUCTION, (uint64_t) &ero_write));
+    scope_levels[0]["write"] = Data(DATA_SEGMENT, "write", new Var(CONSTRUCTIONV, (uint64_t) &ero_write));
     scope_stmts(tree);
     return scope_levels;
 }

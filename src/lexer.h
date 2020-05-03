@@ -28,6 +28,7 @@ enum TokenType {
     IS,             // is
     REAL,           // any floating point value
     APPLY,          // -> operator
+    CONSTRUCTION,   // construction
     // everything after this point is optional to implement if we have time / want
     // these features
     WHILE, // while

@@ -42,6 +42,7 @@ TokenType is_keyword(string s) {
     if (s == "or") return TokenType::OR;
     if (s == "and") return TokenType::AND;
     if (s == "not") return TokenType::NOT;
+    if (s == "construction") return TokenType::CONSTRUCTION;
     return TokenType::IDENTIFIER;
 }
 

@@ -38,7 +38,7 @@ addition       -> multiplication ((MINUS | PLUS) multiplication)*
 multiplication -> exponentiation ((DIVIDE | TIMES | IDIVIDE | MOD) exponentiation)*
 exponentiation -> unary (POWER unary)*
 unary          -> (NOT | MINUS) unary | primary
-primary        -> real | string | identifier | group | tuple | call | index | consturction
+primary        -> real | string | identifier | group | tuple | call | index | construction
 string         -> STRING
 real           -> REAL
 identifier     -> IDENTIFIER

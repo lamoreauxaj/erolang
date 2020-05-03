@@ -17,7 +17,7 @@ enum VarType {
     SPHERE,
     EMPTY,
     SPACE,
-    CONSTRUCTION,
+    CONSTRUCTIONV,
     TUPLE,
     UNDEFINED
 };
