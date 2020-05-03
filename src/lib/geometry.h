@@ -12,6 +12,10 @@ bool withinEps(long double a, long double b) {
     return abs(a - b) <= 1e-6;
 }
 
+bool isZeroVector(Vector3D v) {
+    return withinEps(v.x, 0) && withinEps(v.y, 0) && withinEps(v.z, 0);
+}
+
 struct Figure {};
 
 struct Sphere;

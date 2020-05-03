@@ -3,7 +3,7 @@
 vector<pair<VarType, Figure>> Line::intersect(Point point) {
     vector<pair<VarType, Figure>> ret;
     Vector3D norm = (p - point.p).cross(m);
-    if (withinEps(norm.x, 0) && withinEps(norm.y, 0) && withinEps(norm.z, 0))
+    if (isZeroVector(norm))
         ret.push_back(make_pair(POINT, point));
     return ret;
 }
