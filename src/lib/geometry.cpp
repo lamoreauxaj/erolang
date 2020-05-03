@@ -35,5 +35,9 @@ vector<pair<VarType, Figure>> Line::intersect(Sphere sphere) {
 vector<pair<VarType, Figure>> Line::pointOn() {
     vector<pair<VarType, Figure>> ret;
 
+    // TODO: try and update this to an exponential distri or smth
+    long double r = rand();
+    ret.push_back(make_pair(POINT, Point(p + m * r)));
+
     return ret;
 }
