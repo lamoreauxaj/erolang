@@ -20,15 +20,16 @@ struct Data {
     DataLocation loc;
     int pos;
     string label;
-    Var *value;
+    VarType default_type;
+    string default_value;
 
     Data() {}
     // used for stack variables
-    Data(DataLocation loc, int pos) : loc(loc), pos(pos), label(), value(nullptr) {}
+    Data(DataLocation loc, int pos) : loc(loc), pos(pos), label(), default_type(UNDEFINED), default_value("0") {}
     // used for data segment variables
-    Data(DataLocation loc, string label) : loc(loc), pos(0), label(label), value(nullptr) {}
+    Data(DataLocation loc, string label) : loc(loc), pos(0), label(label), default_type(UNDEFINED), default_value("0") {}
     // used for data segment variables with default value
-    Data(DataLocation loc, string label, Var *value) : loc(loc), pos(0), label(label), value(value) {}
+    Data(DataLocation loc, string label, VarType default_type, string default_value) : loc(loc), pos(0), label(label), default_type(default_type), default_value(default_value) {}
     string tostring() {
         string res = "(Data ";
         if (loc == 0) res += "DATA_SEGMENT";
