@@ -29,7 +29,7 @@ statement      -> expression | if | while
 if             -> IF LEFT_PAREN expression RIGHT_PAREN LEFT_BRACE statements RIGHT_BRACE
 while          -> WHILE LEFT_PAREN expression RIGHT_PAREN LEFT_BRACE statements RIGHT_BRACE
 expression     -> assignment
-assignment     -> disjunction (ASSIGN disjunction)* 
+assignment     -> IDENTIFIER (ASSIGN disjunction)* 
 disjunction    -> xdisjunction (OR xdisjunction)*
 xdisjunction   -> conjunction (XOR conjunction)*
 conjunction    -> comparison (AND comparison)*
@@ -38,7 +38,7 @@ addition       -> multiplication ((MINUS | PLUS) multiplication)*
 multiplication -> exponentiation ((DIVIDE | TIMES | IDIVIDE | MOD) exponentiation)*
 exponentiation -> unary (POWER unary)*
 unary          -> (NOT | MINUS) unary | primary
-primary        -> real | string | identifier | group | tuple | call | index
+primary        -> real | string | identifier | group | tuple | call | index | consturction
 string         -> STRING
 real           -> REAL
 identifier     -> IDENTIFIER
@@ -46,4 +46,5 @@ group          -> LEFT_PAREN expression RIGHT_PAREN
 tuple          -> LEFT_PAREN (expression COMMA)+ expression? RIGHT_PAREN
 call           -> expression LEFT_PAREN (expression COMMA)* expression RIGHT_PAREN
 index          -> expression LEFT_BRACKET expression RIGHT_BRACKET
+construction   -> CONSTRUCTION LEFT_PAREN (IDENTIFIER COMMA)* IDENTIFIER RIGHT_PAREN APPLY LEFT_PAREN (IDENTIFIER COMMA)* IDENTIFIER RIGHT_PAREN LEFT_BRACE statements RIGHT_BRACE
 ```
