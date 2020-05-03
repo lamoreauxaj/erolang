@@ -12,7 +12,7 @@ bool withinEps(long double a, long double b) {
     return abs(a - b) <= 1e-6;
 }
 
-bool isZeroVector(Vector3D v) {
+bool isZeroVector(const Vector3D v) {
     return withinEps(v.x, 0) && withinEps(v.y, 0) && withinEps(v.z, 0);
 }
 
@@ -35,6 +35,16 @@ struct Point : Figure {
     vector<pair<VarType, Figure>> intersect(Plane p);
     vector<pair<VarType, Figure>> intersect(Sphere s);
     vector<pair<VarType, Figure>> pointOn();
+
+    bool operator == (const Point& point) const {
+        if (p == point.p)
+            return true;
+        return false;
+    }
+    
+    bool operator != (const Point& point) const {
+        return !(*this == point);
+    }
 };
 
 struct Line : Figure {
@@ -49,6 +59,14 @@ struct Line : Figure {
     vector<pair<VarType, Figure>> intersect(Plane p);
     vector<pair<VarType, Figure>> intersect(Sphere s);
     vector<pair<VarType, Figure>> pointOn();
+
+    bool operator == (const Line& line) const {
+        return isZeroVector(m.cross(line.m)) && isZeroVector(m.cross(p - line.p));
+    }
+
+    bool operator != (const Line& line) const {
+        return !(*this == line);
+    }
 };
 
 struct Plane : Figure {
