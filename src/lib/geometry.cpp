@@ -129,19 +129,27 @@ vector<pair<VarType, Figure>> Circle::intersect(Line line) {
 }
 
 vector<pair<VarType, Figure>> Circle::intersect(Circle circle) {
-    
+    vector<pair<VarType, Figure>> ret;
+
+    return ret;
 }
 
 vector<pair<VarType, Figure>> Circle::intersect(Plane plane) {
-    
+    vector<pair<VarType, Figure>> ret;
+
+    return ret;
 }
 
 vector<pair<VarType, Figure>> Circle::intersect(Sphere sphere) {
-    
+    vector<pair<VarType, Figure>> ret;
+
+    return ret;
 }
 
 vector<pair<VarType, Figure>> Circle::pointOn() {
-    
+    vector<pair<VarType, Figure>> ret;
+
+    return ret;
 }
 
 // -------------------------------------------------------------------------------------------------------
@@ -161,15 +169,21 @@ vector<pair<VarType, Figure>> Plane::intersect(Circle circle) {
 }
 
 vector<pair<VarType, Figure>> Plane::intersect(Plane plane) {
-    
+    vector<pair<VarType, Figure>> ret;
+
+    return ret;
 }
 
 vector<pair<VarType, Figure>> Plane::intersect(Sphere sphere) {
-    
+    vector<pair<VarType, Figure>> ret;
+
+    return ret;
 }
 
 vector<pair<VarType, Figure>> Plane::pointOn() {
-    
+    vector<pair<VarType, Figure>> ret;
+
+    return ret;
 }
 
 // -------------------------------------------------------------------------------------------------------
@@ -193,9 +207,13 @@ vector<pair<VarType, Figure>> Sphere::intersect(Plane plane) {
 }
 
 vector<pair<VarType, Figure>> Sphere::intersect(Sphere sphere) {
-    
+    vector<pair<VarType, Figure>> ret;
+
+    return ret;
 }
 
 vector<pair<VarType, Figure>> Sphere::pointOn() {
-    
+    vector<pair<VarType, Figure>> ret;
+
+    return ret;
 }
