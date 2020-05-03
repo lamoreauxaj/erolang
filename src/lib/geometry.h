@@ -8,6 +8,10 @@
 
 using namespace std;
 
+bool withinEps(long double a, long double b) {
+    return abs(a - b) <= 1e-6;
+}
+
 struct Figure {};
 
 struct Sphere;
@@ -15,8 +19,8 @@ struct Circle;
 struct Plane;
 
 struct Point : Figure {
-    Vector3D v;
-    Point(Vector3D v) : v(v) {}
+    Vector3D p;
+    Point(Vector3D p) : p(p) {}
 };
 
 struct Line : Figure {
@@ -30,6 +34,7 @@ struct Line : Figure {
     vector<pair<VarType, Figure>> intersect(Circle c);
     vector<pair<VarType, Figure>> intersect(Plane p);
     vector<pair<VarType, Figure>> intersect(Sphere s);
+    vector<pair<VarType, Figure>> pointOn();
 };
 
 struct Plane : Figure {
