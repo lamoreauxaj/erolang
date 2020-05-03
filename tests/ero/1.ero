@@ -1,15 +1,6 @@
 a = 1.0
-if (a) {
-    b = 2.0
-    write(a)
-    write(b)
-    a = a + 0.5
-    if (b) {
-        write(b + 2.0)
-        c = 1.0
-        write(c)
-    }
-}
 c = 2.0
 write(a)
 write(c)
+true = false
+write(true)

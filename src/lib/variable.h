@@ -19,7 +19,8 @@ enum VarType {
     SPACE,
     CONSTRUCTIONV,
     TUPLE,
-    UNDEFINED
+    UNDEFINED,
+    BOOL
 };
 
 struct Var {

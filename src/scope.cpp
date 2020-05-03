@@ -140,7 +140,9 @@ static void scope_stmts(Stmts *stmts, int scope) {
 void scope_variables(Stmts *tree) {
     scope_counter = 0;
     root_scope[0] = 0;
-    scope_levels[0]["write"] = Data(DATA_SEGMENT, "write", new Var(CONSTRUCTIONV, (uint64_t) &ero_write));
+    scope_levels[0]["write"] = Data(DATA_SEGMENT, "write", CONSTRUCTIONV, "ero_write");
+    scope_levels[0]["true"] = Data(DATA_SEGMENT, "true", BOOL, "1");
+    scope_levels[0]["false"] = Data(DATA_SEGMENT, "false", BOOL, "0");
 
     scope_queue.push({tree, scope_counter});
     while (!scope_queue.empty()) {

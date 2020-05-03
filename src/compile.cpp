@@ -152,14 +152,8 @@ void compile_data_segment() {
     add_to_data("format: .byte '%', '.', '2', 'f', 10, 0");
     for (auto p : scope_levels[0]) {
         if (p.second.loc == DATA_SEGMENT) {
-            if (p.second.value) {
-                add_to_data("v0_" + p.second.label + ": .quad " + to_string((int64_t) p.second.value->type));
-                add_to_data("v1_" + p.second.label + ": .quad ero_write");
-            }
-            else {
-                add_to_data("v0_" + p.second.label + ": .quad 0");
-                add_to_data("v1_" + p.second.label + ": .quad 0");
-            }
+            add_to_data("v0_" + p.second.label + ": .quad " + to_string((int64_t) p.second.default_type));
+            add_to_data("v1_" + p.second.label + ": .quad " + p.second.default_value);
         }
         // cout << p.first << " " << p.second.pos << "\n";
     }
