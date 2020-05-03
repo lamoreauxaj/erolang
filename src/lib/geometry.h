@@ -69,19 +69,6 @@ struct Line : Figure {
     }
 };
 
-struct Plane : Figure {
-    Vector3D p, norm;
-
-    Plane(Vector3D p, Vector3D norm) : p(p), norm(norm) {}
-
-    vector<pair<VarType, Figure>> intersect(Point p);
-    vector<pair<VarType, Figure>> intersect(Line l);
-    vector<pair<VarType, Figure>> intersect(Circle c);
-    vector<pair<VarType, Figure>> intersect(Plane p);
-    vector<pair<VarType, Figure>> intersect(Sphere s);
-    vector<pair<VarType, Figure>> pointOn();
-};
-
 struct Circle : Figure {
     Vector3D p, norm;
     long double r;
@@ -94,6 +81,35 @@ struct Circle : Figure {
     vector<pair<VarType, Figure>> intersect(Plane p);
     vector<pair<VarType, Figure>> intersect(Sphere s);
     vector<pair<VarType, Figure>> pointOn();
+
+    bool operator == (const Circle& circle) const {
+        return isZeroVector(p - circle.p) && withinEps(r, circle.r) && isZeroVector(norm.cross(circle.norm));
+    }
+
+    bool operator != (const Circle& circle) const {
+        return !(*this == circle);
+    }
+};
+
+struct Plane : Figure {
+    Vector3D p, norm;
+
+    Plane(Vector3D p, Vector3D norm) : p(p), norm(norm) {}
+
+    vector<pair<VarType, Figure>> intersect(Point p);
+    vector<pair<VarType, Figure>> intersect(Line l);
+    vector<pair<VarType, Figure>> intersect(Circle c);
+    vector<pair<VarType, Figure>> intersect(Plane p);
+    vector<pair<VarType, Figure>> intersect(Sphere s);
+    vector<pair<VarType, Figure>> pointOn();
+
+    bool operator == (const Plane& plane) const {
+        return isZeroVector(norm.cross(plane.norm)) && withinEps(norm.dot(p - plane.p), 0);
+    }
+
+    bool operator != (const Plane& plane) const {
+        return !(*this == plane);
+    }
 };
 
 struct Sphere : Figure {
@@ -108,6 +124,14 @@ struct Sphere : Figure {
     vector<pair<VarType, Figure>> intersect(Plane p);
     vector<pair<VarType, Figure>> intersect(Sphere s);
     vector<pair<VarType, Figure>> pointOn();
+
+    bool operator == (const Sphere& sphere) const {
+        return isZeroVector(p - sphere.p) && withinEps(r, sphere.r);
+    }
+
+    bool operator != (const Sphere& sphere) const {
+        return !(*this == sphere);
+    }
 };
 
 struct Empty : Figure {
