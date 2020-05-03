@@ -2,6 +2,7 @@
 #define SCOPE_H
 #include <iostream>
 #include <map>
+#include <queue>
 #include <string>
 #include <utility>
 #include "parser.h"
@@ -15,14 +16,30 @@ enum DataLocation {
 
 struct Data {
     DataLocation loc;
-    string pos;
+    int pos;
+    string label;
     Var *value;
 
     Data() {}
-    Data(DataLocation loc, string pos) : loc(loc), pos(pos), value(nullptr) {}
-    Data(DataLocation loc, string pos, Var *value) : loc(loc), pos(pos), value(value) {}
+    // used for stack variables
+    Data(DataLocation loc, int pos) : loc(loc), pos(pos), label(), value(nullptr) {}
+    // used for data segment variables
+    Data(DataLocation loc, string label) : loc(loc), pos(0), label(label), value(nullptr) {}
+    // used for data segment variables with default value
+    Data(DataLocation loc, string label, Var *value) : loc(loc), pos(0), label(label), value(value) {}
+    string tostring() {
+        string res = "(Data ";
+        if (loc == 0) res += "DATA_SEGMENT";
+        else res += "STACK";
+        res += " " + to_string(pos) + " " + label + ")";
+        return res;
+    }
 };
 
-map<int, map<string, Data>> scope_variables(Stmts *stmts);
+extern map<int, map<string, Data>> scope_levels;
+extern map<int, int> parent_scope;
+extern map<Node*, int> node_scopes;
+
+void scope_variables(Stmts *stmts);
 
 #endif

@@ -52,7 +52,7 @@ struct IfStmt : Stmt {
     IfStmt() { type = IFSTMT; }
     IfStmt(Expr *cond, Stmts *block) : cond(cond), block(block) { type = IFSTMT; }
     ~IfStmt() { delete cond; delete block; }
-    string pprint() { return "TODO"; }
+    string pprint() { return "(IfStmt " + pprinter(cond) + " " + pprinter(block) + ")"; }
 };
 
 struct WhileStmt : Stmt {

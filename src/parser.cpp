@@ -49,7 +49,7 @@ Expr *parse_primary_expr() {
     Token val;
     if (consume(REAL, val)) expr = new RealExpr(val);
     else if (consume(IDENTIFIER, val)) expr = new IdentifierExpr(val);
-    else if (peek(LEFT_PAREN)) {
+    else if (consume(LEFT_PAREN)) {
         Expr *expr = parse_expr();
         if (peek(COMMA)) {
             vector<Expr*> tuple = {expr};
@@ -73,7 +73,6 @@ Expr *parse_primary_expr() {
         }
     }
     else {
-        log_error("unexpected primary expression");
         return nullptr;
     }
     if (consume(LEFT_BRACKET)) {
@@ -341,12 +340,12 @@ Stmts *parse_statements() {
     vector<Stmt*> stmts;
     while (!eof()) {
         Stmt *stmt = parse_statement();
-        if (!stmt) break;
-        stmts.push_back(stmt);
+        if (!stmt && !peek(NEWLINE)) break;
+        if (stmt)
+            stmts.push_back(stmt);
         consume(NEWLINE);
     }
     if (!stmts.size()) return nullptr;
-    if (!eof()) return nullptr;
     return new Stmts(stmts);
 }
 
