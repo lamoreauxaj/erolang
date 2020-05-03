@@ -5,7 +5,8 @@
 vector<pair<VarType, Figure>> Point::intersect(Point point) {
     vector<pair<VarType, Figure>> ret;
 
-    
+    if (p == point.p)
+        ret.push_back(make_pair(POINT, *this));
     
     return ret;
 }
@@ -13,7 +14,9 @@ vector<pair<VarType, Figure>> Point::intersect(Point point) {
 vector<pair<VarType, Figure>> Point::intersect(Line line) {
     vector<pair<VarType, Figure>> ret;
 
-    
+    Vector3D norm = (line.p - p).cross(line.m);
+    if (isZeroVector(norm))
+        ret.push_back(make_pair(POINT, *this));
 
     return ret;
 }
@@ -21,13 +24,16 @@ vector<pair<VarType, Figure>> Point::intersect(Line line) {
 vector<pair<VarType, Figure>> Point::intersect(Circle circle) {
     vector<pair<VarType, Figure>> ret;
 
+
+
     return ret;
 }
 
 vector<pair<VarType, Figure>> Point::intersect(Plane plane) {
     vector<pair<VarType, Figure>> ret;
 
-
+    if (withinEps(plane.norm.dot(plane.p - p), 0))
+        ret.push_back(make_pair(POINT, *this));
 
     return ret;
 }
@@ -49,13 +55,7 @@ vector<pair<VarType, Figure>> Point::pointOn() {
 // LINE
 
 vector<pair<VarType, Figure>> Line::intersect(Point point) {
-    vector<pair<VarType, Figure>> ret;
-
-    Vector3D norm = (p - point.p).cross(m);
-    if (isZeroVector(norm))
-        ret.push_back(make_pair(POINT, point));
-    
-    return ret;
+    return point.intersect(*this);
 }
 
 vector<pair<VarType, Figure>> Line::intersect(Line line) {
