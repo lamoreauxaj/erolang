@@ -37,9 +37,7 @@ struct Point : Figure {
     vector<pair<VarType, Figure>> pointOn();
 
     bool operator == (const Point& point) const {
-        if (p == point.p)
-            return true;
-        return false;
+        return p == point.p;
     }
     
     bool operator != (const Point& point) const {
