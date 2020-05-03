@@ -3,6 +3,7 @@
 queue<Node*> function_queue;
 
 void compile_expr(Expr *expr);
+void compile_stmts(Stmts *stmts);
 
 void compile_real_expr(RealExpr *expr) {
     double tmp = stod(expr->val.text);
@@ -31,9 +32,9 @@ void compile_call_expr(CallExpr *expr) {
         i++;
     }
     add_to_function("main", "mov " + to_string(offset) + "(%rsp), %rax");
-    add_to_function("main", "sub $8, %rsp");
+    // add_to_function("main", "sub $8, %rsp");
     add_to_function("main", "call *%rax");
-    add_to_function("main", "add $8, %rsp");
+    // add_to_function("main", "add $8, %rsp");
     while (offset > 0) {
         add_to_function("main", "pop %rbx");
         add_to_function("main", "pop %rbx");
@@ -46,8 +47,18 @@ void compile_call_expr(CallExpr *expr) {
 void compile_identifier_expr(IdentifierExpr *expr) {
     // identify shit here
     string name = expr->val.text;
-    add_to_function("main", "push v1_" + name + "(%rip)");
-    add_to_function("main", "push v0_" + name + "(%rip)");
+    Data loc = scope_levels[node_scopes[expr]][name];
+    if (loc.loc == DATA_SEGMENT) {
+        add_to_function("main", "push v1_" + name + "(%rip)");
+        add_to_function("main", "push v0_" + name + "(%rip)");
+    }
+    else if (loc.loc == STACK) {
+        add_to_function("main", "push -" + to_string(loc.pos + 8) + "(%rbp)");
+        add_to_function("main", "push -" + to_string(loc.pos + 16) + "(%rbp)");
+    }
+    else {
+        log_error("unexpected data loc");
+    }
 }
 
 void compile_unary_expr(UnaryExpr *expr) {
@@ -71,10 +82,17 @@ void compile_assign_op(BinaryExpr *expr) {
     compile_expr(expr->right);
     IdentifierExpr *lvalue = (IdentifierExpr*) expr->left;
     string name = lvalue->val.text;
+    Data loc = scope_levels[node_scopes[expr]][name];
     add_to_function("main", "mov (%rsp), %rax");
-    add_to_function("main", "mov %rax, v0_" + name + "(%rip)");
+    if (loc.loc == DATA_SEGMENT)
+        add_to_function("main", "mov %rax, v0_" + name + "(%rip)");
+    else
+        add_to_function("main", "mov %rax, -" + to_string(loc.pos + 16) + "(%rbp)");
     add_to_function("main", "mov 8(%rsp), %rax");
-    add_to_function("main", "mov %rax, v1_" + name + "(%rip)");
+    if (loc.loc == DATA_SEGMENT)
+        add_to_function("main", "mov %rax, v1_" + name + "(%rip)");
+    else
+        add_to_function("main", "mov %rax, -" + to_string(loc.pos + 8) + "(%rbp)");
 }
 
 void compile_binary_expr(BinaryExpr *expr) {
@@ -105,7 +123,8 @@ void compile_expr_stmt(ExprStmt *stmt) {
 }
 
 void compile_if_stmt(IfStmt *stmt) {
-    cout << "compile me pls\n";
+    // compile_expr(stmt->cond);
+    compile_stmts(stmt->block);
 }
 
 void compile_while_stmt(WhileStmt *stmt) {
@@ -132,13 +151,15 @@ void compile_data_segment() {
     add_to_data(".extern ero_write");
     add_to_data("format: .byte '%', '.', '2', 'f', 10, 0");
     for (auto p : scope_levels[0]) {
-        if (p.second.value) {
-            add_to_data("v0_" + p.second.label + ": .quad " + to_string((int64_t) p.second.value->type));
-            add_to_data("v1_" + p.second.label + ": .quad ero_write");
-        }
-        else {
-            add_to_data("v0_" + p.second.label + ": .quad 0");
-            add_to_data("v1_" + p.second.label + ": .quad 0");
+        if (p.second.loc == DATA_SEGMENT) {
+            if (p.second.value) {
+                add_to_data("v0_" + p.second.label + ": .quad " + to_string((int64_t) p.second.value->type));
+                add_to_data("v1_" + p.second.label + ": .quad ero_write");
+            }
+            else {
+                add_to_data("v0_" + p.second.label + ": .quad 0");
+                add_to_data("v1_" + p.second.label + ": .quad 0");
+            }
         }
         // cout << p.first << " " << p.second.pos << "\n";
     }
@@ -146,14 +167,21 @@ void compile_data_segment() {
 
 void compile(Stmts *tree) {
     scope_variables(tree);
-    // for (auto p : scope_levels) {
-    //     cout << p.first << ":\n";
-    //     auto scope = p.second;
-    //     for (auto p1 : scope) {
-    //         cout << p1.first << " " << p1.second.tostring() << "\n";
-    //     }
-    // }
+    for (auto p : scope_levels) {
+        cout << p.first << ":\n";
+        auto scope = p.second;
+        for (auto p1 : scope) {
+            cout << p1.first << " " << p1.second.tostring() << "\n";
+        }
+    }
     compile_data_segment();
+    add_to_function("main", "push %rbp");
+    add_to_function("main", "mov %rsp, %rbp");
+    if (stack_size[0] > 0)
+        add_to_function("main", "sub $" + to_string(stack_size[0]) + ", %rsp");
     compile_stmts(tree);
+    if (stack_size[0] > 0)
+        add_to_function("main", "add $" + to_string(stack_size[0]) + ", %rsp");
+    add_to_function("main", "pop %rbp");
     add_to_function("main", "ret");
 }
