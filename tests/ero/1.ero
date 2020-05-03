@@ -1,6 +1,6 @@
-a = 1.0
-c = 2.0
-write(a)
-write(c)
-true = false
-write(true)
+if (true) {
+    write(1.0)
+}
+if (false) {
+    write(2.0)
+}

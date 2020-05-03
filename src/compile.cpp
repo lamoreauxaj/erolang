@@ -122,9 +122,17 @@ void compile_expr_stmt(ExprStmt *stmt) {
     add_to_function("main", "pop %rax");
 }
 
+static int if_counter = 0;
+
 void compile_if_stmt(IfStmt *stmt) {
-    // compile_expr(stmt->cond);
+    compile_expr(stmt->cond);
+    add_to_function("main", "pop %rax");
+    add_to_function("main", "pop %rax");
+    add_to_function("main", "cmp $0, %rax");
+    string jump_label = "if_" + to_string(if_counter++);
+    add_to_function("main", "jz " + jump_label);
     compile_stmts(stmt->block);
+    add_to_function("main", jump_label + ":");
 }
 
 void compile_while_stmt(WhileStmt *stmt) {
@@ -160,6 +168,8 @@ void compile_data_segment() {
 }
 
 void compile(Stmts *tree) {
+    if_counter = 0;
+
     scope_variables(tree);
     for (auto p : scope_levels) {
         cout << p.first << ":\n";
