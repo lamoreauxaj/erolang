@@ -1,14 +1,16 @@
 #ifndef VECTOR3D_H
 #define VECTOR3D_H
 
+#include <math.h>
+
 struct Vector3D {
-    double x, y, z;
+    long double x, y, z;
 
     Vector3D() {
         x = 0, y = 0, z = 0;
     }
 
-    Vector3D(double x, double y, double z) : x(x), y(y), z(z) {}
+    Vector3D(long double x, long double y, long double z) : x(x), y(y), z(z) {}
 
     Vector3D operator + (const Vector3D& v) const {
         return Vector3D(x + v.x, y + v.y, z + v.z);
@@ -18,11 +20,11 @@ struct Vector3D {
         return Vector3D(x - v.x, y - v.y, z - v.z);
     }
 
-    Vector3D operator * (const double scalar) const {
+    Vector3D operator * (const long double scalar) const {
         return Vector3D(x * scalar, y * scalar, z * scalar);
     }
 
-    Vector3D operator / (const double scalar) const {
+    Vector3D operator / (const long double scalar) const {
         return Vector3D(x / scalar, y / scalar, z / scalar);
     }
 
@@ -40,12 +42,16 @@ struct Vector3D {
         z = v.z;
     }
 
-    double mag2() {
+    long double mag() {
+        return sqrt(x * x + y * y + z * z);
+    }
+
+    long double mag2() {
         return x * x + y * y + z * z;
     }
 
-    Vector3D dot(Vector3D& v) {
-        return Vector3D(x * v.x, y * v.y, z * v.z);
+    long double dot(Vector3D& v) {
+        return x * v.x + y * v.y + z * v.z;
     }
 
     Vector3D cross(Vector3D& v) {
