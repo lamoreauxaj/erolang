@@ -31,6 +31,10 @@ int main(int argc, char **argv) {
 
     cout << "compiling" << endl;
     vector<Token> tokens = tokenize(program);
+    for (Token t : tokens) {
+        cout << t.type << ":" << t.text << " ";
+    }
+    cout << "\n";
     Stmts *tree = parse(tokens);
     cout << pprinter(tree) << "\n";
     int res = 0;

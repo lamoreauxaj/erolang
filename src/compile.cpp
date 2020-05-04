@@ -28,6 +28,14 @@ void compile_call_expr(CallExpr *expr) {
             compile_expr(arg);
             add_to_function("main", "mov %rsp, %rdi");
         }
+        else if (i == 1) {
+            compile_expr(arg);
+            add_to_function("main", "mov %rsp, %rsi");
+        }
+        else {
+            log_error("too many arguments");
+            return;
+        }
         offset += 16;
         i++;
     }
@@ -74,6 +82,20 @@ void compile_addition_op(BinaryExpr *expr) {
     add_to_function("main", "add $16, %rsp");
 }
 
+void compile_is_op(BinaryExpr *expr) {
+    compile_expr(expr->left);
+    compile_expr(expr->right);
+    add_to_function("main", "lea 16(%rsp), %rdi");
+    add_to_function("main", "mov %rsp, %rsi");
+    add_to_function("main", "call ero_equals");
+    add_to_function("main", "pop %rbx");
+    add_to_function("main", "pop %rbx");
+    add_to_function("main", "pop %rbx");
+    add_to_function("main", "pop %rbx");
+    add_to_function("main", "push %rdx");
+    add_to_function("main", "push %rax");
+}
+
 void compile_assign_op(BinaryExpr *expr) {
     if (expr->left->type != IDENTIFIEREXPR) {
         log_error("expected identifier as lvalue");
@@ -98,6 +120,7 @@ void compile_assign_op(BinaryExpr *expr) {
 void compile_binary_expr(BinaryExpr *expr) {
     if (expr->op.type == PLUS) compile_addition_op(expr);
     else if (expr->op.type == ASSIGN) compile_assign_op(expr);
+    else if (expr->op.type == IS) compile_is_op(expr);
     else {
         log_error("unknown binary operator");
         return;
@@ -122,7 +145,8 @@ void compile_expr_stmt(ExprStmt *stmt) {
     add_to_function("main", "pop %rax");
 }
 
-static int if_counter = 0;
+static int if_counter;
+static int while_counter;
 
 void compile_if_stmt(IfStmt *stmt) {
     compile_expr(stmt->cond);
@@ -136,7 +160,17 @@ void compile_if_stmt(IfStmt *stmt) {
 }
 
 void compile_while_stmt(WhileStmt *stmt) {
-
+    string loop_label1 = "loop_" + to_string(while_counter++);
+    string loop_label2 = "loop_" + to_string(while_counter++);
+    add_to_function("main", loop_label1 + ":");
+    compile_expr(stmt->cond);
+    add_to_function("main", "pop %rax");
+    add_to_function("main", "pop %rax");
+    add_to_function("main", "cmp $0, %rax");
+    add_to_function("main", "jz " + loop_label2);
+    compile_stmts(stmt->block);
+    add_to_function("main", "jmp " + loop_label1);
+    add_to_function("main", loop_label2 + ":");
 }
 
 void compile_stmt(Stmt *stmt) {
@@ -157,6 +191,7 @@ void compile_stmts(Stmts *stmts) {
 
 void compile_data_segment() {
     add_to_data(".extern ero_write");
+    add_to_data(".extern ero_equals");
     add_to_data("format: .byte '%', '.', '2', 'f', 10, 0");
     for (auto p : scope_levels[0]) {
         if (p.second.loc == DATA_SEGMENT) {
@@ -169,6 +204,7 @@ void compile_data_segment() {
 
 void compile(Stmts *tree) {
     if_counter = 0;
+    while_counter = 0;
 
     scope_variables(tree);
     for (auto p : scope_levels) {

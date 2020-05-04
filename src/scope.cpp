@@ -20,7 +20,6 @@ static void resolve_identifier(string id, int scope) {
             break;
         }
         if (!parent_scope.count(curr)) {
-            log_error("unable to resolve variable");
             return;
         } 
         curr = parent_scope[curr];
@@ -77,6 +76,10 @@ static void scope_identifier_expr(IdentifierExpr *expr, int scope) {
     node_scopes[expr] = scope;
     string id = expr->val.text;
     resolve_identifier(id, scope);
+    if (!scope_levels[scope].count(id)) {
+        log_error("unable to resolve variable");
+        return;
+    }
     /*
     string id = expr->val.text;
     if (!scope_levels[0].count(id)) {

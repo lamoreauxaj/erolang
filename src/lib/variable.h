@@ -1,9 +1,12 @@
 #ifndef VARIABLE_H
 #define VARIABLE_H
 #include <cstdint>
+#include <cstdlib>
 #include <iostream>
 #include "Vector3D.h"
 using namespace std;
+
+const double EPS = 1e-6;
 
 enum VarType {
     REALV,
@@ -31,5 +34,7 @@ struct Var {
 };
 
 extern "C" Var ero_write(Var *var);
+
+extern "C" Var ero_equals(Var *a, Var *b);
 
 #endif

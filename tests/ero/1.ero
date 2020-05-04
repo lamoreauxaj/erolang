@@ -1,6 +1,10 @@
-if (true) {
-    write(1.0)
-}
-if (false) {
-    write(2.0)
+a = 1.0
+b = 0
+while (a is 1.0) {
+    write(b)
+    b = b + 0.5
+    if (b is 2.0) {
+        write(3.0)
+        a = 0
+    }
 }
