@@ -55,7 +55,7 @@ void compile_call_expr(CallExpr *expr) {
 void compile_identifier_expr(IdentifierExpr *expr) {
     // identify shit here
     string name = expr->val.text;
-    Data loc = scope_levels[node_scopes[expr]][name];
+    Data loc = data_locs[scope_levels[node_scopes[expr]][name]];
     if (loc.loc == DATA_SEGMENT) {
         add_to_function("main", "push v1_" + name + "(%rip)");
         add_to_function("main", "push v0_" + name + "(%rip)");
@@ -67,6 +67,10 @@ void compile_identifier_expr(IdentifierExpr *expr) {
     else {
         log_error("unexpected data loc");
     }
+}
+
+void compile_construction_expr(ConstructionExpr *expr) {
+
 }
 
 void compile_unary_expr(UnaryExpr *expr) {
@@ -104,7 +108,7 @@ void compile_assign_op(BinaryExpr *expr) {
     compile_expr(expr->right);
     IdentifierExpr *lvalue = (IdentifierExpr*) expr->left;
     string name = lvalue->val.text;
-    Data loc = scope_levels[node_scopes[expr]][name];
+    Data loc = data_locs[scope_levels[node_scopes[expr]][name]];
     add_to_function("main", "mov (%rsp), %rax");
     if (loc.loc == DATA_SEGMENT)
         add_to_function("main", "mov %rax, v0_" + name + "(%rip)");
@@ -133,6 +137,7 @@ void compile_expr(Expr *expr) {
     else if (expr->type == REALEXPR) compile_real_expr((RealExpr*) expr);
     else if (expr->type == IDENTIFIEREXPR) compile_identifier_expr((IdentifierExpr*) expr);
     else if (expr->type == CALLEXPR) compile_call_expr((CallExpr*) expr);
+    else if (expr->type == CONSTRUCTIONEXPR) compile_construction_expr((ConstructionExpr*) expr);
     else {
         log_error("unknown expr type");
         return;
@@ -193,12 +198,17 @@ void compile_data_segment() {
     add_to_data(".extern ero_write");
     add_to_data(".extern ero_equals");
     add_to_data("format: .byte '%', '.', '2', 'f', 10, 0");
-    for (auto p : scope_levels[0]) {
-        if (p.second.loc == DATA_SEGMENT) {
-            add_to_data("v0_" + p.second.label + ": .quad " + to_string((int64_t) p.second.default_type));
-            add_to_data("v1_" + p.second.label + ": .quad " + p.second.default_value);
+    for (auto pp : scope_levels) {
+        if (root_scope[pp.first] != pp.first) continue;
+        for (auto p : scope_levels[pp.first]) {
+            int data_cnt = p.second;
+            Data loc = data_locs[data_cnt];
+            if (loc.loc == DATA_SEGMENT) {
+                add_to_data("v0_" + loc.label + ": .quad " + to_string((int64_t) loc.default_type));
+                add_to_data("v1_" + loc.label + ": .quad " + loc.default_value);
+            }
+            // cout << p.first << " " << p.second.pos << "\n";
         }
-        // cout << p.first << " " << p.second.pos << "\n";
     }
 }
 
@@ -211,9 +221,14 @@ void compile(Stmts *tree) {
         cout << p.first << ":\n";
         auto scope = p.second;
         for (auto p1 : scope) {
-            cout << p1.first << " " << p1.second.tostring() << "\n";
+            cout << p1.first << " " << data_locs[p1.second].tostring() << "\n";
         }
     }
+    cout << "root_scopes:\n";
+    for (auto p : root_scope) {
+        cout << p.first << ":" << p.second << " ";
+    }
+    cout << "\n";
     compile_data_segment();
     add_to_function("main", "push %rbp");
     add_to_function("main", "mov %rsp, %rbp");

@@ -41,7 +41,8 @@ struct Data {
 
 extern map<Node*, int> node_scopes;
 // store variable locations
-extern map<int, map<string, Data>> scope_levels;
+extern map<int, map<string, int>> scope_levels;
+extern map<int, Data> data_locs;
 // additional information
 extern map<int, int> parent_scope;
 extern map<int, int> root_scope;
