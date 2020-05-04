@@ -2,13 +2,16 @@
     "name": "erolang",
     "version": "1.0.0",
     "description": "Site for Ero language.",
+    "main": "server/index.js",
     "scripts": {
         "dev": "vuepress dev .",
-        "build": "vuepress build ."
+        "build": "vuepress build .",
+        "start": "nodemon server/index.js"
     },
     "author": "Aaron Lamoreaux <lamoreauxaj@gmail.com>, Anand Iyer <aiy12@gmail.com>",
     "license": "ISC",
     "dependencies": {
+        "nodemon": "^2.0.3",
         "vuepress": "^1.4.1",
         "vuepress-theme-thindark": "^1.0.1"
     }
