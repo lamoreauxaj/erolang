@@ -1,1 +1,0 @@
-/bin/g++-9  -g   CMakeFiles/Ero_run.dir/asm.cpp.o CMakeFiles/Ero_run.dir/compile.cpp.o CMakeFiles/Ero_run.dir/lexer.cpp.o CMakeFiles/Ero_run.dir/lib/geometry.cpp.o CMakeFiles/Ero_run.dir/lib/variable.cpp.o CMakeFiles/Ero_run.dir/log.cpp.o CMakeFiles/Ero_run.dir/main.cpp.o CMakeFiles/Ero_run.dir/parser.cpp.o CMakeFiles/Ero_run.dir/scope.cpp.o  -o Ero_run 

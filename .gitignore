@@ -1,3 +1,4 @@
 .vscode
+build
 docs/server/node_modules
 server/node_modules

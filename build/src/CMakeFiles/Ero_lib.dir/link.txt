@@ -1,2 +1,0 @@
-/bin/ar qc libEro_lib.a  CMakeFiles/Ero_lib.dir/asm.cpp.o CMakeFiles/Ero_lib.dir/compile.cpp.o CMakeFiles/Ero_lib.dir/lexer.cpp.o CMakeFiles/Ero_lib.dir/lib/geometry.cpp.o CMakeFiles/Ero_lib.dir/lib/variable.cpp.o CMakeFiles/Ero_lib.dir/log.cpp.o CMakeFiles/Ero_lib.dir/main.cpp.o CMakeFiles/Ero_lib.dir/parser.cpp.o CMakeFiles/Ero_lib.dir/scope.cpp.o
-/bin/ranlib libEro_lib.a
