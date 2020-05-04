@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
         // add_to_function("main", "ret");
         write_assembly(output_file + ".s");
 
-        string command = "g++ -static -o " + output_file + " " + output_file + ".s ../src/lib/variable.cpp ../src/lib/geometry.cpp";
+        string command = "g++ -static -o " + output_file + " " + output_file + ".s ../../src/lib/variable.cpp ../../src/lib/geometry.cpp";
         int rc = system(command.c_str());
         if (rc) {
             cout << "unable to compile" << endl;
