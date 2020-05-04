@@ -16,10 +16,12 @@ string read_program(string file) {
 
 int main(int argc, char **argv) {
 
-    if (argc != 3) {
+    if (argc < 3) {
         cout << "Usage: " << argv[0] << " <input> <output>\n";
         return 1;
     }
+
+    bool prod = argc > 3;
 
     string input_file = argv[1];
     string output_file = argv[2];
@@ -45,7 +47,11 @@ int main(int argc, char **argv) {
         // add_to_function("main", "ret");
         write_assembly(output_file + ".s");
 
-        string command = "./g++ -static -o " + output_file + " " + output_file + ".s ../../src/lib/variable.cpp ../../src/lib/geometry.cpp";
+        string command;
+        if (prod)
+            command = "./g++ -static -o " + output_file + " ../../" + output_file + ".s ./variable.o ./geometry.o";
+        else
+            command = "g++ -static -o " + output_file + " " + output_file + ".s ../../src/lib/variable.cpp ../../src/lib/geometry.cpp";
         int rc = system(command.c_str());
         if (rc) {
             cout << "unable to compile" << endl;
