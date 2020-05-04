@@ -16,7 +16,17 @@ script:
 - aws s3 sync --acl public-read --sse --delete .vuepress/dist s3://erolang.xyz
 - cd ../..
 - ssh -i "erolang.pem" ubuntu@ec2-54-196-169-10.compute-1.amazonaws.com
-- echo Hello
+- cd pa
+- rm -rf build
+- rm -rf docs/server/node_modules
+- git pull
+- cd docs/server
+- npm install
+- cd ../../
+- mkdir build
+- cd build
+- cmake ../
+- pm2 restart 0
 - exit
 before_install:
 - openssl aes-256-cbc -K $encrypted_6a63e1e2c68c_key -iv $encrypted_6a63e1e2c68c_iv
