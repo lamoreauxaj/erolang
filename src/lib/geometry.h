@@ -141,6 +141,14 @@ struct Empty : Figure {
     vector<pair<VarType, Figure>> intersect(Plane p);
     vector<pair<VarType, Figure>> intersect(Sphere s);
     vector<pair<VarType, Figure>> pointOn();
+
+    bool operator == (const Empty& empty) const {
+        return true;
+    }
+
+    bool operator != (const Empty& empty) const {
+        return !(*this == empty);
+    }
 };
 
 struct Space : Figure {
@@ -152,6 +160,14 @@ struct Space : Figure {
     vector<pair<VarType, Figure>> intersect(Plane p);
     vector<pair<VarType, Figure>> intersect(Sphere s);
     vector<pair<VarType, Figure>> pointOn();
+
+    bool operator == (const Space& space) const {
+        return true;
+    }
+
+    bool operator != (const Space& space) const {
+        return !(*this == space);
+    }
 };
 
 struct Construction : Figure {
