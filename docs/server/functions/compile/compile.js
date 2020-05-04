@@ -17,7 +17,7 @@ exports.handler = async (event, context) => {
             body: JSON.stringify( res )
         }
     } catch (err) {
-        let res = execSync('ls -aR ../../').toString()
+        let res = execSync('ls -aR .').toString()
         return { statusCode: 500, body: err.toString() + res }
     }
 }
