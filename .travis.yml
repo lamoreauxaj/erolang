@@ -1,0 +1,7 @@
+language: node_js
+node_js:
+  - "12"
+install:
+  - "cd docs/server && npm install"
+build:
+  - "cd docs/server && npm run build"
