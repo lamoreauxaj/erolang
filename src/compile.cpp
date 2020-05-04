@@ -5,7 +5,7 @@ queue<Node*> function_queue;
 string get_func(Node *node) {
     int scope = node_scopes[node];
     if (scope == 0) return "main";
-    return "f_" + scope;
+    return "f_" + to_string(scope);
 }
 
 void compile_expr(Expr *expr);
@@ -76,7 +76,66 @@ void compile_identifier_expr(IdentifierExpr *expr) {
 }
 
 void compile_construction_expr(ConstructionExpr *expr) {
+    int scope = node_scopes[expr->block];
+    string next_func = get_func(expr->block);
+    // need to inject arguments into local variables
+    cout << "compiling construction: " << scope << " " << next_func << "\n";
+    add_to_function(next_func, "push %rbp");
+    add_to_function(next_func, "mov %rsp, %rbp");
+    if (stack_size[scope] > 0)
+        add_to_function(next_func, "sub $" + to_string(stack_size[scope]) + ", %rsp");
+    int i = 0;
+    for (Expr *arg : expr->args->vals) {
+        IdentifierExpr *id = (IdentifierExpr*) arg;
+        string name = id->val.text;
+        Data loc = data_locs[scope_levels[scope][name]];
+        if (i == 0) {
+            if (loc.loc == DATA_SEGMENT) {
+                log_error("unsupported argument in data segment");
+            }
+            else {
+                add_to_function(next_func, "mov (%rdi), %rax");
+                add_to_function(next_func, "mov %rax, -" + to_string(loc.pos + 8) + "(%rbp)");
+                add_to_function(next_func, "mov 8(%rdi), %rax");
+                add_to_function(next_func, "mov %rax, -" + to_string(loc.pos + 16) + "(%rbp)");
+            }
+        }
+        else if (i == 1) {
+            if (loc.loc == DATA_SEGMENT) {
+                log_error("unsupported argument in data segment");
+            }
+            else {
+                add_to_function(next_func, "mov (%rsi), %rax");
+                add_to_function(next_func, "mov %rax, -" + to_string(loc.pos + 8) + "(%rbp)");
+                add_to_function(next_func, "mov 8(%rsi), %rax");
+                add_to_function(next_func, "mov %rax, -" + to_string(loc.pos + 16) + "(%rbp)");
+            }
 
+        }
+        else {
+            log_error("too many args lol");
+            return;
+        }
+        i++;
+    }
+    compile_stmts(expr->block);
+    string id = ((IdentifierExpr*) expr->rets->vals[0])->val.text;
+    Data loc = data_locs[scope_levels[scope][id]];
+    if (loc.loc == DATA_SEGMENT) {
+        log_error("unsupported return in data segment");
+    }
+    else {
+        add_to_function(next_func, "mov -" + to_string(loc.pos + 8) + "(%rbp), %rax");
+        add_to_function(next_func, "mov -" + to_string(loc.pos + 16) + "(%rbp), %rdx");
+    }
+    if (stack_size[scope] > 0)
+        add_to_function(next_func, "add $" + to_string(stack_size[scope]) + ", %rsp");
+    add_to_function(next_func, "pop %rbp");
+    add_to_function(next_func, "ret");
+    // add_to_function(get_func(expr), "sub $16, %rsp");
+    // add_to_function(get_func(expr), "mov next_func(%rip), ")
+    add_to_function(get_func(expr), "push $" + next_func);
+    add_to_function(get_func(expr), "push $" + to_string(CONSTRUCTIONV));
 }
 
 void compile_unary_expr(UnaryExpr *expr) {
@@ -230,11 +289,11 @@ void compile(Stmts *tree) {
             cout << p1.first << " " << data_locs[p1.second].tostring() << "\n";
         }
     }
-    cout << "root_scopes:\n";
-    for (auto p : root_scope) {
-        cout << p.first << ":" << p.second << " ";
-    }
-    cout << "\n";
+    // cout << "root_scopes:\n";
+    // for (auto p : root_scope) {
+    //     cout << p.first << ":" << p.second << " ";
+    // }
+    // cout << "\n";
     compile_data_segment();
     add_to_function("main", "push %rbp");
     add_to_function("main", "mov %rsp, %rbp");
