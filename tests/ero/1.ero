@@ -1,11 +1,6 @@
 
-add = 0
-if (true) {
-    d = 2.0
-    add = construction (a, b) -> (z) {
-        z = a + b
-        d = d + 1.0
-    }
+add = construction (a, b) -> (z) {
+    z = a + b
 }
 
 a = 1.0

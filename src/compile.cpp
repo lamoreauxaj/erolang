@@ -2,6 +2,12 @@
 
 queue<Node*> function_queue;
 
+string get_func(Node *node) {
+    int scope = node_scopes[node];
+    if (scope == 0) return "main";
+    return "f_" + scope;
+}
+
 void compile_expr(Expr *expr);
 void compile_stmts(Stmts *stmts);
 
@@ -9,14 +15,14 @@ void compile_real_expr(RealExpr *expr) {
     double tmp = stod(expr->val.text);
     uint64_t val = *((uint64_t*) &tmp);
     // not really sure if endianness is correct here
-    add_to_function("main", "pushw $" + to_string((int16_t) (val >> 48)));
-    add_to_function("main", "pushw $" + to_string((int16_t) ((val >> 32) & 0xffff)));
-    add_to_function("main", "pushw $" + to_string((int16_t) ((val >> 16) & 0xffff)));
-    add_to_function("main", "pushw $" + to_string((int16_t) (val & 0xffff)));
-    add_to_function("main", "pushw $0");
-    add_to_function("main", "pushw $0");
-    add_to_function("main", "pushw $0");
-    add_to_function("main", "pushw $0");
+    add_to_function(get_func(expr), "pushw $" + to_string((int16_t) (val >> 48)));
+    add_to_function(get_func(expr), "pushw $" + to_string((int16_t) ((val >> 32) & 0xffff)));
+    add_to_function(get_func(expr), "pushw $" + to_string((int16_t) ((val >> 16) & 0xffff)));
+    add_to_function(get_func(expr), "pushw $" + to_string((int16_t) (val & 0xffff)));
+    add_to_function(get_func(expr), "pushw $0");
+    add_to_function(get_func(expr), "pushw $0");
+    add_to_function(get_func(expr), "pushw $0");
+    add_to_function(get_func(expr), "pushw $0");
 }
 
 void compile_call_expr(CallExpr *expr) {
@@ -26,11 +32,11 @@ void compile_call_expr(CallExpr *expr) {
     for (Expr *arg : expr->args->vals) {
         if (i == 0) {
             compile_expr(arg);
-            add_to_function("main", "mov %rsp, %rdi");
+            add_to_function(get_func(expr), "mov %rsp, %rdi");
         }
         else if (i == 1) {
             compile_expr(arg);
-            add_to_function("main", "mov %rsp, %rsi");
+            add_to_function(get_func(expr), "mov %rsp, %rsi");
         }
         else {
             log_error("too many arguments");
@@ -39,17 +45,17 @@ void compile_call_expr(CallExpr *expr) {
         offset += 16;
         i++;
     }
-    add_to_function("main", "mov " + to_string(offset) + "(%rsp), %rax");
+    add_to_function(get_func(expr), "mov " + to_string(offset) + "(%rsp), %rax");
     // add_to_function("main", "sub $8, %rsp");
-    add_to_function("main", "call *%rax");
+    add_to_function(get_func(expr), "call *%rax");
     // add_to_function("main", "add $8, %rsp");
     while (offset > 0) {
-        add_to_function("main", "pop %rbx");
-        add_to_function("main", "pop %rbx");
+        add_to_function(get_func(expr), "pop %rbx");
+        add_to_function(get_func(expr), "pop %rbx");
         offset -= 16;
     }
-    add_to_function("main", "push %rdx");
-    add_to_function("main", "push %rax");
+    add_to_function(get_func(expr), "push %rdx");
+    add_to_function(get_func(expr), "push %rax");
 }
 
 void compile_identifier_expr(IdentifierExpr *expr) {
@@ -57,12 +63,12 @@ void compile_identifier_expr(IdentifierExpr *expr) {
     string name = expr->val.text;
     Data loc = data_locs[scope_levels[node_scopes[expr]][name]];
     if (loc.loc == DATA_SEGMENT) {
-        add_to_function("main", "push v1_" + name + "(%rip)");
-        add_to_function("main", "push v0_" + name + "(%rip)");
+        add_to_function(get_func(expr), "push v1_" + name + "(%rip)");
+        add_to_function(get_func(expr), "push v0_" + name + "(%rip)");
     }
     else if (loc.loc == STACK) {
-        add_to_function("main", "push -" + to_string(loc.pos + 8) + "(%rbp)");
-        add_to_function("main", "push -" + to_string(loc.pos + 16) + "(%rbp)");
+        add_to_function(get_func(expr), "push -" + to_string(loc.pos + 8) + "(%rbp)");
+        add_to_function(get_func(expr), "push -" + to_string(loc.pos + 16) + "(%rbp)");
     }
     else {
         log_error("unexpected data loc");
@@ -80,24 +86,24 @@ void compile_unary_expr(UnaryExpr *expr) {
 void compile_addition_op(BinaryExpr *expr) {
     compile_expr(expr->left);
     compile_expr(expr->right);
-    add_to_function("main", "movsd 0x18(%rsp), %xmm0");
-    add_to_function("main", "addsd 0x8(%rsp), %xmm0");
-    add_to_function("main", "movsd %xmm0, 0x18(%rsp)");
-    add_to_function("main", "add $16, %rsp");
+    add_to_function(get_func(expr), "movsd 0x18(%rsp), %xmm0");
+    add_to_function(get_func(expr), "addsd 0x8(%rsp), %xmm0");
+    add_to_function(get_func(expr), "movsd %xmm0, 0x18(%rsp)");
+    add_to_function(get_func(expr), "add $16, %rsp");
 }
 
 void compile_is_op(BinaryExpr *expr) {
     compile_expr(expr->left);
     compile_expr(expr->right);
-    add_to_function("main", "lea 16(%rsp), %rdi");
-    add_to_function("main", "mov %rsp, %rsi");
-    add_to_function("main", "call ero_equals");
-    add_to_function("main", "pop %rbx");
-    add_to_function("main", "pop %rbx");
-    add_to_function("main", "pop %rbx");
-    add_to_function("main", "pop %rbx");
-    add_to_function("main", "push %rdx");
-    add_to_function("main", "push %rax");
+    add_to_function(get_func(expr), "lea 16(%rsp), %rdi");
+    add_to_function(get_func(expr), "mov %rsp, %rsi");
+    add_to_function(get_func(expr), "call ero_equals");
+    add_to_function(get_func(expr), "pop %rbx");
+    add_to_function(get_func(expr), "pop %rbx");
+    add_to_function(get_func(expr), "pop %rbx");
+    add_to_function(get_func(expr), "pop %rbx");
+    add_to_function(get_func(expr), "push %rdx");
+    add_to_function(get_func(expr), "push %rax");
 }
 
 void compile_assign_op(BinaryExpr *expr) {
@@ -109,16 +115,16 @@ void compile_assign_op(BinaryExpr *expr) {
     IdentifierExpr *lvalue = (IdentifierExpr*) expr->left;
     string name = lvalue->val.text;
     Data loc = data_locs[scope_levels[node_scopes[expr]][name]];
-    add_to_function("main", "mov (%rsp), %rax");
+    add_to_function(get_func(expr), "mov (%rsp), %rax");
     if (loc.loc == DATA_SEGMENT)
-        add_to_function("main", "mov %rax, v0_" + name + "(%rip)");
+        add_to_function(get_func(expr), "mov %rax, v0_" + name + "(%rip)");
     else
-        add_to_function("main", "mov %rax, -" + to_string(loc.pos + 16) + "(%rbp)");
-    add_to_function("main", "mov 8(%rsp), %rax");
+        add_to_function(get_func(expr), "mov %rax, -" + to_string(loc.pos + 16) + "(%rbp)");
+    add_to_function(get_func(expr), "mov 8(%rsp), %rax");
     if (loc.loc == DATA_SEGMENT)
-        add_to_function("main", "mov %rax, v1_" + name + "(%rip)");
+        add_to_function(get_func(expr), "mov %rax, v1_" + name + "(%rip)");
     else
-        add_to_function("main", "mov %rax, -" + to_string(loc.pos + 8) + "(%rbp)");
+        add_to_function(get_func(expr), "mov %rax, -" + to_string(loc.pos + 8) + "(%rbp)");
 }
 
 void compile_binary_expr(BinaryExpr *expr) {
@@ -146,8 +152,8 @@ void compile_expr(Expr *expr) {
 
 void compile_expr_stmt(ExprStmt *stmt) {
     compile_expr(stmt->expr);
-    add_to_function("main", "pop %rax");
-    add_to_function("main", "pop %rax");
+    add_to_function(get_func(stmt), "pop %rax");
+    add_to_function(get_func(stmt), "pop %rax");
 }
 
 static int if_counter;
@@ -155,27 +161,27 @@ static int while_counter;
 
 void compile_if_stmt(IfStmt *stmt) {
     compile_expr(stmt->cond);
-    add_to_function("main", "pop %rax");
-    add_to_function("main", "pop %rax");
-    add_to_function("main", "cmp $0, %rax");
+    add_to_function(get_func(stmt), "pop %rax");
+    add_to_function(get_func(stmt), "pop %rax");
+    add_to_function(get_func(stmt), "cmp $0, %rax");
     string jump_label = "if_" + to_string(if_counter++);
-    add_to_function("main", "jz " + jump_label);
+    add_to_function(get_func(stmt), "jz " + jump_label);
     compile_stmts(stmt->block);
-    add_to_function("main", jump_label + ":");
+    add_to_function(get_func(stmt), jump_label + ":");
 }
 
 void compile_while_stmt(WhileStmt *stmt) {
     string loop_label1 = "loop_" + to_string(while_counter++);
     string loop_label2 = "loop_" + to_string(while_counter++);
-    add_to_function("main", loop_label1 + ":");
+    add_to_function(get_func(stmt), loop_label1 + ":");
     compile_expr(stmt->cond);
-    add_to_function("main", "pop %rax");
-    add_to_function("main", "pop %rax");
-    add_to_function("main", "cmp $0, %rax");
-    add_to_function("main", "jz " + loop_label2);
+    add_to_function(get_func(stmt), "pop %rax");
+    add_to_function(get_func(stmt), "pop %rax");
+    add_to_function(get_func(stmt), "cmp $0, %rax");
+    add_to_function(get_func(stmt), "jz " + loop_label2);
     compile_stmts(stmt->block);
-    add_to_function("main", "jmp " + loop_label1);
-    add_to_function("main", loop_label2 + ":");
+    add_to_function(get_func(stmt), "jmp " + loop_label1);
+    add_to_function(get_func(stmt), loop_label2 + ":");
 }
 
 void compile_stmt(Stmt *stmt) {
