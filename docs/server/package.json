@@ -1,0 +1,11 @@
+{
+    "name": "erolang",
+    "version": "1.0.0",
+    "description": "Site for Ero language.",
+    "scripts": {
+        "dev": "vuepress dev .",
+        "build": "vuepress build ."
+    },
+    "author": "Aaron Lamoreaux <lamoreauxaj@gmail.com>, Anand Iyer <aiy12@gmail.com>",
+    "license": "ISC"
+}
