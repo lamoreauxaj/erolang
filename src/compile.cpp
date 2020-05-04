@@ -95,9 +95,9 @@ void compile_construction_expr(ConstructionExpr *expr) {
             }
             else {
                 add_to_function(next_func, "mov (%rdi), %rax");
-                add_to_function(next_func, "mov %rax, -" + to_string(loc.pos + 8) + "(%rbp)");
-                add_to_function(next_func, "mov 8(%rdi), %rax");
                 add_to_function(next_func, "mov %rax, -" + to_string(loc.pos + 16) + "(%rbp)");
+                add_to_function(next_func, "mov 8(%rdi), %rax");
+                add_to_function(next_func, "mov %rax, -" + to_string(loc.pos + 8) + "(%rbp)");
             }
         }
         else if (i == 1) {
@@ -106,9 +106,9 @@ void compile_construction_expr(ConstructionExpr *expr) {
             }
             else {
                 add_to_function(next_func, "mov (%rsi), %rax");
-                add_to_function(next_func, "mov %rax, -" + to_string(loc.pos + 8) + "(%rbp)");
-                add_to_function(next_func, "mov 8(%rsi), %rax");
                 add_to_function(next_func, "mov %rax, -" + to_string(loc.pos + 16) + "(%rbp)");
+                add_to_function(next_func, "mov 8(%rsi), %rax");
+                add_to_function(next_func, "mov %rax, -" + to_string(loc.pos + 8) + "(%rbp)");
             }
 
         }
@@ -125,8 +125,8 @@ void compile_construction_expr(ConstructionExpr *expr) {
         log_error("unsupported return in data segment");
     }
     else {
-        add_to_function(next_func, "mov -" + to_string(loc.pos + 8) + "(%rbp), %rax");
-        add_to_function(next_func, "mov -" + to_string(loc.pos + 16) + "(%rbp), %rdx");
+        add_to_function(next_func, "mov -" + to_string(loc.pos + 16) + "(%rbp), %rax");
+        add_to_function(next_func, "mov -" + to_string(loc.pos + 8) + "(%rbp), %rdx");
     }
     if (stack_size[scope] > 0)
         add_to_function(next_func, "add $" + to_string(stack_size[scope]) + ", %rsp");

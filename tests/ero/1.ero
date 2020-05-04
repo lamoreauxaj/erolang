@@ -1,6 +1,6 @@
 
 add = construction (a, b) -> (z) {
-    z = a + b
+    z = a + b + 2.0
 }
 
 a = 3.0
