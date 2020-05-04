@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
 
         string command;
         if (prod)
-            command = "./g++ -static -o " + output_file + " ../../" + output_file + ".s ./variable.o ./geometry.o";
+            command = "./g++ -static -o " + output_file + " " + output_file + ".s ./variable.o ./geometry.o";
         else
             command = "g++ -static -o " + output_file + " " + output_file + ".s ../../src/lib/variable.cpp ../../src/lib/geometry.cpp";
         int rc = system(command.c_str());

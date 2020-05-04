@@ -5,7 +5,7 @@ exports.handler = async (event, context) => {
     try {
         const subject = event.queryStringParameters.name || 'World'
         // const f = fs.readFileSync('build/src/Ero_run')
-        let res = execSync('./Ero_run 1.ero 1 --prod').toString()
+        let res = execSync('./Ero_run 1.ero /tmp/1 --prod').toString()
         // exec('ls', (error, stdout, stderr) => {
         //     return {
         //         statusCode: 200,
