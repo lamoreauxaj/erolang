@@ -252,3 +252,25 @@ TEST(tokenize17, apply1) {
     };
     checkTokens(tokens, exp);
 }
+
+TEST(tokenize18, equals1) {
+    string program = "a == (b = c); d = = e = f";
+    vector<Token> tokens = tokenize(program);
+    vector<Token> exp = {
+        Token(TokenType::IDENTIFIER, "a"),
+        Token(TokenType::EQUALS, "=="),
+        Token(TokenType::LEFT_PAREN, "("),
+        Token(TokenType::IDENTIFIER, "b"),
+        Token(TokenType::ASSIGN, "="),
+        Token(TokenType::IDENTIFIER, "c"),
+        Token(TokenType::RIGHT_PAREN, ")"),
+        Token(TokenType::SEMICOLON, ";"),
+        Token(TokenType::IDENTIFIER, "d"),
+        Token(TokenType::ASSIGN, "="),
+        Token(TokenType::ASSIGN, "="),
+        Token(TokenType::IDENTIFIER, "e"),
+        Token(TokenType::ASSIGN, "="),
+        Token(TokenType::IDENTIFIER, "f")
+    };
+    checkTokens(tokens, exp);
+}

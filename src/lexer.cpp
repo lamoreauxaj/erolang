@@ -28,7 +28,7 @@ TokenType char_type(char c) {
 
 bool one_char(TokenType t) {
     return (t == NEWLINE) || (t == BACKSLASH) || (t == SEMICOLON) || (t == LEFT_PAREN) || (t == RIGHT_PAREN) || (t == PLUS) ||
-        (t == LEFT_BRACKET) || (t == RIGHT_BRACKET) || (t == LEFT_BRACE) || (t == RIGHT_BRACE) || (t == ASSIGN) || (t == COMMA)
+        (t == LEFT_BRACKET) || (t == RIGHT_BRACKET) || (t == LEFT_BRACE) || (t == RIGHT_BRACE) || (t == COMMA)
         || (t == TIMES) || (t == DIVIDE) || (t == SLICE);
 }
 
@@ -110,6 +110,14 @@ Token next_token() {
             return Token(APPLY, "->", curIndex, curIndex + 1);
         } else {
             return Token(MINUS, "-", curIndex, curIndex);
+        }
+    }
+
+    if (t == ASSIGN) {
+        if (curIndex + 1 < program.length() && program[curIndex + 1] == '=') {
+            return Token(EQUALS, "==", curIndex, curIndex + 1);
+        } else {
+            return Token(ASSIGN, "=", curIndex, curIndex);
         }
     }
 
