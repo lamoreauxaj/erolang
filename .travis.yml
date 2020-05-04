@@ -4,4 +4,4 @@ node_js:
 install:
   - "cd docs/server && npm install"
 script:
-  - "cd docs/server && npm run build"
+  - "npm run build"
