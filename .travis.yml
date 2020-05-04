@@ -2,6 +2,9 @@ language: node_js
 node_js:
   - "12"
 install:
-  - "cd docs/server && npm install"
+  - "cd docs/server"
+  - "npm install"
+  - "pip install awscli"
 script:
   - "npm run build"
+  - "aws s3 sync --acl public-read --sse --delete .vuepress/dist s3://erolang.xyz"
