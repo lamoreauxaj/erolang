@@ -87,6 +87,14 @@ vector<pair<VarType, Figure>> Line::intersect(Line line) {
 vector<pair<VarType, Figure>> Line::intersect(Circle circle) {
     vector<pair<VarType, Figure>> ret;
 
+    vector<pair<VarType, Figure>> sphereIntersection = (*this).intersect(Sphere(circle.p, circle.r));
+    for (int i = 0; i < sphereIntersection.size(); i++) {
+        Point intersection = sphereIntersection[i].second;
+        long double dot = circle.norm.dot(intersection.p - circle.p);
+        if (withinEps(dot, 0))
+            ret.push_back(sphereIntersection[i]);
+    }
+    
     return ret;
 }
 
@@ -102,6 +110,20 @@ vector<pair<VarType, Figure>> Line::intersect(Plane plane) {
 
 vector<pair<VarType, Figure>> Line::intersect(Sphere sphere) {
     vector<pair<VarType, Figure>> ret;
+
+    long double u = m.dot(sphere.p - p) / m.mag2();
+    Vector3D c = p + (m * u);
+    long double d = (c - sphere.p).mag();
+    if (withinEps(d, sphere.r)) {
+        ret.push_back(make_pair(POINT, Point(c)));
+        return ret;
+    }
+    if (d > sphere.r) {
+        return ret;
+    }
+    long double v = sqrt(sphere.r * sphere.r - d * d);
+    ret.push_back(make_pair(POINT, Point(c - (m * v))));
+    ret.push_back(make_pair(POINT, Point(c + (m * v))));
 
     return ret;
 }
