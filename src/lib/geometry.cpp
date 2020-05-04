@@ -237,6 +237,15 @@ vector<pair<VarType, Figure*>> Plane::intersect(Circle circle) {
 vector<pair<VarType, Figure*>> Plane::intersect(Plane plane) {
     vector<pair<VarType, Figure*>> ret;
 
+    if (*this == plane) {
+        ret.push_back(make_pair(PLANE, this));
+    } else {
+        Vector3D m = norm.cross(plane.norm);
+        if (isZeroVector(m))
+            return ret;
+        
+    }
+
     return ret;
 }
 
