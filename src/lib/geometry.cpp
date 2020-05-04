@@ -182,11 +182,22 @@ vector<pair<VarType, Figure*>> Circle::intersect(Circle circle) {
 vector<pair<VarType, Figure*>> Circle::intersect(Plane plane) {
     vector<pair<VarType, Figure*>> ret;
 
+    if (plane == Plane(p, norm)) {
+        ret.push_back(make_pair(CIRCLE, this));
+    } else {
+        if (isZeroVector(plane.norm.cross(norm)))
+            return ret;
+        Line* line = (Line*) plane.intersect(Plane(p, norm))[0].second;
+        ret = (*line).intersect(*this);
+    }
+
     return ret;
 }
 
 vector<pair<VarType, Figure*>> Circle::intersect(Sphere sphere) {
     vector<pair<VarType, Figure*>> ret;
+
+    
 
     return ret;
 }
