@@ -49,6 +49,80 @@ Expr *parse_primary_expr() {
     Token val;
     if (consume(REAL, val)) expr = new RealExpr(val);
     else if (consume(IDENTIFIER, val)) expr = new IdentifierExpr(val);
+    else if (consume(CONSTRUCTION, val)) {
+        if (!consume(LEFT_PAREN)) {
+            log_error("expected left paren");
+            return nullptr;
+        }
+        Expr *expr = parse_expr();
+        vector<Expr*> args;
+        if (!expr) {
+            if (!consume(RIGHT_PAREN)) {
+                log_error("expected argument");
+                return nullptr;
+            }
+        }
+        else {
+            args.push_back(expr);
+            while (!consume(RIGHT_PAREN)) {
+                if (!consume(COMMA)) {
+                    log_error("expected comma");
+                    return nullptr;
+                }
+                Expr *expr = parse_expr();
+                if (!expr) {
+                    log_error("expected argument");
+                    return nullptr;
+                }
+                args.push_back(expr);
+            }
+        }
+        if (!consume(APPLY)) {
+            log_error("expected apply operator");
+            return nullptr;
+        }
+        if (!consume(LEFT_PAREN)) {
+            log_error("expected left paren");
+            return nullptr;
+        }
+        expr = parse_expr();
+        vector<Expr*> rets;
+        if (!expr) {
+            if (!consume(RIGHT_PAREN)) {
+                log_error("expected return value");
+                return nullptr;
+            }
+        }
+        else {
+            rets.push_back(expr);
+            while (!consume(RIGHT_PAREN)) {
+                if (!consume(COMMA)) {
+                    log_error("expected comma");
+                    return nullptr;
+                }
+                Expr *expr = parse_expr();
+                if (!expr) {
+                    log_error("expected return value");
+                    return nullptr;
+                }
+                rets.push_back(expr);
+            }
+        }
+        if (!consume(LEFT_BRACE)) {
+            log_error("expected left brace");
+            return nullptr;
+        }
+        Stmts *block = parse_statements();
+        if (!block) {
+            log_error("expected statements in construction");
+            return nullptr;
+        }
+        if (!consume(RIGHT_BRACE)) {
+            log_error("expected right brace");
+            return nullptr;
+        }
+        return new ConstructionExpr(new TupleExpr(args), new TupleExpr(rets), block);
+    }
     else if (consume(LEFT_PAREN)) {
         Expr *expr = parse_expr();
         if (peek(COMMA)) {
@@ -90,6 +164,10 @@ Expr *parse_primary_expr() {
     else if (consume(LEFT_PAREN)) {
         vector<Expr*> args;
         while (!peek(RIGHT_PAREN)) {
+            if (args.size() && !consume(COMMA)) {
+                log_error("expected comma");
+                return nullptr;
+            }
             Expr *arg = parse_expr();
             if (!arg) {
                 log_error("expected arg");
@@ -345,7 +423,6 @@ Stmts *parse_statements() {
             stmts.push_back(stmt);
         consume(NEWLINE);
     }
-    if (!stmts.size()) return nullptr;
     return new Stmts(stmts);
 }
 

@@ -9,7 +9,7 @@ using namespace std;
 
 enum NodeType {
     NODE, STMT, EXPR, STMTS, IFSTMT, WHILESTMT, EXPRSTMT, REALEXPR, IDENTIFIEREXPR,
-    GROUPEXPR, TUPLEEXPR, CALLEXPR, INDEXEXPR, UNARYEXPR, BINARYEXPR
+    GROUPEXPR, TUPLEEXPR, CALLEXPR, INDEXEXPR, UNARYEXPR, BINARYEXPR, CONSTRUCTIONEXPR
 };
 
 struct Node {
@@ -116,6 +116,22 @@ struct IndexExpr : Expr {
     IndexExpr(Expr *val, Expr *index) : val(val), index(index) { type = INDEXEXPR; }
     ~IndexExpr() { delete val; delete index; }
     string pprint() { return "TODO"; }
+};
+
+struct ConstructionExpr : Expr {
+    TupleExpr *args;
+    TupleExpr *rets;
+    Stmts *block;
+    ConstructionExpr() { type = CONSTRUCTIONEXPR; }
+    ConstructionExpr(TupleExpr *args, TupleExpr *rets, Stmts *block) : args(args), rets(rets), block(block) {
+        type = CONSTRUCTIONEXPR;
+    }
+    ~ConstructionExpr() { delete args; delete rets; delete block; }
+    string pprint() {
+        string res = "(ConstructionExpr ";
+        res += pprinter(args) + " " + pprinter(rets) + " " + pprinter(block) + ")";
+        return res;
+    }
 };
 
 struct UnaryExpr : Expr {
