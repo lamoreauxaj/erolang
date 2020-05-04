@@ -153,6 +153,29 @@ vector<pair<VarType, Figure>> Circle::intersect(Line line) {
 vector<pair<VarType, Figure>> Circle::intersect(Circle circle) {
     vector<pair<VarType, Figure>> ret;
 
+    Sphere s1 = Sphere(p, r);
+    Sphere s2 = Sphere(circle.p, circle.r);
+    vector<pair<VarType, Figure>> sphereIntersection = s2.intersect(s1);
+    if (sphereIntersection.size() == 0)
+        return ret;
+    if (sphereIntersection[0].first == POINT) {
+        Point pt = sphereIntersection[0].second;
+        int dot1 = norm.dot(pt.p - p);
+        int dot2 = circle.norm.dot(pt.p - circle.p);
+        if (withinEps(dot1, 0) && withinEps(dot2, 0))
+            return sphereIntersection;
+        else
+            return ret;
+    } else {
+        Plane plane = Plane(circle.p, circle.norm);
+        vector<pair<VarType, Figure>> planeIntersection = plane.intersect(sphereIntersection[0].second);
+        for (int i = 0; i < planeIntersection.size(); i++) {
+            Point pt = planeIntersection[i];
+            if (withinEps(norm.dot(pt.p - p), 0))
+                ret.push_back(make_pair(POINT, pt));
+        }
+    }
+
     return ret;
 }
 
