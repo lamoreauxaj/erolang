@@ -5,7 +5,10 @@ exports.handler = async (event, context) => {
     try {
         const subject = event.queryStringParameters.name || 'World'
         // const f = fs.readFileSync('build/src/Ero_run')
-        let res = execSync('./Ero_run 1.ero /tmp/1 --prod').toString()
+        const env = Object.assign({}, process.env);
+        // env.PATH += ":."
+        // let res = execSync('./Ero_run 1.ero /tmp/1 --prod', { env }).toString()
+        let res = execSync('PATH=$PATH:. ./Ero_run 1.ero /tmp/1 --prod').toString()
         // exec('ls', (error, stdout, stderr) => {
         //     return {
         //         statusCode: 200,
