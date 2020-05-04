@@ -14,3 +14,10 @@ install:
 script:
 - npm run build
 - aws s3 sync --acl public-read --sse --delete .vuepress/dist s3://erolang.xyz
+- cd ../..
+- ssh -i "erolang.pem" ubuntu@ec2-54-196-169-10.compute-1.amazonaws.com
+- echo Hello
+- exit
+before_install:
+- openssl aes-256-cbc -K $encrypted_6a63e1e2c68c_key -iv $encrypted_6a63e1e2c68c_iv
+  -in erolang.pem.enc -out erolang.pem -d
