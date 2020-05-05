@@ -1,6 +1,5 @@
 <template>
     <div class="demo">
-        <h1>Hello there!</h1>
         <div class="language- line-numbers-mode" ref="demo">
             <pre class="language-text"><code class="editor-container"><textarea ref="editor" class="editor" v-model="codeValue"/></code></pre>
             <div class="line-numbers-wrapper">

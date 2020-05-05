@@ -1,3 +1,6 @@
+This is the original proposal that we submitted for the project. This may not mirror
+entirely exactly what was implemented as the project progressed.
+
 # [PA Proposal] Geometers -- writing a compiler for a geometric language called Ero to create Euclidean constructions
 
 **Team Members:**
@@ -20,7 +23,8 @@ In fact, this language does not even need real numbers in order to be able to sp
 
 The idea for this language originated from a previous project that Aaron and a friend from high school (James) built at a hackathon. It was inspired as a creative way to specify geometric diagrams for a VR project in Unity called Experimental Geometer which would allow the player to render the diagrams and actually play with them in 3D space.
 
-[Here](./experimental-geometer-demo.mp4) is a video of our demo if you want an idea of the project. The quality is bad since this is a screen recording of a Youtube video recorded with a phone which recorded a projector which was playing a screen recording of someone demoing the application. I don't have the original video, sorry!
+[Here](https://www.youtube.com/watch?v=j_ZsZDflT_w) is a video of our demo if you want an idea of the project. Hopefully the presentation is not too bad for you to watch it. There is a short video demo of someone playing the VR application a couple minutes
+into the video which is the part worth watching if you want to see the project in action.
 
 This was actually part of the code that ran that demo. Do note that this code does not match the syntax which we are implementing (for example, the choice to have lack of commas in parameter lists).
 ```
