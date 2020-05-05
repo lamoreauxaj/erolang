@@ -52,7 +52,9 @@ export default {
     },
     watch: {
         editorHeight(val) {
-            this.$refs.editor.style.height = val + 'px'
+            if (this.$refs.editor) {
+                this.$refs.editor.style.height = val + 'px'
+            }
         },
         codeProp(val) {
             this.code = val
@@ -60,7 +62,8 @@ export default {
     },
     created() {
         setTimeout(() => {
-            this.$refs.editor.style.height = this.lineNumbers * 23.0 + 10.0 + 'px'
+            if (this.$refs.editor)
+                this.$refs.editor.style.height = this.lineNumbers * 23.0 + 10.0 + 'px'
         }, 0)
     },
     methods: {
