@@ -50,6 +50,10 @@ vector<pair<VarType, Figure*>> Point::intersect(Sphere sphere) {
     return ret;
 }
 
+vector<pair<VarType, Figure*>> Point::intersect(Empty empty) {
+    return empty.intersect(*this);
+}
+
 vector<pair<VarType, Figure*>> Point::pointOn() {
     vector<pair<VarType, Figure*>> ret;
 
@@ -126,6 +130,10 @@ vector<pair<VarType, Figure*>> Line::intersect(Sphere sphere) {
     ret.push_back(make_pair(POINT, new Point(c + (m * v))));
 
     return ret;
+}
+
+vector<pair<VarType, Figure*>> Line::intersect(Empty empty) {
+    return empty.intersect(*this);
 }
 
 vector<pair<VarType, Figure*>> Line::pointOn() {
@@ -212,6 +220,10 @@ vector<pair<VarType, Figure*>> Circle::intersect(Sphere sphere) {
     return ret;
 }
 
+vector<pair<VarType, Figure*>> Circle::intersect(Empty empty) {
+    return empty.intersect(*this);
+}
+
 vector<pair<VarType, Figure*>> Circle::pointOn() {
     vector<pair<VarType, Figure*>> ret;
 
@@ -270,6 +282,10 @@ vector<pair<VarType, Figure*>> Plane::intersect(Sphere sphere) {
     return ret;
 }
 
+vector<pair<VarType, Figure*>> Plane::intersect(Empty empty) {
+    return empty.intersect(*this);
+}
+
 vector<pair<VarType, Figure*>> Plane::pointOn() {
     vector<pair<VarType, Figure*>> ret;
 
@@ -299,10 +315,119 @@ vector<pair<VarType, Figure*>> Sphere::intersect(Plane plane) {
 vector<pair<VarType, Figure*>> Sphere::intersect(Sphere sphere) {
     vector<pair<VarType, Figure*>> ret;
 
+    if (*this == sphere) {
+        ret.push_back(make_pair(SPHERE, this));
+        return ret;
+    }
+    long double d = (p - sphere.p).mag();
+    if (withinEps(d, r + sphere.r)) {
+        Vector3D v = (sphere.p - p) * r / (r + sphere.r) + p;
+        ret.push_back(make_pair(POINT, new Point(v)));
+        return ret;
+    }
+
     return ret;
 }
 
+vector<pair<VarType, Figure*>> Sphere::intersect(Empty empty) {
+    return empty.intersect(*this);
+}
+
 vector<pair<VarType, Figure*>> Sphere::pointOn() {
+    vector<pair<VarType, Figure*>> ret;
+
+    return ret;
+}
+
+// -------------------------------------------------------------------------------------------------------
+// EMPTY
+// -------------------------------------------------------------------------------------------------------
+
+vector<pair<VarType, Figure*>> Empty::intersect(Point point) {
+    vector<pair<VarType, Figure*>> ret;
+    return ret;
+}
+
+vector<pair<VarType, Figure*>> Empty::intersect(Line line) {
+    vector<pair<VarType, Figure*>> ret;
+    return ret;
+}
+
+vector<pair<VarType, Figure*>> Empty::intersect(Circle circle) {
+    vector<pair<VarType, Figure*>> ret;
+    return ret;
+}
+
+vector<pair<VarType, Figure*>> Empty::intersect(Plane plane) {
+    vector<pair<VarType, Figure*>> ret;
+    return ret;
+}
+
+vector<pair<VarType, Figure*>> Empty::intersect(Sphere sphere) {
+    vector<pair<VarType, Figure*>> ret;
+    return ret;
+}
+
+vector<pair<VarType, Figure*>> Empty::intersect(Empty empty) {
+    vector<pair<VarType, Figure*>> ret;
+    return ret;
+}
+
+vector<pair<VarType, Figure*>> Empty::intersect(Space space) {
+    vector<pair<VarType, Figure*>> ret;
+    return ret;
+}
+
+vector<pair<VarType, Figure*>> Empty::pointOn() {
+    vector<pair<VarType, Figure*>> ret;
+    return ret;
+}
+
+// -------------------------------------------------------------------------------------------------------
+// SPACE
+// -------------------------------------------------------------------------------------------------------
+
+vector<pair<VarType, Figure*>> Space::intersect(Point point) {
+    vector<pair<VarType, Figure*>> ret;
+    ret.push_back(make_pair(POINT, &point));
+    return ret;
+}
+
+vector<pair<VarType, Figure*>> Space::intersect(Line line) {
+    vector<pair<VarType, Figure*>> ret;
+    ret.push_back(make_pair(LINE, &line));
+    return ret;
+}
+
+vector<pair<VarType, Figure*>> Space::intersect(Circle circle) {
+    vector<pair<VarType, Figure*>> ret;
+    ret.push_back(make_pair(CIRCLE, &circle));
+    return ret;
+}
+
+vector<pair<VarType, Figure*>> Space::intersect(Plane plane) {
+    vector<pair<VarType, Figure*>> ret;
+    ret.push_back(make_pair(PLANE, &plane));
+    return ret;
+}
+
+vector<pair<VarType, Figure*>> Space::intersect(Sphere sphere) {
+    vector<pair<VarType, Figure*>> ret;
+    ret.push_back(make_pair(SPHERE, &sphere));
+    return ret;
+}
+
+vector<pair<VarType, Figure*>> Space::intersect(Empty empty) {
+    return empty.intersect(*this);
+}
+
+vector<pair<VarType, Figure*>> Space::intersect(Space space) {
+    vector<pair<VarType, Figure*>> ret;
+    ret.push_back(make_pair(SPACE, this));
+    return ret;
+}
+
+vector<pair<VarType, Figure*>> Space::pointOn() {
     vector<pair<VarType, Figure*>> ret;
 
     return ret;
