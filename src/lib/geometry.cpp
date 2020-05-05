@@ -227,6 +227,8 @@ vector<pair<VarType, Figure*>> Circle::intersect(Empty empty) {
 vector<pair<VarType, Figure*>> Circle::pointOn() {
     vector<pair<VarType, Figure*>> ret;
 
+    // need to implement pointOn() functions for circle,plane,sphere
+
     return ret;
 }
 
@@ -288,7 +290,7 @@ vector<pair<VarType, Figure*>> Plane::intersect(Empty empty) {
 
 vector<pair<VarType, Figure*>> Plane::pointOn() {
     vector<pair<VarType, Figure*>> ret;
-
+    //TODO:implement this
     return ret;
 }
 
