@@ -256,6 +256,17 @@ vector<pair<VarType, Figure*>> Plane::intersect(Plane plane) {
 vector<pair<VarType, Figure*>> Plane::intersect(Sphere sphere) {
     vector<pair<VarType, Figure*>> ret;
 
+    Line l = Line(sphere.p, norm);
+    Vector3D c = (*(Point*) l.intersect(*this)[0].second).p;
+    long double d = (c - sphere.p).mag();
+    if (withinEps(d, sphere.r)) {
+        ret.push_back(make_pair(POINT, new Point(c)));
+        return ret;
+    }
+    if (d > sphere.r) {
+        return ret;
+    }
+    ret.push_back(make_pair(CIRCLE, new Circle(c, norm, sqrt(sphere.r * sphere.r - d * d)));
     return ret;
 }
 
