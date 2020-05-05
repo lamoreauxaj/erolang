@@ -22,7 +22,7 @@ app.post('/api/run', (req, res) => {
     const f2 = temp.openSync();
     fs.closeSync(f2.fd)
     console.log(code)
-    exec(`../build/src/Ero_run ${path} ${f2.path} 1>/dev/null; ${f2.path}`, (error, stdout, stderr) => {
+    exec(`timeout 5 ../build/src/Ero_run ${path} ${f2.path} 1>/dev/null; timeout 5 ${f2.path}`, (error, stdout, stderr) => {
         temp.cleanupSync()
         if (error) {
             res.status(400).send({
