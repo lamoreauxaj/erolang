@@ -23,6 +23,8 @@ struct Line;
 struct Circle;
 struct Plane;
 struct Sphere;
+struct Empty;
+struct Space;
 
 struct Point : Figure {
     Vector3D p;
@@ -34,6 +36,8 @@ struct Point : Figure {
     vector<pair<VarType, Figure*>> intersect(Circle c);
     vector<pair<VarType, Figure*>> intersect(Plane p);
     vector<pair<VarType, Figure*>> intersect(Sphere s);
+    vector<pair<VarType, Figure*>> intersect(Empty e);
+    vector<pair<VarType, Figure*>> intersect(Space s);
     vector<pair<VarType, Figure*>> pointOn();
 
     bool operator == (const Point& point) const {
@@ -56,6 +60,8 @@ struct Line : Figure {
     vector<pair<VarType, Figure*>> intersect(Circle c);
     vector<pair<VarType, Figure*>> intersect(Plane p);
     vector<pair<VarType, Figure*>> intersect(Sphere s);
+    vector<pair<VarType, Figure*>> intersect(Empty e);
+    vector<pair<VarType, Figure*>> intersect(Space s);
     vector<pair<VarType, Figure*>> pointOn();
 
     bool operator == (const Line& line) const {
@@ -78,6 +84,8 @@ struct Circle : Figure {
     vector<pair<VarType, Figure*>> intersect(Circle c);
     vector<pair<VarType, Figure*>> intersect(Plane p);
     vector<pair<VarType, Figure*>> intersect(Sphere s);
+    vector<pair<VarType, Figure*>> intersect(Empty e);
+    vector<pair<VarType, Figure*>> intersect(Space s);
     vector<pair<VarType, Figure*>> pointOn();
 
     bool operator == (const Circle& circle) const {
@@ -99,6 +107,8 @@ struct Plane : Figure {
     vector<pair<VarType, Figure*>> intersect(Circle c);
     vector<pair<VarType, Figure*>> intersect(Plane p);
     vector<pair<VarType, Figure*>> intersect(Sphere s);
+    vector<pair<VarType, Figure*>> intersect(Empty e);
+    vector<pair<VarType, Figure*>> intersect(Space s);
     vector<pair<VarType, Figure*>> pointOn();
 
     bool operator == (const Plane& plane) const {
@@ -121,6 +131,8 @@ struct Sphere : Figure {
     vector<pair<VarType, Figure*>> intersect(Circle c);
     vector<pair<VarType, Figure*>> intersect(Plane p);
     vector<pair<VarType, Figure*>> intersect(Sphere s);
+    vector<pair<VarType, Figure*>> intersect(Empty e);
+    vector<pair<VarType, Figure*>> intersect(Space s);
     vector<pair<VarType, Figure*>> pointOn();
 
     bool operator == (const Sphere& sphere) const {
@@ -140,6 +152,8 @@ struct Empty : Figure {
     vector<pair<VarType, Figure*>> intersect(Circle c);
     vector<pair<VarType, Figure*>> intersect(Plane p);
     vector<pair<VarType, Figure*>> intersect(Sphere s);
+    vector<pair<VarType, Figure*>> intersect(Empty e);
+    vector<pair<VarType, Figure*>> intersect(Space s);
     vector<pair<VarType, Figure*>> pointOn();
 
     bool operator == (const Empty& empty) const {
@@ -159,6 +173,8 @@ struct Space : Figure {
     vector<pair<VarType, Figure*>> intersect(Circle c);
     vector<pair<VarType, Figure*>> intersect(Plane p);
     vector<pair<VarType, Figure*>> intersect(Sphere s);
+    vector<pair<VarType, Figure*>> intersect(Empty e);
+    vector<pair<VarType, Figure*>> intersect(Space s);
     vector<pair<VarType, Figure*>> pointOn();
 
     bool operator == (const Space& space) const {
