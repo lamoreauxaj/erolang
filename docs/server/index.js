@@ -4,11 +4,13 @@ const bodyParser = require('body-parser')
 const fs = require('fs')
 const temp = require('temp')
 const path = require('path')
+const cors = require('cors')
 
 const PORT = 3000
 
 const app = express()
 app.use(bodyParser.json())
+app.use(cors())
 
 temp.track()
 
@@ -21,7 +23,16 @@ app.post('/api/run', (req, res) => {
     fs.closeSync(f2.fd)
     exec(`../build/src/Ero_run ${path} ${f2.path} 1>/dev/null; ${f2.path}`, (error, stdout, stderr) => {
         temp.cleanupSync()
-        res.send(stdout)
+        if (error) {
+            res.status(400).send({
+                error: stderr
+            })
+        }
+        else {
+            res.send({
+                data: stdout
+            })
+        }
     })
 })
 

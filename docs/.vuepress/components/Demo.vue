@@ -10,16 +10,16 @@
                 </template>
             </div>
         </div>
-        <Button @click="onRun">Run</Button>
+        <Button @click.native="onRun">Run</Button>
 
-        <div class="custom-block danger">
+        <div class="custom-block danger" v-if="error">
             <p class="custom-block-title">Error</p>
-            <p>{{ error }}</p>
+            <pre class="error-text">{{ error }}</pre>
         </div>
 
-        <div class="custom-block tip">
+        <div class="custom-block tip" v-if="output">
             <p class="custom-block-title">Output</p>
-            <p>{{ output }}</p>
+            <pre class="output-text">{{ output }}</pre>
         </div>
     </div>
 </template>
@@ -38,8 +38,8 @@ export default {
     data() {
         return {
             codeValue: this.code,
-            error: 'Not an error',
-            output: 'Am I an output?'
+            error: '',
+            output: ''
         }
     },
     computed: {
@@ -65,7 +65,15 @@ export default {
     },
     methods: {
         onRun() {
-            console.log('running')
+            this.output = ''
+            this.error = ''
+            axios.post(process.env.API + '/api/run', { code: this.codeValue })
+                .then((response) => {
+                    this.output = response.data.data
+                })
+                .catch((error) => {
+                    this.error = error.response.data.error
+                })
         }
     }
 }
@@ -114,5 +122,16 @@ export default {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #444;
+}
+.output-text, .error-text {
+    font-family: 'Courier New', Courier, monospace;
+    padding: 15px 10px 15px 10px;
+    margin: 0;
+}
+.output-text {
+    background-color: #f3f5f7;
+}
+.error-text {
+    background-color: #ffe6e6;
 }
 </style>
