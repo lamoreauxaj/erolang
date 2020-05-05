@@ -1,0 +1,16 @@
+language: node_js
+node_js:
+- '12'
+env:
+  matrix:
+  - AWS_DEFAULT_REGION=us-east-1
+  global:
+  - secure: J74vLhdr7Mi+D/bN4LhRsoiU0kE06HEmpyQFQz9pleG15f6JbiQOJbt8Ku48/n6O3vqbHZSlR4AfDaUx3JtqF3ombUGmFDV3ESBr8G7qU/u8weHfWo4tKoZQDnor7xLr2rfwo4/ynoe7d7mUh2/qNU+VLKELhM7WGo366oG2Q9kDH+TxBIcKnDaD/3S++DX0zJbtqbpyy3/9oMuqA/pUdmsylGE+7W/9ChOni8HuModBlo+uS8eVoQWI8rETDwjikNYTwfG7LtuY0KDsrsOHU+Sa2ZhP4wlTC8tAcy4RC1dx28Lt//ryhYfIePe9vZDDj75GbcWwfRTYZ/8ZRXdkdtAAxrzolhD6E2vIjtuMlWXwvnXSn19/sbxKNupfKX50nkL+m5K/8DkF+5J066NrMRO3vqMPDYyMVBibZMNiPmtRDgQQPwVGj4xorKu02OWJUI9GAbvKytaid2+PukCHi8u6QvUm76/4z216FZKLdsP3ZV5fDOY8CZfT4/KN7o+OAwElD2ufyM73Hd40rVr+RPIefho3PXhxvpQvKj418AK4EtnmZBBGlSxnyUG6RinSicncrv71E1UEd8Lsfn/eRwM5CEjEMaPUf7Tsg/m1A2o/sY1EzrjxL8zgoWQY99QGPVt9AeG+BgeA2d0SFg/2HOkE+9cm7BQyzQa15Q3pqKg=
+  - secure: OzNqynJWRsHsSW6gHEmGt+eU0HFzvwAW+/SsJ1IXp2ONNuFY/hLAN8QUveQmBWWneEidEAZEG9mof0LxW3zNp6o/eRzahmgpnUf4EJJnHPwPn1DoPJy5TwIxCYO5BXeie5KdQhiHDM47nAiVtIeK5o2nmf/OD7pQ3PXZ0XzIBAwQBpaxCpTnqCs6RRc2dQsPb6bGfUSs9d+foWl8jCfNSBe+X6mrNiT4vpaK5/BkNSi/r7M7WNdVC3c1MJo0hCGbmjAgdHaDTMXQdF5E4uciY4Igj0FNquThHNEMVG7gihDIL7qv2p/n3Yf6s417/sEcZvX4IZ6AmSmcF8FZ8fb7tLQDpMGgYlOEuHHVmPoLySfnjZdiETcwgSERQnI/bK+MSVZGiBPGV7+5917f1py1MraZUYA5RNNSo6naXKBu0L30+xmY5lOZJlPymza7ey2LHPBsZpBWdo0/W+ivvSmkWiukIE2u0VesWj/mg73QbbY+peBXItvw2KUS59WbG4upW+EfRXeO6RTlUGHK10Q2juhY6LN4JaTxCj4MMTMM9gqC5EpGMc9AiFPF3Rn9zDVu0qIJTpzFHGRfd4nxoMzNEVE5MkIJGBFIqxmkPgSjvOM5UP9AiWsmxympYE79gQYu2A4cR3W/1PPRgfqeRz9yrmaLgtHdEuQER9lmc2TO1WI=
+install:
+  - echo Installing...
+script:
+  - ./deploy.sh
+before_install:
+- openssl aes-256-cbc -K $encrypted_6a63e1e2c68c_key -iv $encrypted_6a63e1e2c68c_iv
+  -in erolang.pem.enc -out erolang.pem -d
