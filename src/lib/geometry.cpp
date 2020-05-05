@@ -243,7 +243,11 @@ vector<pair<VarType, Figure*>> Plane::intersect(Plane plane) {
         Vector3D m = norm.cross(plane.norm);
         if (isZeroVector(m))
             return ret;
-        
+        auto randPt = pointOn();
+        Point* pt = (Point*) randPt[0].second;
+        Line l = Line(p, (*pt).p - p);
+        vector<pair<VarType, Figure*>> lineIntersection = l.intersect(*this);
+        ret.push_back(make_pair(LINE, new Line((*(Point*)lineIntersection[0].second).p, m)));
     }
 
     return ret;
