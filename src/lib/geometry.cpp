@@ -325,6 +325,24 @@ vector<pair<VarType, Figure*>> Sphere::intersect(Sphere sphere) {
         ret.push_back(make_pair(POINT, new Point(v)));
         return ret;
     }
+    if (withinEps(d + r, sphere.r)) {
+        Vector3D v = (p - sphere.p) / d * sphere.r + sphere.p;
+        ret.push_back(make_pair(POINT, new Point(v)));
+        return ret;
+    }
+    if (withinEps(d + sphere.r, r)) {
+        Vector3D v = (sphere.p - p) / d * r + p;
+        ret.push_back(make_pair(POINT, new Point(v)));
+        return ret;
+    }
+    if (d > r + sphere.r || r > d + sphere.r || sphere.r > d + r) {
+        return ret;
+    }
+    long double h = 0.5 + (r * r - sphere.r * sphere.r) / (2 * d * d);
+    long double r = sqrt(r * r - h * h * d * d);
+    Vector3D c = p + (sphere.p - p) * h;
+    Vector3D norm = sphere.p - p;
+    ret.push_back(make_pair(CIRCLE, new Circle(c, norm, r)));
 
     return ret;
 }
