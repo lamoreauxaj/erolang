@@ -10,8 +10,7 @@
                 </template>
             </div>
         </div>
-        <Button>Run</Button>
-        <!-- <button class="btn run">Run</button> -->
+        <Button @click="onRun">Run</Button>
 
         <div class="custom-block danger">
             <p class="custom-block-title">Error</p>
@@ -26,6 +25,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
     name: 'demo',
     props: {
@@ -41,11 +42,6 @@ export default {
             output: 'Am I an output?'
         }
     },
-    created() {
-        setTimeout(() => {
-            this.$refs.editor.style.height = this.lineNumbers * 23.0 + 10.0 + 'px'
-        }, 0)
-    },
     computed: {
         lineNumbers() {
             return this.codeValue.split('\n').length
@@ -60,6 +56,16 @@ export default {
         },
         codeProp(val) {
             this.code = val
+        }
+    },
+    created() {
+        setTimeout(() => {
+            this.$refs.editor.style.height = this.lineNumbers * 23.0 + 10.0 + 'px'
+        }, 0)
+    },
+    methods: {
+        onRun() {
+            console.log('running')
         }
     }
 }
