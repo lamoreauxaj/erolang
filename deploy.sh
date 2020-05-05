@@ -18,6 +18,7 @@ ssh -i "erolang.pem" -o "StrictHostKeyChecking no" ubuntu@ec2-54-196-169-10.comp
     mkdir build &&
     cd build &&
     cmake .. &&
+    make &&
     pm2 restart 0 &&
     exit
 EOF

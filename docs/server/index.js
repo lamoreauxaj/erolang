@@ -21,7 +21,7 @@ app.post('/api/run', (req, res) => {
     fs.closeSync(fd)
     const f2 = temp.openSync();
     fs.closeSync(f2.fd)
-    exec(`ls ..`, (error, stdout, stderr) => {
+    exec(`../build/src/Ero_run ${path} ${f2.path} 1>/dev/null; ${f2.path}`, (error, stdout, stderr) => {
         temp.cleanupSync()
         if (error) {
             res.status(400).send({
