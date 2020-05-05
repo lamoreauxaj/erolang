@@ -1,11 +1,28 @@
 const express = require('express')
-
-const app = express()
+const { exec } = require('child_process')
+const bodyParser = require('body-parser')
+const fs = require('fs')
+const temp = require('temp')
+const path = require('path')
 
 const PORT = 3000
 
-app.get('/', (req, res) => {
-    res.send('Hello world! I hope this works Anand!')
+const app = express()
+app.use(bodyParser.json())
+
+temp.track()
+
+app.post('/api/run', (req, res) => {
+    const code = req.body.code
+    const { path, fd } = temp.openSync();
+    fs.writeSync(fd, code)
+    fs.closeSync(fd)
+    const f2 = temp.openSync();
+    fs.closeSync(f2.fd)
+    exec(`../build/src/Ero_run ${path} ${f2.path} 1>/dev/null; ${f2.path}`, (error, stdout, stderr) => {
+        temp.cleanupSync()
+        res.send(stdout)
+    })
 })
 
 app.listen(PORT, () => {

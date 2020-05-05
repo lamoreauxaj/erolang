@@ -12,6 +12,7 @@
     "license": "ISC",
     "dependencies": {
         "nodemon": "^2.0.3",
+        "temp": "^0.9.1",
         "vuepress": "^1.4.1",
         "vuepress-theme-thindark": "^1.0.1"
     }
