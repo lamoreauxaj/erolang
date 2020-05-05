@@ -10,22 +10,23 @@
                 </template>
             </div>
         </div>
-        <Button>Run</Button>
-        <!-- <button class="btn run">Run</button> -->
+        <Button @click.native="onRun">Run</Button>
 
-        <div class="custom-block danger">
+        <div class="custom-block danger" v-if="error">
             <p class="custom-block-title">Error</p>
-            <p>{{ error }}</p>
+            <pre class="error-text">{{ error }}</pre>
         </div>
 
-        <div class="custom-block tip">
+        <div class="custom-block tip" v-if="output">
             <p class="custom-block-title">Output</p>
-            <p>{{ output }}</p>
+            <pre class="output-text">{{ output }}</pre>
         </div>
     </div>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
     name: 'demo',
     props: {
@@ -37,15 +38,9 @@ export default {
     data() {
         return {
             codeValue: this.code,
-            error: 'Not an error',
-            output: 'Am I an output?'
+            error: '',
+            output: ''
         }
-    },
-    mounted() {
-        setTimeout(() => {
-            console.log('this ran')
-            this.$refs.editor.style.height = this.code.split('\n').length * 23.0 + 10.0
-        }, 2000);
     },
     computed: {
         lineNumbers() {
@@ -57,10 +52,31 @@ export default {
     },
     watch: {
         editorHeight(val) {
-            this.$refs.editor.style.height = val + 'px'
+            if (this.$refs.editor) {
+                this.$refs.editor.style.height = val + 'px'
+            }
         },
         codeProp(val) {
             this.code = val
+        }
+    },
+    created() {
+        setTimeout(() => {
+            if (this.$refs.editor)
+                this.$refs.editor.style.height = this.lineNumbers * 23.0 + 10.0 + 'px'
+        }, 0)
+    },
+    methods: {
+        onRun() {
+            this.output = ''
+            this.error = ''
+            axios.post(process.env.API + '/api/run', { code: this.codeValue })
+                .then((response) => {
+                    this.output = response.data.data
+                })
+                .catch((error) => {
+                    this.error = error.response.data.error
+                })
         }
     }
 }
@@ -109,5 +125,16 @@ export default {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #444;
+}
+.output-text, .error-text {
+    font-family: 'Courier New', Courier, monospace;
+    padding: 15px 10px 15px 10px;
+    margin: 0;
+}
+.output-text {
+    background-color: #f3f5f7;
+}
+.error-text {
+    background-color: #ffe6e6;
 }
 </style>
