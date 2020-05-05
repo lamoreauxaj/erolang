@@ -41,11 +41,10 @@ export default {
             output: 'Am I an output?'
         }
     },
-    mounted() {
+    created() {
         setTimeout(() => {
-            console.log('this ran')
-            this.$refs.editor.style.height = this.code.split('\n').length * 23.0 + 10.0
-        }, 2000);
+            this.$refs.editor.style.height = this.lineNumbers * 23.0 + 10.0 + 'px'
+        }, 0)
     },
     computed: {
         lineNumbers() {
