@@ -12,6 +12,16 @@
         </div>
         <Button>Run</Button>
         <!-- <button class="btn run">Run</button> -->
+
+        <div class="custom-block danger">
+            <p class="custom-block-title">Error</p>
+            <p>{{ error }}</p>
+        </div>
+
+        <div class="custom-block tip">
+            <p class="custom-block-title">Output</p>
+            <p>{{ output }}</p>
+        </div>
     </div>
 </template>
 
@@ -26,8 +36,16 @@ export default {
     },
     data() {
         return {
-            codeValue: this.code
+            codeValue: this.code,
+            error: 'Not an error',
+            output: 'Am I an output?'
         }
+    },
+    mounted() {
+        setTimeout(() => {
+            console.log('this ran')
+            this.$refs.editor.style.height = this.code.split('\n').length * 23.0 + 10.0
+        }, 2000);
     },
     computed: {
         lineNumbers() {
@@ -59,13 +77,11 @@ export default {
     background-color: #282c34;
     color: #fff;
     border: none;
-    height: auto;
     outline-width: 0;
     resize: none;
     margin: 0;
     padding: 0;
     line-height: 1.440rem;
-    height: 600px;
     overflow-x: scroll;
     width: 100%;
     white-space: nowrap;
