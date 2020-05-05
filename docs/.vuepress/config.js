@@ -7,5 +7,8 @@ module.exports = {
             { text: 'Proposal', link: '/proposal' },
             { text: 'Demo', link: '/demo' }
         ]
+    },
+    markdown: {
+        lineNumbers: true
     }
 }

@@ -4,13 +4,13 @@
     "description": "Site for Ero language.",
     "main": "server/index.js",
     "scripts": {
-        "dev": "vuepress dev .",
-        "build": "vuepress build .",
-        "start": "nodemon server/index.js"
+        "dev": "concurrently \"vuepress dev .\" \"nodemon server/index.js\"",
+        "build": "vuepress build ."
     },
     "author": "Aaron Lamoreaux <lamoreauxaj@gmail.com>, Anand Iyer <aiy12@gmail.com>",
     "license": "ISC",
     "dependencies": {
+        "concurrently": "^5.2.0",
         "nodemon": "^2.0.3",
         "temp": "^0.9.1",
         "vuepress": "^1.4.1",

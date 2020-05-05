@@ -1,4 +1,4 @@
 .vscode
 build
-docs/node_modules
+docs/node_modules/**
 docs/.vuepress/dist
