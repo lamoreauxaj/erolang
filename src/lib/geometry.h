@@ -23,6 +23,8 @@ struct Line;
 struct Circle;
 struct Plane;
 struct Sphere;
+struct Empty;
+struct Space;
 
 struct Point : Figure {
     Vector3D p;

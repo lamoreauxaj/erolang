@@ -280,7 +280,7 @@ vector<pair<VarType, Figure*>> Plane::intersect(Sphere sphere) {
     if (d > sphere.r) {
         return ret;
     }
-    ret.push_back(make_pair(CIRCLE, new Circle(c, norm, sqrt(sphere.r * sphere.r - d * d)));
+    ret.push_back(make_pair(CIRCLE, new Circle(c, norm, sqrt(sphere.r * sphere.r - d * d))));
     return ret;
 }
 
