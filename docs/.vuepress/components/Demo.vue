@@ -2,7 +2,7 @@
     <div class="demo">
         <h1>Hello there!</h1>
         <div class="language- line-numbers-mode" ref="demo">
-            <pre class="language-text"><code class="editor-container"><textarea class="editor" v-model="codeValue"/></code></pre>
+            <pre class="language-text"><code class="editor-container"><textarea ref="editor" class="editor" v-model="codeValue"/></code></pre>
             <div class="line-numbers-wrapper">
                 <template v-for="k in lineNumbers" v-key="k">
                     <span class="line-number">{{k}}</span>
@@ -34,12 +34,12 @@ export default {
             return this.codeValue.split('\n').length
         },
         editorHeight() {
-            return this.lineNumbers * 1.0 + 2.0
+            return this.lineNumbers * 23.0 + 10.0
         }
     },
     watch: {
         editorHeight(val) {
-            this.$refs.demo.style.height = val
+            this.$refs.editor.style.height = val + 'px'
         },
         codeProp(val) {
             this.code = val
@@ -69,15 +69,29 @@ export default {
     overflow-x: scroll;
     width: 100%;
     white-space: nowrap;
+    overflow-y: hidden;
 }
 .editor-container {
 }
 .language-text {
     margin-top: 0 !important;
+    margin-bottom: 0 !important;
 }
 .langauge- {
 }
 .line-numbers-wrapper {
     margin-top: -2px !important;
+}
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #282c34;
+}
+::-webkit-scrollbar-thumb {
+  background: #555;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #444;
 }
 </style>
