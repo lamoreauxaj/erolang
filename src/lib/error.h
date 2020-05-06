@@ -3,7 +3,10 @@
 #include <cstdio>
 #include <cstdlib>
 #include "variable.h"
+#include "vartype.h"
 using namespace std;
+
+class Var;
 
 extern "C" void ero_error(const char *msg);
 

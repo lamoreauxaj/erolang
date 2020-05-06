@@ -1,9 +1,6 @@
 
-add = construction (a, b) -> (z) {
-    z = a + b + 2.0
-}
-
-a = 3.0
-b = 4.0
-c = add(a, b)
+a = 1.0
+b = 2.0
+write(a + b)
+c = point(1, 2, 3)
 write(c)
