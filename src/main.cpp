@@ -16,6 +16,8 @@ string read_program(string file) {
 
 int main(int argc, char **argv) {
 
+    return ero_main(argc, argv);
+
     if (argc < 3) {
         cout << "Usage: " << argv[0] << " <input> <output>\n";
         return 1;
