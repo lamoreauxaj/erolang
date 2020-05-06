@@ -14,7 +14,7 @@ app.use(cors())
 
 temp.track()
 
-app.post('/api/run', (req, res) => {
+app.post('/run', (req, res) => {
     const code = req.body.code
     const { path, fd } = temp.openSync();
     fs.writeSync(fd, code)
