@@ -69,7 +69,7 @@ export default {
         onRun() {
             this.output = ''
             this.error = ''
-            axios.post(process.env.API + '/api/run', { code: this.codeValue })
+            axios.post(process.env.API + '/run', { code: this.codeValue })
                 .then((response) => {
                     this.output = response.data.data
                 })
