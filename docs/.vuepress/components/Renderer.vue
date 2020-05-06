@@ -1,15 +1,71 @@
 <template>
     <div class="renderer">
-        Hello there
+        <div class="canvas" ref="canvas">
+
+        </div>
     </div>
 </template>
 
 <script>
+import * as THREE from 'three/build/three.module.js'
+
 export default {
-    name: 'renderer'
+    name: 'renderer',
+    props: {
+        objects: {
+            required: true,
+            type: Array
+        }
+    },
+    data() {
+        return {
+            error: '',
+            mesh: undefined,
+            camera: undefined,
+            scene: undefined,
+            renderer: undefined
+        }
+    },
+    computed: {
+    },
+    mounted() {
+    
+        this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 10 );
+        this.camera.position.z = 1;
+    
+        this.scene = new THREE.Scene();
+    
+        let geometry = new THREE.BoxGeometry( 0.2, 0.2, 0.2 );
+        let material = new THREE.MeshNormalMaterial();
+    
+        this.mesh = new THREE.Mesh( geometry, material );
+        this.scene.add( this.mesh );
+    
+        this.renderer = new THREE.WebGLRenderer( { antialias: true } );
+        this.renderer.setSize(640, 640)
+        // renderer.setSize( window.innerWidth, window.innerHeight );
+        this.$refs.canvas.appendChild( this.renderer.domElement );
+    
+        this.animate()
+    },
+    methods: {
+        animate() {
+            requestAnimationFrame( this.animate );
+            this.mesh.rotation.x += 0.01;
+            this.mesh.rotation.y += 0.02;
+            this.renderer.render( this.scene, this.camera );
+        }
+    }
 }
 </script>
 
 <style scoped>
-
+.renderer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.renderer-canvas {
+    background-color: #ddd;
+}
 </style>
