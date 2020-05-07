@@ -9,6 +9,10 @@ extern "C" Var ero_plane(Var *alpha, Var *beta, Var *gamma) {
     Vector3D norm = x.cross(y);
     if (isZeroVector(norm))
         return Var(UNDEFINED, 0);
+    else {
+        Plane *plane = new Plane(((Point*) beta->val)->p, norm);
+        return Var(PLANE, (uint64_t) plane);
+    }
 }
 
 extern "C" Var ero_sphere(Var *alpha, Var *beta) {
