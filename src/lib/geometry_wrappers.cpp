@@ -1,13 +1,27 @@
 #include "geometry_wrappers.h"
 
 extern "C" Var ero_plane(Var *alpha, Var *beta, Var *gamma) {
-    ero_error("plane is unimplemented");
-    return Var(UNDEFINED, 0);
+    type_check(alpha, POINT);
+    type_check(beta, POINT);
+    type_check(gamma, POINT);
+    Vector3D x = ((Point*) alpha->val)->p - ((Point*) beta->val)->p;
+    Vector3D y = ((Point*) gamma->val)->p - ((Point*) beta->val)->p;
+    Vector3D norm = x.cross(y);
+    if (isZeroVector(norm))
+        return Var(UNDEFINED, 0);
 }
 
-extern "C" Var ero_sphere(Var *center, Var *point) {
-    ero_error("sphere is unimplemented");
-    return Var(UNDEFINED, 0);
+extern "C" Var ero_sphere(Var *alpha, Var *beta) {
+    type_check(alpha, POINT);
+    type_check(beta, POINT);
+    Vector3D center = ((Point*) alpha->val)->p;
+    Vector3D point = ((Point*) beta->val)->p;
+    if (isZeroVector(point - center))
+        return Var(UNDEFINED, 0);
+    else {
+        Sphere *sphere = new Sphere(center, (point - center).mag());
+        return Var(SPHERE, (uint64_t) sphere);
+    }
 }
 
 extern "C" Var ero_line(Var *alpha, Var *beta) {
@@ -76,6 +90,16 @@ void ero_write_geometry(Var *figure) {
     else if (figure->type == LINE) {
         Line *line = (Line*) figure->val;
         string json = "{\"figure\":\"line\",\"point\":[" + to_string(line->p.x) + "," + to_string(line->p.y) + "," + to_string(line->p.z) + "],\"slope\":[" + to_string(line->m.x) + "," + to_string(line->m.y) + "," + to_string(line->m.z) + "]}";
+        cout << json << endl;
+    }
+    else if (figure->type == SPHERE) {
+        Sphere *sphere = (Sphere*) figure->val;
+        string json = "{\"figure\":\"sphere\",\"center\":[" + to_string(sphere->p.x) + "," + to_string(sphere->p.y) + "," + to_string(sphere->p.z) + "],\"radius\":" + to_string(sphere->r) + "}";
+        cout << json << endl;
+    }
+    else if (figure->type == PLANE) {
+        Plane *plane = (Plane*) figure->val;
+        string json = "{\"figure\":\"plane\",\"point\":[" + to_string(plane->p.x) + "," + to_string(plane->p.y) + "," + to_string(plane->p.z) + "],\"norm\":[" + to_string(plane->norm.x) + "," + to_string(plane->norm.y) + "," + to_string(plane->norm.z) + "]}";
         cout << json << endl;
     }
     else {

@@ -11,7 +11,7 @@ class Var;
 
 extern "C" Var ero_plane(Var *alpha, Var *beta, Var *gamma);
 
-extern "C" Var ero_sphere(Var *center, Var *point);
+extern "C" Var ero_sphere(Var *alpha, Var *beta);
 
 extern "C" Var ero_line(Var *alpha, Var *beta);
 
