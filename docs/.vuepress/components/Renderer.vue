@@ -29,21 +29,42 @@ export default {
     computed: {
     },
     mounted() {
-    
+
         this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 10 );
         this.camera.position.z = 1;
     
         this.scene = new THREE.Scene();
+
+        // v-for loop through all the items in object? idk syntax
+        if (item.figure == "sphere") {
+            // template
+            var geometry = new THREE.SphereGeometry( 5, 32, 32 );
+            var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+            var sphere = new THREE.Mesh( geometry, material );
+            this.scene.add( sphere );
+        } else if (item.figure == "circle") {
+            // template
+            var geometry = new THREE.CircleGeometry( 5, 32 );
+            var material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+            var circle = new THREE.Mesh( geometry, material );
+            this.scene.add( circle );
+        } else if (item.figure == "plane") {
+
+        } else if (item.figure == "line") {
+
+        } else if (item.figure == "point") {
+
+        }
     
-        let geometry = new THREE.BoxGeometry( 0.2, 0.2, 0.2 );
-        let material = new THREE.MeshNormalMaterial();
+        // let geometry = new THREE.BoxGeometry( 0.2, 0.2, 0.2 );
+        // let material = new THREE.MeshNormalMaterial();
     
-        this.mesh = new THREE.Mesh( geometry, material );
-        this.scene.add( this.mesh );
+        // this.mesh = new THREE.Mesh( geometry, material );
+        // this.scene.add( this.mesh );
     
         this.renderer = new THREE.WebGLRenderer( { antialias: true } );
         this.renderer.setSize(640, 640)
-        // renderer.setSize( window.innerWidth, window.innerHeight );
+        renderer.setSize( window.innerWidth, window.innerHeight );
         this.$refs.canvas.appendChild( this.renderer.domElement );
     
         this.animate()
