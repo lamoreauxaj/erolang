@@ -3,4 +3,7 @@ a = 1.0
 b = 2.0
 write(a + b)
 c = point(1, 2, 3)
+d = point(1, 2, 2)
+l = line(c, d)
 write(c)
+write(l)

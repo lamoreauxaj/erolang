@@ -11,8 +11,16 @@ extern "C" Var ero_sphere(Var *center, Var *point) {
 }
 
 extern "C" Var ero_line(Var *alpha, Var *beta) {
-    ero_error("line is unimplemented");
-    return Var(UNDEFINED, 0);
+    type_check(alpha, POINT);
+    type_check(beta, POINT);
+    Vector3D point = ((Point*) alpha->val)->p;
+    Vector3D slope = ((Point*) beta->val)->p - point;
+    if (isZeroVector(slope))
+        return Var(UNDEFINED, 0);
+    else {
+        Line *line = new Line(point, slope);
+        return Var(LINE, (uint64_t) line);
+    }
 }
 
 extern "C" Var ero_point(Var *x, Var *y, Var *z) {
@@ -63,6 +71,11 @@ void ero_write_geometry(Var *figure) {
     if (figure->type == POINT) {
         Point *point = (Point*) figure->val;
         string json = "{\"figure\":\"point\",\"point\":[" + to_string(point->p.x) + "," + to_string(point->p.y) + "," + to_string(point->p.z) + "]}";
+        cout << json << endl;
+    }
+    else if (figure->type == LINE) {
+        Line *line = (Line*) figure->val;
+        string json = "{\"figure\":\"line\",\"point\":[" + to_string(line->p.x) + "," + to_string(line->p.y) + "," + to_string(line->p.z) + "],\"slope\":[" + to_string(line->m.x) + "," + to_string(line->m.y) + "," + to_string(line->m.z) + "]}";
         cout << json << endl;
     }
     else {
