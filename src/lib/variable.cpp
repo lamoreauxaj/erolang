@@ -1,9 +1,5 @@
 #include "variable.h"
 
-static double as_double(uint64_t v) {
-    return *((double*) &v);
-}
-
 extern "C" Var ero_write(Var *var) {
     if (var->type == REALV) {
         double res = *((double*) &var->val);
@@ -12,7 +8,17 @@ extern "C" Var ero_write(Var *var) {
     else if (var->type == BOOL) {
         cout << (var->val ? "true" : "false") << endl;
     }
+    else if (var->type == UNDEFINED) {
+        cout << "undefined" << endl;
+    }
+    else if (var->type == POINT || var->type == LINE || var->type == SEGMENT ||
+        var->type == RAY || var->type == PLANE || var->type == PLANE ||
+        var->type == CIRCLE || var->type == ARC || var->type == SPHERE ||
+        var->type == EMPTY || var->type == SPACE) {
+        ero_write_geometry(var);
+    }
     else {
+        ero_error("write: unknown type of variable");
         // should throw runtime error here
     }
     // cout << "hello world!" << endl;
