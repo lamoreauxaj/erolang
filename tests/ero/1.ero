@@ -1,7 +1,10 @@
-c = point(0, 0, 0)
-a = point(1, 0, 0)
-b = point(0, 1, 0)
-pln = plane(a, b, c)
-sphr = sphere(c, a)
-circ = intersection(pln, sphr)
-write(circ)
+adder = 0
+if (true) {
+    d = 1.0
+    adder = construction (a, b) -> (z) {
+        z = a + b + d
+        d = d + 1.0
+    }
+}
+write(adder(0, 1))
+write(adder(0, 1))

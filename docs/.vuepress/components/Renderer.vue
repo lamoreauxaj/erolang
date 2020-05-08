@@ -28,7 +28,9 @@ export default {
     computed: {
     },
     mounted() {
-        console.log(window.innerWidth / window.innerHeight)
+        if (this.objects.length === 0) {
+            this.$refs.canvas.style.display = 'none'
+        }
         this.camera = new THREE.PerspectiveCamera( 70, 1, 0.01, 10 )
         this.camera.position.z = 10
     

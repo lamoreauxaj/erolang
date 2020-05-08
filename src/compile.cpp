@@ -3,7 +3,7 @@
 queue<Node*> function_queue;
 
 string get_func(Node *node) {
-    int scope = node_scopes[node];
+    int scope = root_scope[node_scopes[node]];
     if (scope == 0) return "main";
     return "f_" + to_string(scope);
 }
@@ -83,7 +83,6 @@ void compile_construction_expr(ConstructionExpr *expr) {
     int scope = node_scopes[expr->block];
     string next_func = get_func(expr->block);
     // need to inject arguments into local variables
-    cout << "compiling construction: " << scope << " " << next_func << "\n";
     add_to_function(next_func, "push %rbp");
     add_to_function(next_func, "mov %rsp, %rbp");
     if (stack_size[scope] > 0)

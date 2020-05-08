@@ -21,7 +21,7 @@
             <pre class="output-text">{{ output }}</pre>
         </div>
 
-        <Renderer v-if="output" :objects="renderObjects">
+        <Renderer v-if="output && render" :objects="renderObjects">
         </Renderer>
     </div>
 </template>
@@ -33,8 +33,14 @@ export default {
     name: 'demo',
     props: {
         code: {
-            required: true,
-            type: String
+            required: false,
+            type: String,
+            defaultValue: undefined
+        },
+        render: {
+            required: false,
+            type: Boolean,
+            default: true
         }
     },
     data() {
@@ -57,8 +63,10 @@ export default {
             lines.forEach((line) => {
                 try {
                     line = line.trim()
-                    const object = JSON.parse(line)
-                    objects.push(object)
+                    if (line[0] === '{') {
+                        const object = JSON.parse(line)
+                        objects.push(object)
+                    }
                 } catch (e) {
                 }
             })

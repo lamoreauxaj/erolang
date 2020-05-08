@@ -25,8 +25,9 @@ app.post('/run', (req, res) => {
     exec(`timeout 5 ../build/src/Ero_run ${path} ${f2.path} 1>/dev/null; timeout 5 ${f2.path}`, (error, stdout, stderr) => {
         temp.cleanupSync()
         if (error) {
+            console.log(stderr + ' ' + stdout)
             res.status(400).send({
-                error: stderr
+                error: stderr + stdout
             })
         }
         else {
