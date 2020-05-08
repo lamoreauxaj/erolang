@@ -20,6 +20,9 @@
             <p class="custom-block-title">Output</p>
             <pre class="output-text">{{ output }}</pre>
         </div>
+
+        <Renderer v-if="output" :objects="renderObjects">
+        </Renderer>
     </div>
 </template>
 
@@ -47,6 +50,10 @@ export default {
         },
         editorHeight() {
             return this.lineNumbers * 23.0 + 10.0
+        },
+        renderObjects() {
+            const lines = this.output.split('\n')
+            console.log(lines)
         }
     },
     watch: {

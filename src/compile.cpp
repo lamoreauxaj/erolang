@@ -38,6 +38,10 @@ void compile_call_expr(CallExpr *expr) {
             compile_expr(arg);
             add_to_function(get_func(expr), "mov %rsp, %rsi");
         }
+        else if (i == 2) {
+            compile_expr(arg);
+            add_to_function(get_func(expr), "mov %rsp, %rdx");
+        }
         else {
             log_error("too many arguments");
             return;
@@ -261,6 +265,17 @@ void compile_stmts(Stmts *stmts) {
 
 void compile_data_segment() {
     add_to_data(".extern ero_write");
+    add_to_data(".extern ero_plane");
+    add_to_data(".extern ero_sphere");
+    add_to_data(".extern ero_line");
+    add_to_data(".extern ero_point");
+    add_to_data(".extern ero_intersection");
+    add_to_data(".extern ero_point_on");
+    add_to_data(".extern ero_center");
+    add_to_data(".extern ero_endpoints");
+    add_to_data(".extern ero_segment");
+    add_to_data(".extern ero_ray");
+    add_to_data(".extern ero_arc");
     add_to_data(".extern ero_equals");
     add_to_data("format: .byte '%', '.', '2', 'f', 10, 0");
     for (auto pp : scope_levels) {
