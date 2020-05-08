@@ -1,7 +1,6 @@
 <template>
     <div class="renderer">
-        <div class="canvas" ref="canvas">
-
+        <div class="renderer-canvas" ref="canvas">
         </div>
     </div>
 </template>
@@ -29,32 +28,36 @@ export default {
     computed: {
     },
     mounted() {
-
-        this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 10 );
-        this.camera.position.z = 1;
+        this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 10 )
+        this.camera.position.z = 5
     
-        this.scene = new THREE.Scene();
+        this.scene = new THREE.Scene()
 
-        // v-for loop through all the items in object? idk syntax
-        for (item in objects) {
+        for (let item of this.objects) {
+            console.log(item)
+            console.log(item.figure)
             if (item.figure == "sphere") {
                 // template
-                var geometry = new THREE.SphereGeometry( 5, 32, 32 );
-                var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
-                var sphere = new THREE.Mesh( geometry, material );
-                this.scene.add( sphere );
+                const geometry = new THREE.SphereGeometry( 5, 32, 32 )
+                const material = new THREE.MeshBasicMaterial( {color: 0x000000} )
+                const sphere = new THREE.Mesh( geometry, material )
+                this.scene.add( sphere )
             } else if (item.figure == "circle") {
                 // template
-                var geometry = new THREE.CircleGeometry( 5, 32 );
-                var material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
-                var circle = new THREE.Mesh( geometry, material );
-                this.scene.add( circle );
+                const geometry = new THREE.CircleGeometry( item.radius, 64 )
+                const material = new THREE.LineBasicMaterial( { color: 0x000000 } )
+                geometry.vertices.shift()
+                const circle = new THREE.LineLoop( geometry, material )
+                circle.position.set(...item.center)
+                circle.lookAt(new THREE.Vector3(...item.norm))
+                this.scene.add( circle )
             } else if (item.figure == "plane") {
                 // template
-                var geometry = new THREE.PlaneGeometry( 5, 20, 32 );
-                var material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
-                var plane = new THREE.Mesh( geometry, material );
-                this.scene.add( plane );
+                const geometry = new THREE.PlaneGeometry(1000, 1000, 32, 32)
+                const material = new THREE.MeshPhongMaterial({color: 0x000000, side: THREE.DoubleSide, opacity: 0.2, transparent: true})
+                const plane = new THREE.Mesh( geometry, material )
+                plane.lookAt(new THREE.Vector3(...item.norm))
+                this.scene.add( plane )
             } else if (item.figure == "line") {
 
             } else if (item.figure == "point") {
@@ -68,9 +71,11 @@ export default {
         // this.mesh = new THREE.Mesh( geometry, material );
         // this.scene.add( this.mesh );
     
-        this.renderer = new THREE.WebGLRenderer( { antialias: true } );
+        this.renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
         this.renderer.setSize(640, 640)
-        renderer.setSize( window.innerWidth, window.innerHeight );
+        // this.renderer.setSize( window.innerWidth, window.innerHeight );
+        this.renderer.setClearColor( 0xffffff, 0 )
+
         this.$refs.canvas.appendChild( this.renderer.domElement );
     
         this.animate()
@@ -78,8 +83,6 @@ export default {
     methods: {
         animate() {
             requestAnimationFrame( this.animate );
-            this.mesh.rotation.x += 0.01;
-            this.mesh.rotation.y += 0.02;
             this.renderer.render( this.scene, this.camera );
         }
     }
@@ -93,6 +96,7 @@ export default {
     align-items: center;
 }
 .renderer-canvas {
-    background-color: #ddd;
+    border: solid 2px black;
+    border-radius: 10px;
 }
 </style>
