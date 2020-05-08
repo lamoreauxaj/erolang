@@ -13,6 +13,7 @@ module.exports = {
     themeConfig: {
         nav: [
             { text: 'Proposal', link: '/proposal' },
+            { text: 'Presentation', link: '/presentation' },
             { text: 'Documentation', link: '/docs/' },
             { text: 'Demo', link: '/demo' }
         ]
