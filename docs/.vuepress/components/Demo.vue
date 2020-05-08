@@ -53,7 +53,16 @@ export default {
         },
         renderObjects() {
             const lines = this.output.split('\n')
-            console.log(lines)
+            const objects = []
+            lines.forEach((line) => {
+                try {
+                    line = line.trim()
+                    const object = JSON.parse(line)
+                    objects.push(object)
+                } catch (e) {
+                }
+            })
+            return objects
         }
     },
     watch: {
