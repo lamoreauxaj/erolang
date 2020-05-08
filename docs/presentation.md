@@ -249,7 +249,7 @@ intersection.
 
 The project has actually grown a lot and there is a significant portion of refactoring
 that needs to be done along with more documentation and unit testing. The project has
-actually become pretty large without over 3000 lines of C++ (in 14 different files)
+actually become pretty large with over 3000 lines of C++ (in 14 different files)
 plus a few hundred lines of markdown (which this page is written in)
 and a couple hundred lines of JavaScript as of writing this. Although most of this code
 will remain, maintaining our technical debt is important.
