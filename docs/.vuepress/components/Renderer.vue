@@ -27,13 +27,12 @@ export default {
     computed: {
     },
     mounted() {
-        this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 10 )
-        this.camera.position.z = 5
+        console.log(window.innerWidth / window.innerHeight)
+        this.camera = new THREE.PerspectiveCamera( 70, 1, 0.01, 10 )
+        this.camera.position.z = 10
     
         this.scene = new THREE.Scene()
         for (let item of this.objects) {
-            console.log(item)
-            console.log(item.figure)
             if (item.figure == "sphere") {
                 // template
                 const geometry = new THREE.SphereGeometry( 5, 32, 32 )
