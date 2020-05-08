@@ -1,20 +1,15 @@
 #ifndef GEOMETRY_H
 #define GEOMETRY_H
-
 #include <utility>
 #include <vector>
 #include "Vector3D.h"
 #include "variable.h"
-
+#include "vartype.h"
 using namespace std;
 
-bool withinEps(long double a, long double b) {
-    return abs(a - b) <= 1e-6;
-}
+bool withinEps(long double a, long double b);
 
-bool isZeroVector(const Vector3D v) {
-    return withinEps(v.x, 0) && withinEps(v.y, 0) && withinEps(v.z, 0);
-}
+bool isZeroVector(const Vector3D v);
 
 struct Figure {};
 

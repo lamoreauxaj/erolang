@@ -3,28 +3,14 @@
 #include <cstdint>
 #include <cstdlib>
 #include <iostream>
+#include "error.h"
+#include "geometry_wrappers.h"
+#include "util.h"
 #include "Vector3D.h"
+#include "vartype.h"
 using namespace std;
 
 const double EPS = 1e-6;
-
-enum VarType {
-    REALV,
-    POINT,
-    LINE,
-    SEGMENT, // later
-    RAY,     // later
-    PLANE,
-    CIRCLE,
-    ARC,     // later
-    SPHERE,
-    EMPTY,
-    SPACE,
-    CONSTRUCTIONV,
-    TUPLE,
-    UNDEFINED,
-    BOOL
-};
 
 struct Var {
     VarType type;
