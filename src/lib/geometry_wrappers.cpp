@@ -54,7 +54,7 @@ extern "C" Var ero_intersection(Var *alpha, Var *beta) {
     Figure *a = (Figure*) alpha->val;
     switch (beta->type) {
         case SPHERE:
-            vector<pair<VarType, Figure*>> sect = a->intersection((Sphere*) beta->val);
+            vector<pair<VarType, Figure*>> sect = a->intersect(*((Sphere*) beta->val));
             return Var(sect[0].first, (uint64_t) sect[1].second);
     }
     ero_error("intersection is unimplemented");

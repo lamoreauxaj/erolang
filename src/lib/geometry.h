@@ -20,17 +20,17 @@ struct Empty;
 struct Space;
 
 struct Figure {
-    vector<pair<VarType, Figure*>> intersect(Point p) { return {}; }
-    vector<pair<VarType, Figure*>> intersect(Line l) { return {}; }
-    vector<pair<VarType, Figure*>> intersect(Circle c) { return {}; }
-    vector<pair<VarType, Figure*>> intersect(Plane p) { return {}; }
-    vector<pair<VarType, Figure*>> intersect(Sphere s) { return {}; }
-    vector<pair<VarType, Figure*>> intersect(Empty e) { return {}; }
-    vector<pair<VarType, Figure*>> intersect(Space s) { return {}; }
-    vector<pair<VarType, Figure*>> pointOn() { return {}; }
+    virtual vector<pair<VarType, Figure*>> intersect(Point p) = 0;
+    virtual vector<pair<VarType, Figure*>> intersect(Line l) = 0;
+    virtual vector<pair<VarType, Figure*>> intersect(Circle c) = 0;
+    virtual vector<pair<VarType, Figure*>> intersect(Plane p) = 0;
+    virtual vector<pair<VarType, Figure*>> intersect(Sphere s) = 0;
+    virtual vector<pair<VarType, Figure*>> intersect(Empty e) = 0;
+    virtual vector<pair<VarType, Figure*>> intersect(Space s) = 0;
+    virtual vector<pair<VarType, Figure*>> pointOn() = 0;
 };
 
-struct Point : virtual Figure {
+struct Point : Figure {
     Vector3D p;
 
     Point(Vector3D p) : p(p) {}
@@ -53,7 +53,7 @@ struct Point : virtual Figure {
     }
 };
 
-struct Line : virtual Figure {
+struct Line : Figure {
     Vector3D p;
     Vector3D m;
 
@@ -77,7 +77,7 @@ struct Line : virtual Figure {
     }
 };
 
-struct Circle : virtual Figure {
+struct Circle : Figure {
     Vector3D p, norm;
     long double r;
 
@@ -101,7 +101,7 @@ struct Circle : virtual Figure {
     }
 };
 
-struct Plane : virtual Figure {
+struct Plane : Figure {
     Vector3D p, norm;
 
     Plane(Vector3D p, Vector3D norm) : p(p), norm(norm) {}
@@ -124,7 +124,7 @@ struct Plane : virtual Figure {
     }
 };
 
-struct Sphere : virtual Figure {
+struct Sphere : Figure {
     Vector3D p;
     long double r;
     
@@ -148,7 +148,7 @@ struct Sphere : virtual Figure {
     }
 };
 
-struct Empty : virtual Figure {
+struct Empty : Figure {
     Empty() {}
 
     vector<pair<VarType, Figure*>> intersect(Point p);
@@ -169,7 +169,7 @@ struct Empty : virtual Figure {
     }
 };
 
-struct Space : virtual Figure {
+struct Space : Figure {
     Space() {}
 
     vector<pair<VarType, Figure*>> intersect(Point p);
