@@ -255,5 +255,5 @@ that we are more thorough which we skipped often when working on this project.
 ## Thanks
 
 Thanks for listening or reading our presentation! We really enjoyed working on this
-project and probably invested just over 100 hours of work combined between the two
-of this on this project.
+project and probably invested just over 100 hours of work combined between us on this
+project.
