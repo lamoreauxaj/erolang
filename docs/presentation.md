@@ -166,6 +166,12 @@ even though they are local variables.
 
 ## Technical Challenges
 
+### Language Grammar
+
+When designing our recursive descent parser, we also
+wrote out the language's syntactic grammar. This allowed us to avoid an ambiguous
+language and give us a guide for what to implement as we worked.
+
 ### How to Store Data Types
 
 Given that data types actually need to not only know their type since there is type
