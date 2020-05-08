@@ -66,6 +66,10 @@ vector<pair<VarType, Figure*>> Point::intersect(Empty empty) {
     return empty.intersect(*this);
 }
 
+vector<pair<VarType, Figure*>> Point::intersect(Space space) {
+    return {{POINT, this}};
+}
+
 vector<pair<VarType, Figure*>> Point::pointOn() {
     vector<pair<VarType, Figure*>> ret;
 
@@ -146,6 +150,10 @@ vector<pair<VarType, Figure*>> Line::intersect(Sphere sphere) {
 
 vector<pair<VarType, Figure*>> Line::intersect(Empty empty) {
     return empty.intersect(*this);
+}
+
+vector<pair<VarType, Figure*>> Line::intersect(Space space) {
+    return {{LINE, this}};
 }
 
 vector<pair<VarType, Figure*>> Line::pointOn() {
@@ -236,6 +244,10 @@ vector<pair<VarType, Figure*>> Circle::intersect(Empty empty) {
     return empty.intersect(*this);
 }
 
+vector<pair<VarType, Figure*>> Circle::intersect(Space space) {
+    return {{CIRCLE, this}};
+}
+
 vector<pair<VarType, Figure*>> Circle::pointOn() {
     vector<pair<VarType, Figure*>> ret;
 
@@ -298,6 +310,10 @@ vector<pair<VarType, Figure*>> Plane::intersect(Sphere sphere) {
 
 vector<pair<VarType, Figure*>> Plane::intersect(Empty empty) {
     return empty.intersect(*this);
+}
+
+vector<pair<VarType, Figure*>> Plane::intersect(Space space) {
+    return {{CIRCLE, this}};
 }
 
 vector<pair<VarType, Figure*>> Plane::pointOn() {
@@ -363,6 +379,10 @@ vector<pair<VarType, Figure*>> Sphere::intersect(Sphere sphere) {
 
 vector<pair<VarType, Figure*>> Sphere::intersect(Empty empty) {
     return empty.intersect(*this);
+}
+
+vector<pair<VarType, Figure*>> Sphere::intersect(Space space) {
+    return {{SPHERE, this}};
 }
 
 vector<pair<VarType, Figure*>> Sphere::pointOn() {

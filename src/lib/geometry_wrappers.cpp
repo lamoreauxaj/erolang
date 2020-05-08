@@ -51,6 +51,15 @@ extern "C" Var ero_point(Var *x, Var *y, Var *z) {
 }
 
 extern "C" Var ero_intersection(Var *alpha, Var *beta) {
+    Figure *a = (Figure*) alpha->val;
+    switch (beta->type) {
+        case SPHERE:
+            vector<pair<VarType, Figure*>> sect = a->intersect(*((Sphere*) beta->val));
+            if (!sect.size())
+                return Var(UNDEFINED, 0);
+            else
+                return Var(sect[0].first, (uint64_t) sect[0].second);
+    }
     ero_error("intersection is unimplemented");
     return Var(UNDEFINED, 0);
 }
@@ -99,6 +108,11 @@ void ero_write_geometry(Var *figure) {
     else if (figure->type == SPHERE) {
         Sphere *sphere = (Sphere*) figure->val;
         string json = "{\"figure\":\"sphere\",\"center\":[" + to_string(sphere->p.x) + "," + to_string(sphere->p.y) + "," + to_string(sphere->p.z) + "],\"radius\":" + to_string(sphere->r) + "}";
+        cout << json << endl;
+    }
+    else if (figure->type == CIRCLE) {
+        Circle *circle = (Circle*) figure->val;
+        string json = "{\"figure\":\"circle\",\"center\":[" + to_string(circle->p.x) + "," + to_string(circle->p.y) + "," + to_string(circle->p.z) + "],\"radius\":" + to_string(circle->r) + ",\"norm\":[" + to_string(circle->norm.x) + "," + to_string(circle->norm.y) + "," + to_string(circle->norm.z) + "]}";
         cout << json << endl;
     }
     else if (figure->type == PLANE) {

@@ -14,4 +14,8 @@ Feel free to play around with it and see what works.
 The error messages are in beta, sometimes they
 are okay, while sometimes you'll get significantly less helpful messages.
 
-<Demo :code="'a = 1.0\nb = 0.0\nwhile (a is 1.0) {\n    b = b + 0.5\n    if (b is 1.0) {\n        write(b)\n    }\n    if (b is 3.0) {\n        c = 4.2\n        a = b + c\n        write(a)\n   }\n}\nadd = construction (c, d) -> (z) {\n    z = c + d\n}\nc = 1.0\nd = 3.0\n\nwrite(add(c, d))'"/>
+<!-- <Demo :code="'a = 1.0\nb = 0.0\nwhile (a is 1.0) {\n    b = b + 0.5\n    if (b is 1.0) {\n        write(b)\n    }\n    if (b is 3.0) {\n        c = 4.2\n        a = b + c\n        write(a)\n   }\n}\nadd = construction (c, d) -> (z) {\n    z = c + d\n}\nc = 1.0\nd = 3.0\n\nwrite(add(c, d))'"/> -->
+<Demo :code="'p = point(1, 2, 3)\nq = point(3, 4, 5)\ncirc = circle(p, q)\nwrite(circ)'"/>
+
+<!-- <Renderer :objects="[{'figure': 'circle', 'center': [0, 0, 0], 'radius': .2, 'norm': [0, 1, 1]}]"/> -->
+<!-- <Renderer :objects="[{'figure': 'plane', 'point': [0, 0, 0], 'norm': [0, 1, 1]},{'figure': 'circle', 'center': [0, 0, 0], 'radius': .2, 'norm': [0, 1, 1]}]"/> -->

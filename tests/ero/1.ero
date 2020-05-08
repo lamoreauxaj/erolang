@@ -1,11 +1,7 @@
-
-a = 1.0
-b = 2.0
-write(a + b)
-c = point(1, 2, 3)
-d = point(1, 2, 2)
-l = line(c, d)
-s = sphere(c, d)
-write(c)
-write(l)
-write(s)
+c = point(0, 0, 0)
+a = point(1, 0, 0)
+b = point(0, 1, 0)
+pln = plane(a, b, c)
+sphr = sphere(c, a)
+circ = intersection(pln, sphr)
+write(circ)

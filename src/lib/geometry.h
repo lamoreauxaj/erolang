@@ -11,8 +11,6 @@ bool withinEps(long double a, long double b);
 
 bool isZeroVector(const Vector3D v);
 
-struct Figure {};
-
 struct Point;
 struct Line;
 struct Circle;
@@ -20,6 +18,17 @@ struct Plane;
 struct Sphere;
 struct Empty;
 struct Space;
+
+struct Figure {
+    virtual vector<pair<VarType, Figure*>> intersect(Point p) = 0;
+    virtual vector<pair<VarType, Figure*>> intersect(Line l) = 0;
+    virtual vector<pair<VarType, Figure*>> intersect(Circle c) = 0;
+    virtual vector<pair<VarType, Figure*>> intersect(Plane p) = 0;
+    virtual vector<pair<VarType, Figure*>> intersect(Sphere s) = 0;
+    virtual vector<pair<VarType, Figure*>> intersect(Empty e) = 0;
+    virtual vector<pair<VarType, Figure*>> intersect(Space s) = 0;
+    virtual vector<pair<VarType, Figure*>> pointOn() = 0;
+};
 
 struct Point : Figure {
     Vector3D p;
@@ -179,28 +188,6 @@ struct Space : Figure {
     bool operator != (const Space& space) const {
         return !(*this == space);
     }
-};
-
-struct Construction : Figure {
-    Construction() {}
-
-    vector<pair<VarType, Figure*>> intersect(Point p);
-    vector<pair<VarType, Figure*>> intersect(Line l);
-    vector<pair<VarType, Figure*>> intersect(Circle c);
-    vector<pair<VarType, Figure*>> intersect(Plane p);
-    vector<pair<VarType, Figure*>> intersect(Sphere s);
-    vector<pair<VarType, Figure*>> pointOn();
-};
-
-struct Undefined : Figure {
-    Undefined() {}
-
-    vector<pair<VarType, Figure*>> intersect(Point p);
-    vector<pair<VarType, Figure*>> intersect(Line l);
-    vector<pair<VarType, Figure*>> intersect(Circle c);
-    vector<pair<VarType, Figure*>> intersect(Plane p);
-    vector<pair<VarType, Figure*>> intersect(Sphere s);
-    vector<pair<VarType, Figure*>> pointOn();
 };
 
 #endif

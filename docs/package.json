@@ -4,7 +4,7 @@
     "description": "Site for Ero language.",
     "main": "server/index.js",
     "scripts": {
-        "dev": "concurrently \"API=http://localhost:3000 vuepress dev .\" \"nodemon server/index.js\"",
+        "dev": "concurrently \"API=http://localhost:3000 DEBUG=true vuepress dev .\" \"nodemon server/index.js\"",
         "build": "API=https://api.erolang.xyz vuepress build ."
     },
     "author": "Aaron Lamoreaux <lamoreauxaj@gmail.com>, Anand Iyer <aiy12@gmail.com>",
@@ -16,6 +16,7 @@
         "dotenv": "^8.2.0",
         "nodemon": "^2.0.3",
         "temp": "^0.9.1",
+        "three": "^0.116.1",
         "vuepress": "^1.4.1",
         "vuepress-theme-thindark": "^1.0.1"
     }
