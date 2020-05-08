@@ -35,9 +35,10 @@ export default {
         for (let item of this.objects) {
             if (item.figure == "sphere") {
                 // template
-                const geometry = new THREE.SphereGeometry( 5, 32, 32 )
+                const geometry = new THREE.SphereGeometry( item.radius, 32, 32 )
                 const material = new THREE.MeshBasicMaterial( {color: 0x000000} )
                 const sphere = new THREE.Mesh( geometry, material )
+                sphere.position.set(...item.center)
                 this.scene.add( sphere )
             } else if (item.figure == "circle") {
                 // template
@@ -56,7 +57,10 @@ export default {
                 plane.lookAt(new THREE.Vector3(...item.norm))
                 this.scene.add( plane )
             } else if (item.figure == "line") {
-            } else if (item.figure == "point") {
+                const point = new THREE.Vector3(item.position);
+                const slope = new THREE.Vector3(item.slope);
+                const line = new THREE.LineCurve3(point - slope * 1000, point + slope * 1000);
+                
             } else if (item.figure == "empty") {
             } else if (item.figure == "space") {
                 
