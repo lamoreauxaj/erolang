@@ -2,7 +2,7 @@
 
 Welcome! We (Aaron Lamoreaux and
 Anand Iyer) created Ero as a final project in CS429H: Computer Organization and
-Architecture at UT Austin. Check out our proposal [here](http://erolang.xyz/). 
+Architecture at UT Austin. Check out our proposal [here](http://erolang.xyz/proposal.html). 
 After this project is over, we will open source the language
 and possibly continue development. Credit also goes to James Rayman for many of the
 original ideas and working on an implementation of the interpreter and a virtual
